@@ -14,7 +14,7 @@ public class Game extends Pane {
     private final GamePanel gamePanel;
 
     public Game() {
-
+        
         menuPanel = new MenuPanel(this);
         gamePanel = new GamePanel(this);
 
@@ -22,6 +22,9 @@ public class Game extends Pane {
     }
 
     public void showMenu() {
+        menuPanel.prefWidthProperty().bind(widthProperty());
+        menuPanel.prefHeightProperty().bind(heightProperty());
+
         getChildren().setAll(menuPanel);
     }
 
