@@ -24,7 +24,7 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-        game.start();
+        game.showMenu();
 
     }
 

@@ -10,8 +10,6 @@ import javafx.scene.layout.Pane;
 
 public class Game extends Pane {
 
-    private GameState currentState;
-
     private final MenuPanel menuPanel;
     private final GamePanel gamePanel;
 
@@ -20,23 +18,15 @@ public class Game extends Pane {
         menuPanel = new MenuPanel(this);
         gamePanel = new GamePanel(this);
 
-        setState(GameState.MENU);
+        showMenu();
     }
 
-    public void setState(GameState state) {
-
-        currentState = state;
-
-        getChildren().clear();
-
-        switch (state) {
-            case MENU -> getChildren().add(menuPanel);
-            case GAME -> getChildren().add(gamePanel);
-        }
+    public void showMenu() {
+        getChildren().setAll(menuPanel);
     }
 
-    public void start() {
-        // game loop later
+    public void startGame() {
+        getChildren().setAll(gamePanel);
     }
 
 }
