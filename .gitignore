@@ -2,8 +2,8 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-.idea/discord.xml
 .kotlin
+.idea/
 
 ### Eclipse ###
 .apt_generated
@@ -55,3 +55,8 @@ bin/
 hs_err_pid*
 replay_pid*
 
+# Gradle
+.gradle/
+
+
+build/
