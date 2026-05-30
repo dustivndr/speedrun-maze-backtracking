@@ -1,6 +1,4 @@
 package io.github.maze.entities;
 
-public class Player {
-
-
+public class Ninja {
 }
