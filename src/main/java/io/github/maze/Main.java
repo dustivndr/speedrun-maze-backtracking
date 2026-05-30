@@ -2,7 +2,7 @@ package io.github.maze;
 
 /*
 * REQUIRES JAVA 25+
-*
+* don't touch, it's already working
 */
 
 import java.util.Objects;
@@ -53,7 +53,4 @@ public class Main extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
