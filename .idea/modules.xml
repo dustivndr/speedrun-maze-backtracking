@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/speedrun-maze-backtracking.iml" filepath="$PROJECT_DIR$/speedrun-maze-backtracking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/speedrun-maze-backtracking.main.iml" filepath="$PROJECT_DIR$/.idea/modules/speedrun-maze-backtracking.main.iml" />
     </modules>
   </component>
 </project>

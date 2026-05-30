@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+group 'io.github.maze'
+version '0.1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Add UI libraries later (JavaFX, Swing is in JDK)
+}
+
+javafx {
+    version = "17.0.1" // Specify your JavaFX version
+    modules = [ 'javafx.controls', 'javafx.fxml' ] // List required modules
+}
+
+application {
+    mainClass = 'io.github.maze.Main'
+}
+
+tasks.register('printMain') {
+    doLast {
+        println "mainClass = '${project.findProperty('mainClass') ?: ''}'"
+    }
+}
+
+tasks.register('runGui') {
+    description = 'Run GUI app. Pass -PmainClass and optionally -PmodulePath and -PaddModules'
+    doLast {
+        def mainCls = project.findProperty('mainClass')
+        if (!mainCls) {
+            throw new GradleException("Please pass -PmainClass=fully.qualified.Main")
+        }
+        def modulePath = project.findProperty('modulePath')
+        def addModules = project.findProperty('addModules')
+        javaexec {
+            main = mainCls
+            classpath = sourceSets.main.runtimeClasspath
+            if (modulePath) {
+                jvmArgs = ["--module-path", modulePath, "--add-modules", addModules ?: 'javafx.controls']
+            }
+        }
+    }
+}
+
+tasks.register('fatJar', Jar) {
+    archiveClassifier.set('all')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with tasks.named('jar').get()
+}
