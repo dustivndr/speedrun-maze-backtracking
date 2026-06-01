@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface GameObject {
 
-    public void draw(GraphicsContext g);
+    public void render(GraphicsContext g);
     public void update();
     public double getDepth();
     public double getY();

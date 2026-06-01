@@ -5,6 +5,7 @@ package io.github.maze.game;
 *
 */
 
+import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.TileManager;
 import javafx.scene.canvas.Canvas;
@@ -22,6 +23,7 @@ public class GamePanel extends Pane implements Runnable {
     public final class Constants {
 
         public static final int TILE_SIZE = 16;
+        public static final int SCALE = 2;
 
         public static final int SCREEN_WIDTH = 800;
         public static final int SCREEN_HEIGHT = 600;
@@ -35,6 +37,7 @@ public class GamePanel extends Pane implements Runnable {
     public final Canvas canvas;
     public final GraphicsContext gc;
     public final TileManager tileManager;
+    public final Player player;
     public Thread gameThread;
 
     public GamePanel(Game game) {
@@ -44,6 +47,7 @@ public class GamePanel extends Pane implements Runnable {
         gc = canvas.getGraphicsContext2D();
 
         tileManager = new TileManager();
+        player = new Player();
 
         getChildren().add(canvas);
     }
@@ -85,7 +89,7 @@ public class GamePanel extends Pane implements Runnable {
         renderBucket.sort(Comparator.comparing(GameObject::getDepth));
         for (int i = 0; i < renderBucket.size(); i++) {
             GameObject o = renderBucket.get(i);
-            o.draw(g);
+            o.render(g);
         }
     }
 
