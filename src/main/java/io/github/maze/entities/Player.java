@@ -12,9 +12,11 @@ public class Player {
             health = 0;
     }
 
-//    public int getTileX() {
-//    }
-//
-//    public int getTileY() {
-//    }
+    public int getTileX() {
+        return 0;
+    }
+
+    public int getTileY() {
+        return 0;
+    }
 }
