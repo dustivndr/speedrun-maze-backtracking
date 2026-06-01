@@ -42,6 +42,18 @@ public class Main extends Application {
                 ).toExternalForm()
         );
 
+        System.out.println(
+                getClass().getResource(
+                        "/image/tiles/gentle-forest-v01.png"
+                )
+        );
+
+        System.out.println(
+                getClass().getResourceAsStream(
+                        "/image/tiles/gentle-forest-v01.png"
+                )
+        );
+
         stage.setTitle("Maze");
         stage.setScene(scene);
 
