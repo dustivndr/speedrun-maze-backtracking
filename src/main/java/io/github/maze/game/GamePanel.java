@@ -5,6 +5,7 @@ package io.github.maze.game;
 *
 */
 
+import io.github.maze.maze.GameObject;
 import io.github.maze.maze.TileManager;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,7 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class GamePanel extends Pane {
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class GamePanel extends Pane implements Runnable {
 
     public final class Constants {
 
@@ -24,13 +29,16 @@ public class GamePanel extends Pane {
         private Constants() {}
     }
 
-    private final Canvas canvas;
-    private final GraphicsContext gc;
-    private final TileManager tileManager;
+    public List<GameObject> renderBucket = new ArrayList<>();
+
+    final Game game;
+    public final Canvas canvas;
+    public final GraphicsContext gc;
+    public final TileManager tileManager;
+    public Thread gameThread;
 
     public GamePanel(Game game) {
-
-        //initializeGame();
+        this.game = game;
 
         canvas = new Canvas(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         gc = canvas.getGraphicsContext2D();
@@ -38,14 +46,21 @@ public class GamePanel extends Pane {
         tileManager = new TileManager();
 
         getChildren().add(canvas);
-
-        drawMap();
-
     }
 
-//    private void initializeGame() {
-//
-//    }
+    public void startGameThread() {
+        gameThread = new Thread(this);
+    }
+
+    // MAIN GAME LOOP
+    @Override
+    public void run() {
+        while (true) {
+
+            update();
+            render();
+        }
+    }
 
     private void drawMap() {
 
@@ -66,12 +81,24 @@ public class GamePanel extends Pane {
 
     }
 
+    public void drawObjects(GraphicsContext g) {
+        renderBucket.sort(Comparator.comparing(GameObject::getDepth));
+        for (int i = 0; i < renderBucket.size(); i++) {
+            GameObject o = renderBucket.get(i);
+            o.draw(g);
+        }
+    }
+
     public void update() {
 
     }
 
     public void render() {
 
+        GraphicsContext g = canvas.getGraphicsContext2D();
+
+        drawMap();
+        drawObjects(g);
     }
 
 }

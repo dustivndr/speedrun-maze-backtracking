@@ -30,6 +30,7 @@ public class Game extends Pane {
 
     public void startGame() {
         getChildren().setAll(gamePanel);
+        gamePanel.startGameThread();
     }
 
 }
