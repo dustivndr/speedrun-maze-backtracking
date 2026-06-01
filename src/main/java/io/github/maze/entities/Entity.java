@@ -1,4 +1,32 @@
 package io.github.maze.entities;
 
-public class Entity {
+import io.github.maze.game.GamePanel;
+import io.github.maze.maze.GameObject;
+
+public abstract class Entity implements GameObject {
+
+    final GamePanel gp;
+
+    protected double x;
+    protected double y;
+    protected double width;
+    protected double height;
+
+    public Entity(GamePanel gp, double x, double y, double width, double height) {
+        this.gp = gp;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override public double getX() { return x; }
+    @Override public double getY() { return y; }
+    @Override public double getWidth() { return width; }
+    @Override public double getHeight() { return height; }
+
+    @Override public void setX(double x) { this.x = x; }
+    @Override public void setY(double y) { this.y = y; }
+    @Override public void setWidth(double width) { this.width = width; }
+    @Override public void setHeight(double height) { this.height = height; }
 }
