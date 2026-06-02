@@ -62,6 +62,8 @@ public class GamePanel extends Pane implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
 
+        // modifikasi
+
         while (true) {
 
             currentTime = System.nanoTime();                    // dapetin waktu sekarang dlm nanosecond spy akurat
