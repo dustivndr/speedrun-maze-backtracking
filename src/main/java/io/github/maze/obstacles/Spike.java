@@ -14,8 +14,8 @@ public class Spike extends Obstacle implements GameObject {
 
     public Spike(GamePanel gp, int x, int y, SpikeAssets assets) {
         super(gp, x, y,
-              GamePanel.Constants.TILE_SIZE * GamePanel.Constants.SCALE,
-              GamePanel.Constants.TILE_SIZE * GamePanel.Constants.SCALE);
+              GamePanel.TILE_SIZE * GamePanel.SCALE,
+              GamePanel.TILE_SIZE * GamePanel.SCALE);
         this.player = gp.player;
         this.assets = assets;
     }
