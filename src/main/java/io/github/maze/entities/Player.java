@@ -5,9 +5,10 @@ import io.github.maze.game.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity {
-    
 
     private int health;
+
+    public int keyCount = 0;
 
     public Player(GamePanel gp) {
         this(gp, 0, 0);
@@ -34,7 +35,7 @@ public class Player extends Entity {
 
     @Override
     public void render(GraphicsContext g) {
-        
+
     }
 
     @Override

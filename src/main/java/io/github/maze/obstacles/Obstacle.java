@@ -18,6 +18,8 @@ public abstract class Obstacle implements GameObject {
     protected double width;
     protected double height;
 
+    protected boolean removeObject = false;
+
     public Obstacle(GamePanel gp, double x, double y, double width, double height) {
         this.gp = gp;
         this.x = x;
@@ -25,6 +27,8 @@ public abstract class Obstacle implements GameObject {
         this.width = width;
         this.height = height;
     }
+
+    public boolean removeObject() { return removeObject; }
 
     @Override public double getX() { return x; }
     @Override public double getY() { return y; }

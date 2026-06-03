@@ -8,6 +8,7 @@ package io.github.maze.game;
 import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.TileManager;
+import io.github.maze.obstacles.Obstacle;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -29,7 +30,7 @@ public class GamePanel extends Pane implements Runnable {
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
 
-    public List<GameObject> renderBucket = new ArrayList<>();
+    public List<GameObject> objectList = new ArrayList<>();
 
     public int FPS = 30;
 
@@ -103,15 +104,26 @@ public class GamePanel extends Pane implements Runnable {
     }
 
     public void drawObjects(GraphicsContext g) {
-        renderBucket.sort(Comparator.comparing(GameObject::getDepth));
-        for (int i = 0; i < renderBucket.size(); i++) {
-            GameObject o = renderBucket.get(i);
+        objectList.sort(Comparator.comparing(GameObject::getDepth));
+        for (int i = 0; i < objectList.size(); i++) {
+            GameObject o = objectList.get(i);
             o.render(g);
         }
     }
 
     public void update() {
 
+        for (int i = objectList.size() - 1; i >= 0; i--) {
+            GameObject obj = objectList.get(i);
+            obj.update();
+
+            // handles obstacles
+            if (obj instanceof Obstacle o) {
+                if (o.removeObject()) {
+                    objectList.remove(i);
+                }
+            }
+        }
     }
 
     public void render() {
