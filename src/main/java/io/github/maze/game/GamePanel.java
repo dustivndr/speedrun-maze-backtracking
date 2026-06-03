@@ -26,6 +26,9 @@ public class GamePanel extends Pane implements Runnable {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 
+    public static final int ROW_WIDTH = 40;
+    public static final int COL_HEIGHT = 30;
+
     public List<GameObject> renderBucket = new ArrayList<>();
 
     public int FPS = 30;
@@ -61,8 +64,6 @@ public class GamePanel extends Pane implements Runnable {
         long delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
-        // modifikasi
 
         while (true) {
 
