@@ -7,17 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Spike extends Obstacle implements GameObject {
 
-    private final SpikeAssets assets;
+    private static final SpikeAssets assets = new SpikeAssets();
     private boolean active;
     private boolean triggered;
     private Player player;
 
-    public Spike(GamePanel gp, int x, int y, SpikeAssets assets) {
+    public Spike(GamePanel gp, int x, int y) {
         super(gp, x, y,
               GamePanel.TILE_SIZE * GamePanel.SCALE,
               GamePanel.TILE_SIZE * GamePanel.SCALE);
         this.player = gp.player;
-        this.assets = assets;
     }
 
     @Override

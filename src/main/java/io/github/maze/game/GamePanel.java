@@ -47,7 +47,7 @@ public class GamePanel extends Pane implements Runnable {
         gc = canvas.getGraphicsContext2D();
 
         tileManager = new TileManager();
-        player = new Player();
+        player = new Player(this);
 
         getChildren().add(canvas);
     }
