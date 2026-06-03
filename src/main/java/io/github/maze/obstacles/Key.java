@@ -1,6 +1,5 @@
 package io.github.maze.obstacles;
 
-import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -9,6 +8,8 @@ public class Key extends Obstacle {
     int dy;
     int minDY = 0; // inclusive
     int maxDY = 10; // exclusive
+
+    static final KeyAssets assets = new KeyAssets();
 
     boolean dirUp = true;
 
@@ -59,11 +60,11 @@ public class Key extends Obstacle {
         int screenX = (int) (this.x);
         int screenY = (int) (this.y - GamePanel.TILE_SIZE / 4.0 + dy);
 
-        g.drawImage(texture, screenX, screenY, null);
+        g.drawImage(assets.getKeyImage(), screenX, screenY);
     }
 
     @Override
     public void update() {
-
+        if (gp.player.getTileX() == )
     }
 }
