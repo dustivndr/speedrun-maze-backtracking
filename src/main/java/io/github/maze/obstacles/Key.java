@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -65,6 +66,12 @@ public class Key extends Obstacle {
 
     @Override
     public void update() {
-        if (gp.player.getTileX() == )
+        int col = (int) (x / GamePanel.TILE_SIZE);
+        int row = (int) (y / GamePanel.TILE_SIZE);
+        if (gp.player.getTileX() == col &&
+                gp.player.getTileY() == row) {
+            gp.player.keyCount++;
+            removeObject = true;
+        }
     }
 }
