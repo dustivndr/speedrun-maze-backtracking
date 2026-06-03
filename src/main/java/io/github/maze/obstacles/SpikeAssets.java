@@ -17,7 +17,7 @@ public class SpikeAssets {
         Image sheet = new Image(
                 Objects.requireNonNull(
                         getClass().getResourceAsStream(
-                                "/image/obstacles/spike.png"
+                                "/image/spike/SPIKE.png"
                         )
                 )
         );
