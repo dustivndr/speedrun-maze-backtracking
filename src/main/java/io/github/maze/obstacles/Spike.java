@@ -12,7 +12,7 @@ public class Spike extends Obstacle implements GameObject {
     private boolean triggered;
     private Player player;
 
-    public Spike(GamePanel gp, int x, int y) {
+    public Spike(GamePanel gp, double x, double y) {
         super(gp, x, y,
               GamePanel.TILE_SIZE * GamePanel.SCALE,
               GamePanel.TILE_SIZE * GamePanel.SCALE);

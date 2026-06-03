@@ -7,6 +7,7 @@ package io.github.maze.game;
 
 import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
+import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
 import io.github.maze.obstacles.Obstacle;
 import javafx.scene.canvas.Canvas;
@@ -30,7 +31,7 @@ public class GamePanel extends Pane implements Runnable {
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
 
-    public List<GameObject> objectList = new ArrayList<>();
+    final Maze maze;
 
     public int FPS = 30;
 
@@ -49,19 +50,21 @@ public class GamePanel extends Pane implements Runnable {
 
         tileManager = new TileManager();
         player = new Player(this);
+        maze = new Maze(this);
 
         getChildren().add(canvas);
     }
 
     public void startGameThread() {
         gameThread = new Thread(this);
+        gameThread.start();
     }
 
     // MAIN GAME LOOP
     @Override
     public void run() {
 
-        long drawInterval = 1000000000 / FPS; // (1 sec in nanoseconds) / FPS
+        long drawInterval = 1_000_000_000 / FPS; // (1 sec in nanoseconds) / FPS
         long delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -73,14 +76,17 @@ public class GamePanel extends Pane implements Runnable {
             lastTime = currentTime;
 
             if (delta >= 1) {
-                update();
+//                update();
                 render();
+
+                System.out.println(delta);
+                delta--;
             }
 
-            try {
-                Thread.sleep(1_000_000_000 / FPS);
-            } catch (InterruptedException e) {
-            }
+//            try {
+//                Thread.sleep(1_000_000_000 / FPS);
+//            } catch (InterruptedException e) {
+//            }
         }
     }
 
@@ -104,23 +110,23 @@ public class GamePanel extends Pane implements Runnable {
     }
 
     public void drawObjects(GraphicsContext g) {
-        objectList.sort(Comparator.comparing(GameObject::getDepth));
-        for (int i = 0; i < objectList.size(); i++) {
-            GameObject o = objectList.get(i);
+        maze.objectList.sort(Comparator.comparing(GameObject::getDepth));
+        for (int i = 0; i < maze.objectList.size(); i++) {
+            GameObject o = maze.objectList.get(i);
             o.render(g);
         }
     }
 
     public void update() {
 
-        for (int i = objectList.size() - 1; i >= 0; i--) {
-            GameObject obj = objectList.get(i);
+        for (int i = maze.objectList.size() - 1; i >= 0; i--) {
+            GameObject obj = maze.objectList.get(i);
             obj.update();
 
             // handles obstacles
             if (obj instanceof Obstacle o) {
                 if (o.removeObject()) {
-                    objectList.remove(i);
+                    maze.objectList.remove(i);
                 }
             }
         }
@@ -131,7 +137,7 @@ public class GamePanel extends Pane implements Runnable {
         GraphicsContext g = canvas.getGraphicsContext2D();
 
         drawMap();
-        drawObjects(g);
+//        drawObjects(g);
     }
 
 }
