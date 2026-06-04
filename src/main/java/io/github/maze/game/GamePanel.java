@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class GamePanel extends Pane implements Runnable {
+public class GamePanel extends Pane {
 
     public static final int TILE_SIZE = 16;
     public static final int SCALE = 1;
@@ -64,6 +64,8 @@ public class GamePanel extends Pane implements Runnable {
             private long lastTime = 0;
             private double delta = 0;
 
+
+            // MAIN GAME LOOP
             @Override
             public void handle(long currentTime) {
                 if (lastTime == 0) {
@@ -71,17 +73,14 @@ public class GamePanel extends Pane implements Runnable {
                     return;
                 }
 
-                // Delta accumulation
                 delta += (double) (currentTime - lastTime) / drawInterval;
                 lastTime = currentTime;
 
-                // Game updates (Updates at capped 30 FPS)
                 while (delta >= 1) {
                     update();
                     delta--;
                 }
 
-                // Render happens safely on the JavaFX UI Thread
                 render();
             }
         };
@@ -93,10 +92,10 @@ public class GamePanel extends Pane implements Runnable {
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
     void setup() {
         // SPIKE
-        maze.addObject(2, 1, 1);
-        maze.addObject(2, 1, 2);
-        maze.addObject(2, 2, 1);
-        maze.addObject(2, 2, 2);
+//        maze.addObject(2, 1, 1);
+//        maze.addObject(2, 1, 2);
+//        maze.addObject(2, 2, 1);
+//        maze.addObject(2, 2, 2);
 
         // KEY
         maze.addObject(4, 2, 2);
@@ -105,42 +104,11 @@ public class GamePanel extends Pane implements Runnable {
 //        maze.addObject(4, 2, 1);
 
         // BUSH WALL
-//        maze.addObject(1, 2, 1);
-//        maze.addObject(1, 2, 3);
-//        maze.addObject(1, 2, 4);
-//        maze.addObject(1, 2, 5);
-//        maze.addObject(1, 2, 6);
-    }
-
-    // MAIN GAME LOOP
-    @Override
-    public void run() {
-
-        long drawInterval = 1_000_000_000 / FPS; // (1 sec in nanoseconds) / FPS
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
-
-        while (true) {
-
-            currentTime = System.nanoTime();                    // dapetin waktu sekarang dlm nanosecond spy akurat
-            delta += (currentTime - lastTime) / (double) drawInterval;   // jarak waktu antara tiap frame
-            lastTime = currentTime;
-
-            while (delta >= 1) {
-                update();
-                render();
-
-                delta--;
-            }
-
-            try {
-                Thread.sleep(1000 / FPS);
-            } catch (InterruptedException e) {
-                System.exit(0);
-            }
-
-        }
+        maze.addObject(1, 2, 1);
+        maze.addObject(1, 2, 3);
+        maze.addObject(1, 2, 4);
+        maze.addObject(1, 2, 5);
+        maze.addObject(1, 2, 6);
     }
 
     private void drawMap() {
