@@ -24,6 +24,6 @@ public class BushWall extends Obstacle {
 
     @Override
     public void update() {
-        // TODO
+        // BushWall needs no updating
     }
 }
