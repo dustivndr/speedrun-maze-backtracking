@@ -10,6 +10,8 @@ public class Player extends Entity {
 
     public int keyCount = 0;
 
+    private int frameCounter = 0;
+
     public Player(GamePanel gp) {
         this(gp, 0, 0);
     }
@@ -34,8 +36,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public void render(GraphicsContext g) {
-
+    public void render(GraphicsContext gc) {
+        gc.drawImage();
     }
 
     @Override

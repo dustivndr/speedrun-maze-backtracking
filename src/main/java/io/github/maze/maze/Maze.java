@@ -1,4 +1,56 @@
 package io.github.maze.maze;
 
+import io.github.maze.game.GamePanel;
+import io.github.maze.obstacles.Hole;
+import io.github.maze.obstacles.Key;
+import io.github.maze.obstacles.Spike;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Maze {
+
+    final GamePanel gp;
+    public List<GameObject> objectList = new ArrayList<>();
+
+    public Maze(GamePanel gp) {
+        this.gp = gp;
+
+        // DEBUG
+//        addObject(2, 1, 1);
+    }
+
+    public void addObject(int id, int col, int row) {
+
+        double x = col * GamePanel.TILE_SIZE * GamePanel.SCALE;
+        double y = row * GamePanel.TILE_SIZE * GamePanel.SCALE;
+
+        switch (id) {
+            // air, do not add GameObject
+            case 0 -> {}
+
+            // BushWall
+            case 1 -> {
+                // TODO: commented since BushWall doesn't yet exists
+//                objectList.add(new BushWall(gp, x, y));
+            }
+
+            // Spike
+            case 2 -> {
+                System.out.println("spike added");
+                objectList.add(new Spike(gp, x, y));
+            }
+
+            // Hole
+            case 3 -> {
+                // TODO: commented since Hole constructor hasn't yet been made
+//                objectList.add(new Hole(gp, x, y));
+            }
+
+            // Key
+            case 4 -> {
+                objectList.add(new Key(gp, col, row));
+            }
+        }
+    }
 }
