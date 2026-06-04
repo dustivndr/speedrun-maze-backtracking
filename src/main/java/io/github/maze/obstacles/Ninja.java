@@ -24,6 +24,6 @@ public class Ninja extends Obstacle {
 
     }
 
-    @Override
-    public double getDepth() { return y + height; }
+    @Override public double getDepth() { return y + height; }
+    @Override public boolean getCollision() { return true; }
 }

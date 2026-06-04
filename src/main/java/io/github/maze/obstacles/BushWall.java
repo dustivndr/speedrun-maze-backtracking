@@ -15,6 +15,7 @@ public class BushWall extends Obstacle {
     }
 
     @Override public double getDepth() { return y + GamePanel.TILE_SIZE; }
+    @Override public boolean getCollision() { return true; }
 
     @Override
     public void render(GraphicsContext gc) {

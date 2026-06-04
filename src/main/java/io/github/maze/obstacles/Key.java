@@ -28,8 +28,9 @@ public class Key extends Obstacle {
         lastTime = System.currentTimeMillis();
     }
 
-    @Override
-    public double getDepth() { return y + height; }
+    @Override public double getDepth() { return y + height; }
+    @Override public boolean getCollision() { return false; }
+
 
     @Override
     public void render(GraphicsContext g) {

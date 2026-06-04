@@ -16,4 +16,6 @@ public interface GameObject {
     public void setY(double y);
     public void setHeight(double height);
     public void setWidth(double width);
+
+    public boolean getCollision();
 }
