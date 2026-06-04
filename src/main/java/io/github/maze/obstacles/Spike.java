@@ -4,6 +4,7 @@ import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public class Spike extends Obstacle implements GameObject {
 
@@ -35,13 +36,15 @@ public class Spike extends Obstacle implements GameObject {
     @Override
     public void render(GraphicsContext gc) {
 
-        gc.drawImage(
-                active
-                        ? assets.getSpikeFrame()
-                        : assets.getHiddenFrame(),
-                x * 16,
-                y * 16
-        );
+        Image texture;
+
+        if (active) {
+            texture = assets.getSpikeFrame();
+        } else {
+            texture = assets.getHiddenFrame();
+        }
+
+        gc.drawImage(texture, x * GamePanel.TILE_SIZE, y * GamePanel.TILE_SIZE);
     }
 
     @Override

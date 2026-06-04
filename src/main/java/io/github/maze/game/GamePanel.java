@@ -10,6 +10,7 @@ import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
 import io.github.maze.obstacles.Obstacle;
+import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -23,7 +24,7 @@ import java.util.List;
 public class GamePanel extends Pane implements Runnable {
 
     public static final int TILE_SIZE = 16;
-    public static final int SCALE = 2;
+    public static final int SCALE = 1;
 
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
@@ -36,11 +37,12 @@ public class GamePanel extends Pane implements Runnable {
     public int FPS = 30;
 
     final Game game;
+    public final Maze maze;
     public final Canvas canvas;
     public final GraphicsContext gc;
     public final TileManager tileManager;
     public final Player player;
-    public Thread gameThread;
+    public AnimationTimer gameTimer;
 
     public GamePanel(Game game) {
         this.game = game;
@@ -53,11 +55,47 @@ public class GamePanel extends Pane implements Runnable {
         maze = new Maze(this);
 
         getChildren().add(canvas);
+
+        setup();
     }
 
     public void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
+        long drawInterval = 1_000_000_000 / FPS;
+
+        gameTimer = new AnimationTimer() {
+            private long lastTime = 0;
+            private double delta = 0;
+
+            @Override
+            public void handle(long currentTime) {
+                if (lastTime == 0) {
+                    lastTime = currentTime;
+                    return;
+                }
+
+                // Delta accumulation
+                delta += (double) (currentTime - lastTime) / drawInterval;
+                lastTime = currentTime;
+
+                // Game updates (Updates at capped 30 FPS)
+                while (delta >= 1) {
+                    update();
+                    delta--;
+                }
+
+                // Render happens safely on the JavaFX UI Thread
+                render();
+            }
+        };
+
+        gameTimer.start();
+    }
+
+
+    // TODO: TEMPORARY METHOD TO ADD OBJECTS
+    void setup() {
+        maze.addObject(2, 1, 1);
+        maze.addObject(4, 2, 2);
     }
 
     // MAIN GAME LOOP
@@ -65,22 +103,27 @@ public class GamePanel extends Pane implements Runnable {
     public void run() {
 
         long drawInterval = 1_000_000_000 / FPS; // (1 sec in nanoseconds) / FPS
-        long delta = 0;
+        double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
 
         while (true) {
 
             currentTime = System.nanoTime();                    // dapetin waktu sekarang dlm nanosecond spy akurat
-            delta += (currentTime - lastTime) / drawInterval;   // jarak waktu antara tiap frame
+            delta += (currentTime - lastTime) / (double) drawInterval;   // jarak waktu antara tiap frame
             lastTime = currentTime;
 
-            if (delta >= 1) {
-//                update();
+            while (delta >= 1) {
+                update();
                 render();
 
-                System.out.println(delta);
                 delta--;
+            }
+
+            try {
+                Thread.sleep(1000 / FPS);
+            } catch (InterruptedException e) {
+                System.exit(0);
             }
 
 //            try {
@@ -94,19 +137,12 @@ public class GamePanel extends Pane implements Runnable {
 
         Image grass = tileManager.getTile(1, 5);
 
-        ImageView imageView = new ImageView(grass);
+        for (int row = 0; row < COL_HEIGHT; row++) {
+            for (int col = 0; col < ROW_WIDTH; col++) {
 
-        for (int y = 0; y < SCREEN_HEIGHT; y += TILE_SIZE) {
-            for (int x = 0; x < SCREEN_WIDTH; x += TILE_SIZE) {
-
-                gc.drawImage(grass, x, y);
+                gc.drawImage(grass, col, row);
             }
         }
-
-        imageView.setSmooth(false);
-
-        getChildren().add(imageView);
-
     }
 
     public void drawObjects(GraphicsContext g) {
@@ -134,10 +170,8 @@ public class GamePanel extends Pane implements Runnable {
 
     public void render() {
 
-        GraphicsContext g = canvas.getGraphicsContext2D();
-
         drawMap();
-//        drawObjects(g);
+        drawObjects(gc);
     }
 
 }

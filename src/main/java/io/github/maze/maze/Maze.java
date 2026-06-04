@@ -2,6 +2,7 @@ package io.github.maze.maze;
 
 import io.github.maze.game.GamePanel;
 import io.github.maze.obstacles.Hole;
+import io.github.maze.obstacles.Key;
 import io.github.maze.obstacles.Spike;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ public class Maze {
 
     public void addObject(int id, int col, int row) {
 
-        double x = col * GamePanel.TILE_SIZE;
-        double y = row * GamePanel.TILE_SIZE;
-        switch (id) {
+        double x = col * GamePanel.TILE_SIZE * GamePanel.SCALE;
+        double y = row * GamePanel.TILE_SIZE * GamePanel.SCALE;
 
-            // just nothing, do not add GameObject
+        switch (id) {
+            // air, do not add GameObject
             case 0 -> {}
 
             // BushWall
@@ -43,6 +44,11 @@ public class Maze {
             case 3 -> {
                 // TODO: commented since Hole constructor hasn't yet been made
 //                objectList.add(new Hole(gp, x, y));
+            }
+
+            // Key
+            case 4 -> {
+                objectList.add(new Key(gp, col, row));
             }
         }
     }
