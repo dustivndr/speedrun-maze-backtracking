@@ -32,8 +32,6 @@ public class GamePanel extends Pane implements Runnable {
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
 
-    final Maze maze;
-
     public int FPS = 30;
 
     final Game game;
@@ -94,8 +92,24 @@ public class GamePanel extends Pane implements Runnable {
 
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
     void setup() {
+        // SPIKE
         maze.addObject(2, 1, 1);
+        maze.addObject(2, 1, 2);
+        maze.addObject(2, 2, 1);
+        maze.addObject(2, 2, 2);
+
+        // KEY
         maze.addObject(4, 2, 2);
+//        maze.addObject(4, 1, 1);
+//        maze.addObject(4, 1, 2);
+//        maze.addObject(4, 2, 1);
+
+        // BUSH WALL
+//        maze.addObject(1, 2, 1);
+//        maze.addObject(1, 2, 3);
+//        maze.addObject(1, 2, 4);
+//        maze.addObject(1, 2, 5);
+//        maze.addObject(1, 2, 6);
     }
 
     // MAIN GAME LOOP
@@ -126,10 +140,6 @@ public class GamePanel extends Pane implements Runnable {
                 System.exit(0);
             }
 
-//            try {
-//                Thread.sleep(1_000_000_000 / FPS);
-//            } catch (InterruptedException e) {
-//            }
         }
     }
 
@@ -140,7 +150,7 @@ public class GamePanel extends Pane implements Runnable {
         for (int row = 0; row < COL_HEIGHT; row++) {
             for (int col = 0; col < ROW_WIDTH; col++) {
 
-                gc.drawImage(grass, col, row);
+                gc.drawImage(grass, col * TILE_SIZE, row * TILE_SIZE);
             }
         }
     }
