@@ -32,6 +32,7 @@ public class GamePanel extends Pane implements Runnable {
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
 
+    final Maze maze;
 
     public int FPS = 30;
 
@@ -124,6 +125,11 @@ public class GamePanel extends Pane implements Runnable {
             } catch (InterruptedException e) {
                 System.exit(0);
             }
+
+//            try {
+//                Thread.sleep(1_000_000_000 / FPS);
+//            } catch (InterruptedException e) {
+//            }
         }
     }
 

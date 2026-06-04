@@ -37,7 +37,6 @@ public class Maze {
 
             // Spike
             case 2 -> {
-                System.out.println("spike added");
                 objectList.add(new Spike(gp, x, y));
             }
 
