@@ -1,6 +1,7 @@
 package io.github.maze.maze;
 
 import io.github.maze.game.GamePanel;
+import io.github.maze.obstacles.BushWall;
 import io.github.maze.obstacles.Hole;
 import io.github.maze.obstacles.Key;
 import io.github.maze.obstacles.Spike;
@@ -25,20 +26,21 @@ public class Maze {
         double x = col * GamePanel.TILE_SIZE * GamePanel.SCALE;
         double y = row * GamePanel.TILE_SIZE * GamePanel.SCALE;
 
+        /**
+         * id list:
+         *
+         * 0: air
+         * 1: BushWall
+         * 2: Spike
+         * 3: Hole
+         * 4: Key
+         */
+
         switch (id) {
             // air, do not add GameObject
             case 0 -> {}
-
-            // BushWall
-            case 1 -> {
-                // TODO: commented since BushWall doesn't yet exists
-//                objectList.add(new BushWall(gp, x, y));
-            }
-
-            // Spike
-            case 2 -> {
-                objectList.add(new Spike(gp, x, y));
-            }
+            case 1 -> { objectList.add(new BushWall(gp, x, y)); }   // BushWall
+            case 2 -> { objectList.add(new Spike(gp, x, y)); }      // Spike
 
             // Hole
             case 3 -> {
@@ -46,10 +48,7 @@ public class Maze {
 //                objectList.add(new Hole(gp, x, y));
             }
 
-            // Key
-            case 4 -> {
-                objectList.add(new Key(gp, col, row));
-            }
+            case 4 -> { objectList.add(new Key(gp, col, row)); }    // Key
         }
     }
 }

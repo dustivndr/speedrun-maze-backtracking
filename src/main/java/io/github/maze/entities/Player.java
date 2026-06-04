@@ -10,8 +10,11 @@ public class Player extends Entity {
 
     public int keyCount = 0;
 
+    static final PlayerAssets playerAssets = new PlayerAssets();
+
     private int frameCounter = 0;
     private String direction = "down";
+    private int spriteNum = 1;
     private boolean isMoving = false;
 
     private static StringBuilder sb = new StringBuilder();
@@ -39,66 +42,74 @@ public class Player extends Entity {
         return (int) (y / GamePanel.TILE_SIZE);
     }
 
+    @Override public boolean getCollision() { return true; }
+
     @Override
     public void render(GraphicsContext gc) {
 
         sb.setLength(0);
 
+        sb.append(direction);
+        if (isMoving) {
+            sb.append("Walk").append(spriteNum);
 
+        } else {
+            sb.append("Stationary");
+        }
 
-        gc.drawImage();
+        gc.drawImage(playerAssets.getTexture(sb.toString()), x, y);
     }
 
     @Override
     public void update() {
-//        lastX = x;
-//        lastY = y;
+////        lastX = x;
+////        lastY = y;
+////
+//        int dx = 0;
+//        int dy = 0;
+////
+////        if (keyH.wPressed) dy--;
+////        if (keyH.sPressed) dy++;
+////        if (keyH.aPressed) dx--;
+////        if (keyH.dPressed) dx++;
 //
-        int dx = 0;
-        int dy = 0;
+//        isMoving = dy != 0 || dx != 0;
 //
-//        if (keyH.wPressed) dy--;
-//        if (keyH.sPressed) dy++;
-//        if (keyH.aPressed) dx--;
-//        if (keyH.dPressed) dx++;
-
-        isMoving = dy != 0 || dx != 0;
-
-        if (dx < 0) direction = "left";
-        else if (dx > 0) direction = "right";
-        else if (dy < 0) direction = "up";
-        else if (dy > 0) direction = "down";
-
-        // Reset flags and check collisions
-        collisionUp = false;
-        collisionDown = false;
-        collisionLeft = false;
-        collisionRight = false;
-
-        // checks and handles collision
-        gp.cChecker.checkOutOfBound(this, dx, dy, dt);
-        gp.cChecker.checkObject(this, dx, dy, dt);
-        gp.cChecker.checkTile(this, dx, dy, dt);
-
-        // checks and handles interactions
-        gp.interactionChecker.checkPickup(this);
-        gp.interactionChecker.checkOpenContainer(this);
-
-        // movement logic
-        double currentSpeed = (dx != 0 && dy != 0) ? speedDiagonal : speed;
-        if (dy < 0 && !collisionUp)    worldY -= currentSpeed * dt;
-        if (dy > 0 && !collisionDown)  worldY += currentSpeed * dt;
-        if (dx < 0 && !collisionLeft)  worldX -= currentSpeed * dt;
-        if (dx > 0 && !collisionRight) worldX += currentSpeed * dt;
-
-        gp.interactionChecker.checkStepping(this);
-
-        spriteCounter += dt;
-        final double animationTimerSc = 0.15; // change texture every 0.15 seconds
-        if (spriteCounter > animationTimerSc) {
-            spriteNum = (spriteNum % 4) + 1; // cycle 1-4
-            spriteCounter = 0;
-        }
+//        if (dx < 0) direction = "left";
+//        else if (dx > 0) direction = "right";
+//        else if (dy < 0) direction = "up";
+//        else if (dy > 0) direction = "down";
+//
+//        // Reset flags and check collisions
+//        collisionUp = false;
+//        collisionDown = false;
+//        collisionLeft = false;
+//        collisionRight = false;
+//
+//        // checks and handles collision
+//        gp.cChecker.checkOutOfBound(this, dx, dy, dt);
+//        gp.cChecker.checkObject(this, dx, dy, dt);
+//        gp.cChecker.checkTile(this, dx, dy, dt);
+//
+//        // checks and handles interactions
+//        gp.interactionChecker.checkPickup(this);
+//        gp.interactionChecker.checkOpenContainer(this);
+//
+//        // movement logic
+//        double currentSpeed = (dx != 0 && dy != 0) ? speedDiagonal : speed;
+//        if (dy < 0 && !collisionUp)    worldY -= currentSpeed * dt;
+//        if (dy > 0 && !collisionDown)  worldY += currentSpeed * dt;
+//        if (dx < 0 && !collisionLeft)  worldX -= currentSpeed * dt;
+//        if (dx > 0 && !collisionRight) worldX += currentSpeed * dt;
+//
+//        gp.interactionChecker.checkStepping(this);
+//
+//        spriteCounter += dt;
+//        final double animationTimerSc = 0.15; // change texture every 0.15 seconds
+//        if (spriteCounter > animationTimerSc) {
+//            spriteNum = (spriteNum % 4) + 1; // cycle 1-4
+//            spriteCounter = 0;
+//        }
     }
 
     @Override

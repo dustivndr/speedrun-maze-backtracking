@@ -18,20 +18,20 @@ public class PlayerAssets {
         sheet = new Image("/image/player/player.png");
 
         frames.add(sliceImage(0, 0));
-        frames.add(sliceImage(0, FRAME_HEIGHT));
-        frames.add(sliceImage(0, 3 * FRAME_HEIGHT));
+        frames.add(sliceImage(0, 1));
+        frames.add(sliceImage(0, 3));
 
-        frames.add(sliceImage(0, 4 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 5 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 7 * FRAME_HEIGHT));
+        frames.add(sliceImage(0, 4));
+        frames.add(sliceImage(0, 5));
+        frames.add(sliceImage(0, 7));
 
-        frames.add(sliceImage(0, 8 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 9 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 11 * FRAME_HEIGHT));
+        frames.add(sliceImage(0, 8));
+        frames.add(sliceImage(0, 9));
+        frames.add(sliceImage(0, 11));
 
-        frames.add(sliceImage(0, 13 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 14 * FRAME_HEIGHT));
-        frames.add(sliceImage(0, 16 * FRAME_HEIGHT));
+        frames.add(sliceImage(0, 13));
+        frames.add(sliceImage(0, 14));
+        frames.add(sliceImage(0, 16));
 
         sheet = null;
     }
