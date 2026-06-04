@@ -109,6 +109,9 @@ public class GamePanel extends Pane {
         maze.addObject(1, 2, 4);
         maze.addObject(1, 2, 5);
         maze.addObject(1, 2, 6);
+
+        // add player
+        maze.addObject(5, 0, 0);
     }
 
     private void drawMap() {
