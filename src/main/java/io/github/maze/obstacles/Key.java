@@ -7,20 +7,20 @@ import javafx.scene.canvas.GraphicsContext;
 public class Key extends Obstacle {
 
     int dy;
-    int minDY = 0; // inclusive
-    int maxDY = 10; // exclusive
+    int minDY = -5; // inclusive
+    int maxDY = 0; // exclusive
 
     static final KeyAssets assets = new KeyAssets();
 
     boolean dirUp = true;
 
     private long lastTime;
-    private final int animationSpeedMs = 30;
+    private static final int animationSpeedMs = 60;
 
     public Key(GamePanel gp, int col, int row) {
         super(gp,
-                col * GamePanel.SCALE,
-                row * GamePanel.SCALE,
+                col * GamePanel.SCALE * GamePanel.TILE_SIZE,
+                row * GamePanel.SCALE * GamePanel.TILE_SIZE,
                 GamePanel.TILE_SIZE * GamePanel.SCALE,
                 GamePanel.TILE_SIZE * GamePanel.SCALE);
 
@@ -37,6 +37,7 @@ public class Key extends Obstacle {
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastTime >= animationSpeedMs) {
+
             // move the key down on px
             if (dirUp) {
                 if (dy < maxDY) {
@@ -60,7 +61,7 @@ public class Key extends Obstacle {
         }
 
         int screenX = (int) (this.x);
-        int screenY = (int) (this.y - GamePanel.TILE_SIZE / 4.0 + dy);
+        int screenY = (int) (this.y + dy - 5);
 
         g.drawImage(assets.getKeyImage(), screenX, screenY);
     }

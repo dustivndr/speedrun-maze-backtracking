@@ -28,9 +28,6 @@ public class BushWall extends Obstacle {
 
         if (cachedFrame == null) {
 
-            int row = (int) (y / GamePanel.TILE_SIZE);
-            int col = (int) (x / GamePanel.TILE_SIZE);
-
             sb.setLength(0);
             getBushWallConnections();
             if (sb.toString().equals("leftright") || sb.toString().equals("updown")) {
@@ -38,6 +35,8 @@ public class BushWall extends Obstacle {
             }
 
             cachedFrame = frames.getTexture(sb.toString());
+
+            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
         }
 
         gc.drawImage(cachedFrame, x, y - GamePanel.TILE_SIZE);
@@ -49,36 +48,48 @@ public class BushWall extends Obstacle {
 
         boolean found = false;
 
+        boolean up = false;
+        boolean down = false;
+        boolean left = false;
+        boolean right = false;
+
         for (int i = 0; i < gp.maze.objectList.size(); i++) {
             GameObject o = gp.maze.objectList.get(i);
+
+            if (!(o instanceof BushWall)) continue;
 
             int objCol = (int) (o.getX() / GamePanel.TILE_SIZE);
             int objRow = (int) (o.getY() / GamePanel.TILE_SIZE);
 
             // check up
             if (objCol == col && objRow == row - 1) {
-                sb.append("up");
+                up = true;
                 found = true;
             }
 
             // check down
             if (objCol == col && objRow == row + 1) {
-                sb.append("down");
+                down = true;
                 found = true;
             }
 
             // check left
-            if (objCol - 1 == col && objRow == row) {
-                sb.append("left");
+            if (objCol == col - 1 && objRow == row) {
+                left = true;
                 found = true;
             }
 
             // check right
-            if (objCol + 1 == col && objRow == row) {
-                sb.append("right");
+            if (objCol == col + 1 && objRow == row) {
+                right = true;
                 found = true;
             }
         }
+
+        if (up) sb.append("up");
+        if (down) sb.append("down");
+        if (left) sb.append("left");
+        if (right) sb.append("right");
 
         if (!found) {
             sb.append("single");

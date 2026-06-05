@@ -35,18 +35,20 @@ public class Maze {
          * 2: Spike
          * 3: Hole
          * 4: Key
+         * 5: player
          */
 
         switch (id) {
             case 0 /* air */ -> {}
             case 1 /* BushWall */ -> { objectList.add(new BushWall(gp, x, y)); }
             case 2 /* Spike */ -> { objectList.add(new Spike(gp, x, y)); }
-            case 3 /* Hole */ -> {
-                // TODO: commented since Hole constructor hasn't yet been made
-//                objectList.add(new Hole(gp, x, y));
+            case 3 /* Hole */ -> { objectList.add(new Hole(gp, col, row)); }
+            case 4 /* Key */ -> { objectList.add(new Key(gp, col, row)); }
+            case 5 /* Player */ -> {
+                Player p = new Player(gp, x, y);
+                objectList.add(p);
+                gp.player = p;
             }
-            case 4 /* Key */    -> { objectList.add(new Key(gp, col, row)); }
-            case 5 /* Player */ -> { objectList.add(new Player(gp, x, y)); }
         }
     }
 }

@@ -74,7 +74,7 @@ public class BushWallAssets {
             case "updownleftright": return textures.get(17);
             case "single":          return textures.get(8);
 
-            default:                return null;
+            default:                throw new RuntimeException(key);
         }
     }
 }
