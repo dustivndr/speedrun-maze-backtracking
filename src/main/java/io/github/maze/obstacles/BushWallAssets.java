@@ -1,6 +1,7 @@
 package io.github.maze.obstacles;
 
 import io.github.maze.game.GamePanel;
+import io.github.maze.util.Util;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
@@ -21,18 +22,7 @@ public class BushWallAssets {
     public final int FRAME_HEIGHT = BASE_HEIGHT * GamePanel.SCALE;
 
     public BushWallAssets() {
-        Image ogSheet = new Image("/image/bush/bush walllll.png");
-
-        double scaledWidth = ogSheet.getWidth() * GamePanel.SCALE;
-        double scaledHeight = ogSheet.getHeight() * GamePanel.SCALE;
-
-        this.sheet = new Image(
-                "/image/bush/bush walllll.png",
-                scaledWidth,
-                scaledHeight,
-                true,
-                false
-        );
+        this.sheet = Util.getScaledImage("/image/bush/bush walllll.png");
 
         textures.add(sliceImage(0, 0)); // 0  : left-right ver. 1
         textures.add(sliceImage(1, 0)); // 1  : left-right ver. 2
