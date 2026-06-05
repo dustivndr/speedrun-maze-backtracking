@@ -77,7 +77,6 @@ public class GamePanel extends Pane {
             private long lastTime = 0;
             private double delta = 0;
 
-
             // MAIN GAME LOOP
             @Override
             public void handle(long currentTime) {
@@ -104,11 +103,15 @@ public class GamePanel extends Pane {
 
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
     void setup() {
+
+        // add player
+        maze.addObject(5, 0, 0);
+
         // SPIKE
-//        maze.addObject(2, 1, 1);
-//        maze.addObject(2, 1, 2);
-//        maze.addObject(2, 2, 1);
-//        maze.addObject(2, 2, 2);
+        maze.addObject(2, 5, 0);
+        maze.addObject(2, 5, 1);
+        maze.addObject(2, 6, 1);
+        maze.addObject(2, 6, 2);
 
         // KEY
         maze.addObject(4, 6, 3);
@@ -130,9 +133,6 @@ public class GamePanel extends Pane {
         maze.addObject(1, 2, 7);
         maze.addObject(1, 3, 6);
         maze.addObject(1, 3, 7);
-
-        // add player
-        maze.addObject(5, 0, 0);
     }
 
     private void drawMap() {
