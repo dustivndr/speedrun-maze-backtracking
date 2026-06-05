@@ -1,8 +1,26 @@
 package io.github.maze.input;
 
-import io.github.maze.game.Game;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class InputHandler {
 
+    private final Set<KeyCode> pressedKeys =
+            new HashSet<>();
+
+    public void keyPressed(KeyEvent e) {
+        pressedKeys.add(e.getCode());
+    }
+
+    public void keyReleased(KeyEvent e) {
+        pressedKeys.remove(e.getCode());
+    }
+
+    public boolean isPressed(KeyCode key) {
+        return pressedKeys.contains(key);
+    }
 
 }
