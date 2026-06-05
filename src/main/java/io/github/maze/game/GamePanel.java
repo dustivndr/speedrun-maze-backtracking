@@ -6,6 +6,7 @@ package io.github.maze.game;
 */
 
 import io.github.maze.entities.Player;
+import io.github.maze.input.InputHandler;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
@@ -23,14 +24,20 @@ import java.util.List;
 
 public class GamePanel extends Pane {
 
-    public static final int TILE_SIZE = 16;
-    public static final int SCALE = 1;
+    public static final int ORIGINAL_TILE_SIZE = 16;
+    public static final int TILE_SIZE;
+    public static final int SCALE;
 
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
+
+    static {
+        SCALE = 2;
+        TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
+    }
 
     public int FPS = 30;
 
@@ -39,6 +46,7 @@ public class GamePanel extends Pane {
     public final Canvas canvas;
     public final GraphicsContext gc;
     public final TileManager tileManager;
+    public final InputHandler inputHandler;
     public Player player;
     public AnimationTimer gameTimer;
 
@@ -50,6 +58,7 @@ public class GamePanel extends Pane {
 
         tileManager = new TileManager();
         maze = new Maze(this);
+        inputHandler = new InputHandler();
 
         getChildren().add(canvas);
 
