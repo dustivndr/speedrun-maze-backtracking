@@ -59,6 +59,11 @@ public class GamePanel extends Pane {
         tileManager = new TileManager();
         maze = new Maze(this);
         inputHandler = new InputHandler();
+        setOnKeyPressed(inputHandler::keyPressed);
+        setOnKeyReleased(inputHandler::keyReleased);
+
+        setFocusTraversable(true);
+        requestFocus();
 
         getChildren().add(canvas);
 

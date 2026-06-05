@@ -27,19 +27,8 @@ public class Maze {
         double x = col * GamePanel.TILE_SIZE;
         double y = row * GamePanel.TILE_SIZE;
 
-        /**
-         * id list:
-         *
-         * 0: air
-         * 1: BushWall
-         * 2: Spike
-         * 3: Hole
-         * 4: Key
-         * 5: player
-         */
-
         switch (id) {
-            case 0 /* air */ -> {}
+            case 0 /* air */ -> { /* do nothing */ }
             case 1 /* BushWall */ -> { objectList.add(new BushWall(gp, x, y)); }
             case 2 /* Spike */ -> { objectList.add(new Spike(gp, x, y)); }
             case 3 /* Hole */ -> { objectList.add(new Hole(gp, col, row)); }
