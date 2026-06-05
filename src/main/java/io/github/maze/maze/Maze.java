@@ -24,8 +24,8 @@ public class Maze {
 
     public void addObject(int id, int col, int row) {
 
-        double x = col * GamePanel.TILE_SIZE * GamePanel.SCALE;
-        double y = row * GamePanel.TILE_SIZE * GamePanel.SCALE;
+        double x = col * GamePanel.TILE_SIZE;
+        double y = row * GamePanel.TILE_SIZE;
 
         /**
          * id list:
