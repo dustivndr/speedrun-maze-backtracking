@@ -1,12 +1,16 @@
 package io.github.maze.entities;
 
-import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
+import io.github.maze.input.InputHandler;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 
 public class Player extends Entity {
 
-    public static int count = 0;
+    final InputHandler inpH;
+
+    public static int animationCounter = 0;
+    public double lastX, lastY;
 
     private int health;
 
@@ -14,10 +18,18 @@ public class Player extends Entity {
 
     static final PlayerAssets playerAssets = new PlayerAssets();
 
-    private int frameCounter = 0;
     private String direction = "down";
+    private long spriteCounter = 0;
     private int spriteNum = 1;
+    private long lastTime;
     private boolean isMoving = false;
+
+    private boolean collisionUp = false;
+    private boolean collisionRight = false;
+    private boolean collisionDown = false;
+    private boolean collisionLeft = false;
+
+    private double currentSpeed = 15;
 
     private static StringBuilder sb = new StringBuilder();
 
@@ -27,11 +39,15 @@ public class Player extends Entity {
 
     public Player(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+        inpH = gp.inputHandler;
+        lastX = this.x;
+        lastY = this.y;
+        lastTime = System.currentTimeMillis();
 
-        if (count + 1 > 1) {
+        if (animationCounter + 1 > 1) {
             throw new IllegalArgumentException("Cannot add more than one player.");
         }
-        count++;
+        animationCounter++;
     }
 
     public void damage(int i) {
@@ -69,34 +85,34 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-////        lastX = x;
-////        lastY = y;
-////
-//        int dx = 0;
-//        int dy = 0;
-////
-////        if (keyH.wPressed) dy--;
-////        if (keyH.sPressed) dy++;
-////        if (keyH.aPressed) dx--;
-////        if (keyH.dPressed) dx++;
-//
-//        isMoving = dy != 0 || dx != 0;
-//
-//        if (dx < 0) direction = "left";
-//        else if (dx > 0) direction = "right";
-//        else if (dy < 0) direction = "up";
-//        else if (dy > 0) direction = "down";
-//
-//        // Reset flags and check collisions
-//        collisionUp = false;
-//        collisionDown = false;
-//        collisionLeft = false;
-//        collisionRight = false;
-//
-//        // checks and handles collision
-//        gp.cChecker.checkOutOfBound(this, dx, dy, dt);
-//        gp.cChecker.checkObject(this, dx, dy, dt);
-//        gp.cChecker.checkTile(this, dx, dy, dt);
+        lastX = x;
+        lastY = y;
+
+        int dx = 0;
+        int dy = 0;
+
+        if (inpH.isPressed(KeyCode.W)) dy--;
+        if (inpH.isPressed(KeyCode.S)) dy++;
+        if (inpH.isPressed(KeyCode.A)) dx--;
+        if (inpH.isPressed(KeyCode.D)) dx++;
+
+        isMoving = dy != 0 || dx != 0;
+
+        if (dx < 0) direction = "left";
+        else if (dx > 0) direction = "right";
+        else if (dy < 0) direction = "up";
+        else if (dy > 0) direction = "down";
+
+        // Reset flags and check collisions
+        collisionUp = false;
+        collisionDown = false;
+        collisionLeft = false;
+        collisionRight = false;
+
+        // checks and handles collision
+//        checkOutOfBound(dx, dy);
+//        gp.cChecker.checkObject(this, dx, dy);
+//        gp.cChecker.checkTile(this, dx, dy);
 //
 //        // checks and handles interactions
 //        gp.interactionChecker.checkPickup(this);
@@ -104,19 +120,26 @@ public class Player extends Entity {
 //
 //        // movement logic
 //        double currentSpeed = (dx != 0 && dy != 0) ? speedDiagonal : speed;
-//        if (dy < 0 && !collisionUp)    worldY -= currentSpeed * dt;
-//        if (dy > 0 && !collisionDown)  worldY += currentSpeed * dt;
-//        if (dx < 0 && !collisionLeft)  worldX -= currentSpeed * dt;
-//        if (dx > 0 && !collisionRight) worldX += currentSpeed * dt;
+        if (dy < 0 && !collisionUp)    y -= currentSpeed;
+        if (dy > 0 && !collisionDown)  y += currentSpeed;
+        if (dx < 0 && !collisionLeft)  x -= currentSpeed;
+        if (dx > 0 && !collisionRight) x += currentSpeed;
 //
 //        gp.interactionChecker.checkStepping(this);
 //
-//        spriteCounter += dt;
-//        final double animationTimerSc = 0.15; // change texture every 0.15 seconds
-//        if (spriteCounter > animationTimerSc) {
-//            spriteNum = (spriteNum % 4) + 1; // cycle 1-4
-//            spriteCounter = 0;
-//        }
+
+        long curr = System.currentTimeMillis();
+        spriteCounter += lastTime - curr;
+        lastTime = curr;
+        final double animationTimerSc = 0.15; // change texture every 0.15 seconds
+        if (spriteCounter > animationTimerSc) {
+            spriteNum = (spriteNum % 4) + 1; // cycle 1-4
+            spriteCounter = 0;
+        }
+    }
+
+    public void checkOutOfBound(int dx, int dy) {
+
     }
 
     @Override

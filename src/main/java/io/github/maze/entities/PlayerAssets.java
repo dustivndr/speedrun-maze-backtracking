@@ -1,5 +1,7 @@
 package io.github.maze.entities;
 
+import io.github.maze.game.GamePanel;
+import io.github.maze.util.Util;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
@@ -8,14 +10,17 @@ import java.util.List;
 
 public class PlayerAssets {
 
-    int FRAME_WIDTH = 16;
-    int FRAME_HEIGHT = 16;
+    int BASE_WIDTH = 16;
+    int BASE_HEIGHT = 16;
+
+    int FRAME_WIDTH = BASE_WIDTH * GamePanel.SCALE;
+    int FRAME_HEIGHT = BASE_HEIGHT * GamePanel.SCALE;
 
     private final List<Image> frames = new ArrayList<>();
     private Image sheet;
 
     public PlayerAssets() {
-        sheet = new Image("/image/player/player.png");
+        sheet = Util.getScaledImage("/image/player/player.png");
 
         frames.add(sliceImage(0, 0));
         frames.add(sliceImage(0, 1));
