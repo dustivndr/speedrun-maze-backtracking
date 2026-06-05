@@ -39,7 +39,7 @@ public class GamePanel extends Pane {
     public final Canvas canvas;
     public final GraphicsContext gc;
     public final TileManager tileManager;
-    public final Player player;
+    public Player player;
     public AnimationTimer gameTimer;
 
     public GamePanel(Game game) {
@@ -49,7 +49,6 @@ public class GamePanel extends Pane {
         gc = canvas.getGraphicsContext2D();
 
         tileManager = new TileManager();
-        player = new Player(this);
         maze = new Maze(this);
 
         getChildren().add(canvas);
@@ -98,17 +97,25 @@ public class GamePanel extends Pane {
 //        maze.addObject(2, 2, 2);
 
         // KEY
-        maze.addObject(4, 2, 2);
-//        maze.addObject(4, 1, 1);
-//        maze.addObject(4, 1, 2);
-//        maze.addObject(4, 2, 1);
+        maze.addObject(4, 6, 3);
 
         // BUSH WALL
+        maze.addObject(1, 0, 1);
+
         maze.addObject(1, 2, 1);
+        maze.addObject(1, 2, 2);
         maze.addObject(1, 2, 3);
-        maze.addObject(1, 2, 4);
-        maze.addObject(1, 2, 5);
+        maze.addObject(1, 3, 1);
+        maze.addObject(1, 3, 2);
+        maze.addObject(1, 3, 3);
+        maze.addObject(1, 4, 1);
+        maze.addObject(1, 4, 2);
+        maze.addObject(1, 4, 3);
+
         maze.addObject(1, 2, 6);
+        maze.addObject(1, 2, 7);
+        maze.addObject(1, 3, 6);
+        maze.addObject(1, 3, 7);
 
         // add player
         maze.addObject(5, 0, 0);

@@ -6,6 +6,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity {
 
+    public static int count = 0;
+
     private int health;
 
     public int keyCount = 0;
@@ -25,6 +27,11 @@ public class Player extends Entity {
 
     public Player(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+
+        if (count + 1 > 1) {
+            throw new IllegalArgumentException("Cannot add more than one player.");
+        }
+        count++;
     }
 
     public void damage(int i) {
