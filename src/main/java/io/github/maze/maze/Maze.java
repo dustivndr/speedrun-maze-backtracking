@@ -15,12 +15,13 @@ public class Maze {
 
     public Maze(GamePanel gp) {
         this.gp = gp;
-
-        // DEBUG
-//        addObject(2, 1, 1);
     }
 
     public void addObject(int id, int col, int row) {
+
+        if (col < 0 || col >= GamePanel.ROW_WIDTH || row < 0 || row >= GamePanel.ROW_WIDTH) {
+            throw new IllegalArgumentException("col: " + col + ", row: " + row);
+        }
 
         double x = col * GamePanel.TILE_SIZE;
         double y = row * GamePanel.TILE_SIZE;

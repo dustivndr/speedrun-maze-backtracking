@@ -16,12 +16,14 @@ import java.util.Objects;
 public class TileManager {
 
     private final Image tileset;
+    public final Image grass;
 
     public TileManager() {
         tileset = Util.getScaledImage("/image/tiles/gentle-forest-v01.png");
+        grass = getTile(1, 5);
     }
 
-    public Image getTile(int col, int row) {
+    public final Image getTile(int col, int row) {
 
         if (col < 0 || col > 7 || row < 0 || row > 7) {
             throw new IllegalArgumentException(
