@@ -43,7 +43,6 @@ public class Ninja extends Obstacle {
             if (!playerWasInside) {
                 p.damage(damage);
 
-                // Lock in the player's current position as the new baseline
                 playerStartX = p.getX();
                 playerStartY = p.getY();
                 playerWasInside = true;
