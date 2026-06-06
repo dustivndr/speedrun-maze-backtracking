@@ -36,7 +36,7 @@ public class BushWall extends Obstacle {
 
             cachedFrame = frames.getTexture(sb.toString());
 
-            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
+//            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
         }
 
         gc.drawImage(cachedFrame, x, y - GamePanel.TILE_SIZE);
