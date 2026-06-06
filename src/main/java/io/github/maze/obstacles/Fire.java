@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Fire extends Obstacle {
 
-
+    final FireAssets fireAssets = new FireAssets();
 
     public Fire(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
