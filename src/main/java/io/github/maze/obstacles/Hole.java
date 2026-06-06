@@ -3,6 +3,7 @@ package io.github.maze.obstacles;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.render.Camera;
+import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 
@@ -45,14 +46,11 @@ public class Hole extends Obstacle {
     public void update() {
 
         Player p = gp.player;
-        if (
-                p.getX() < x + width &&
-                p.getX() + p.getWidth() > x &&
-                p.getY() < y + height &&
-                p.getY() + p.getHeight() > y
-        ) {
+        if (Util.checkAABB(p, this)) {
             hasOpened = true;
             collision = true;
+
+            p.damage(5);
         }
     }
 

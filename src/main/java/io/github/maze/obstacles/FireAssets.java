@@ -38,4 +38,6 @@ public class FireAssets {
     public Image getFrame(int frame) {
         return frames[frame];
     }
+
+    public int size() { return frames.length; }
 }
