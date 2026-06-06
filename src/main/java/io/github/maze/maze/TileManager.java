@@ -10,9 +10,6 @@ import io.github.maze.util.Util;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
-import java.net.URL;
-import java.util.Objects;
-
 public class TileManager {
 
     private final Image tileset;

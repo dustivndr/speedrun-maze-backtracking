@@ -114,9 +114,10 @@ public class GamePanel extends Pane {
     }
 
 
-    // TODO: TEMPORARY METHOD TO ADD OBJECTS
+    // TODO: TEMPORARY METHOD TO ADD OBSTACLES LATER REPLACE WITH map.txt FILES
     void initGameObjects() {
 
+        // ====== map 1 ========
 //         SPIKE
 //        maze.addObject(2, 5, 0);
 //        maze.addObject(2, 5, 1);
@@ -147,47 +148,63 @@ public class GamePanel extends Pane {
 //        // NINJA
 //        maze.addObject(6, 6, 0);
 
-        maze.addObject(1, 4, 3);
-        maze.addObject(1, 5, 3);
-        maze.addObject(1, 6, 3);
-        maze.addObject(1, 7, 3);
-        maze.addObject(1, 8, 3);
-        maze.addObject(1, 4, 4);
-        maze.addObject(1, 6, 4);
-        maze.addObject(1, 8, 4);
-        maze.addObject(1, 4, 5);
-        maze.addObject(1, 5, 5);
-        maze.addObject(1, 6, 5);
-        maze.addObject(1, 7, 5);
-        maze.addObject(1, 8, 5);
-        maze.addObject(1, 4, 6);
-        maze.addObject(1, 6, 6);
-        maze.addObject(1, 8, 6);
-        maze.addObject(1, 4, 7);
-        maze.addObject(1, 5, 7);
-        maze.addObject(1, 6, 7);
-        maze.addObject(1, 7, 7);
-        maze.addObject(1, 8, 7);
 
-        maze.addObject(1, 10, 1);
-        maze.addObject(1, 11, 1);
-        maze.addObject(1, 12, 1);
-        maze.addObject(1, 10, 2);
-        maze.addObject(1, 11, 2);
-        maze.addObject(1, 12, 2);
-        maze.addObject(1, 10, 3);
-        maze.addObject(1, 11, 3);
-        maze.addObject(1, 12, 3);
 
-        maze.addObject(1, 4, 10);
-        maze.addObject(1, 4, 11);
-        maze.addObject(1, 4, 12);
-        maze.addObject(1, 4, 13);
-        maze.addObject(1, 4, 14);
-        maze.addObject(1, 2, 12);
-        maze.addObject(1, 3, 12);
-        maze.addObject(1, 5, 12);
-        maze.addObject(1, 6, 12);
+        // ======== map 2 : GRASS DEBUG =========
+//        maze.addObject(1, 4, 3);
+//        maze.addObject(1, 5, 3);
+//        maze.addObject(1, 6, 3);
+//        maze.addObject(1, 7, 3);
+//        maze.addObject(1, 8, 3);
+//        maze.addObject(1, 4, 4);
+//        maze.addObject(1, 6, 4);
+//        maze.addObject(1, 8, 4);
+//        maze.addObject(1, 4, 5);
+//        maze.addObject(1, 5, 5);
+//        maze.addObject(1, 6, 5);
+//        maze.addObject(1, 7, 5);
+//        maze.addObject(1, 8, 5);
+//        maze.addObject(1, 4, 6);
+//        maze.addObject(1, 6, 6);
+//        maze.addObject(1, 8, 6);
+//        maze.addObject(1, 4, 7);
+//        maze.addObject(1, 5, 7);
+//        maze.addObject(1, 6, 7);
+//        maze.addObject(1, 7, 7);
+//        maze.addObject(1, 8, 7);
+//
+//        maze.addObject(1, 10, 1);
+//        maze.addObject(1, 11, 1);
+//        maze.addObject(1, 12, 1);
+//        maze.addObject(1, 10, 2);
+//        maze.addObject(1, 11, 2);
+//        maze.addObject(1, 12, 2);
+//        maze.addObject(1, 10, 3);
+//        maze.addObject(1, 11, 3);
+//        maze.addObject(1, 12, 3);
+//
+//        maze.addObject(1, 4, 10);
+//        maze.addObject(1, 4, 11);
+//        maze.addObject(1, 4, 12);
+//        maze.addObject(1, 4, 13);
+//        maze.addObject(1, 4, 14);
+//        maze.addObject(1, 2, 12);
+//        maze.addObject(1, 3, 12);
+//        maze.addObject(1, 5, 12);
+//        maze.addObject(1, 6, 12);
+
+
+
+        // ======== map 3 : HOLES ========
+        maze.addObject(3, 3, 3);
+        maze.addObject(3, 4, 3);
+        maze.addObject(3, 5, 3);
+        maze.addObject(3, 3, 4);
+        maze.addObject(3, 4, 4);
+        maze.addObject(3, 5, 4);
+        maze.addObject(3, 3, 6);
+        maze.addObject(3, 4, 6);
+        maze.addObject(3, 5, 6);
     }
 
     private void drawMap() {

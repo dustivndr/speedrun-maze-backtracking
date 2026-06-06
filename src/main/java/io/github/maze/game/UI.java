@@ -1,7 +1,5 @@
 package io.github.maze.game;
 
-import io.github.maze.util.Fonts;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 
 public class UI {

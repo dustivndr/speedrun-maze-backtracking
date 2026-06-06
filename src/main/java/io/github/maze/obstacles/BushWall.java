@@ -1,6 +1,5 @@
 package io.github.maze.obstacles;
 
-import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
 import io.github.maze.render.Camera;
@@ -15,7 +14,7 @@ public class BushWall extends Obstacle {
     static final StringBuilder sb = new StringBuilder(8);
 
     public Image cachedFrame;
-    private Camera camera;
+    final Camera camera;
 
     public BushWall(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);

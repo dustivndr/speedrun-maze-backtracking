@@ -26,7 +26,7 @@ public class Maze {
         double x = col * GamePanel.TILE_SIZE;
         double y = row * GamePanel.TILE_SIZE;
 
-        /**
+        /*
          * ID List
          *
          * 0 = air
