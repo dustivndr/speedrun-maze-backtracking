@@ -9,10 +9,13 @@ public class Player extends Entity {
 
     final InputHandler inpH;
 
+    public int walkCount = 0;
+
     public static int animationCounter = 0;
     public double lastX, lastY;
 
-    private int health;
+    private int health = 100;
+    private int MAX_HP = 100;
 
     public int keyCount = 0;
 
@@ -50,12 +53,21 @@ public class Player extends Entity {
         animationCounter++;
     }
 
-    public void damage(int i) {
-        health -= i;
+    public void damage(int hp) {
+        health -= hp;
 
         if (health <= 0)
             health = 0;
     }
+
+    public void heal(int hp) {
+        health += hp;
+        if (health >= MAX_HP) {
+            health = MAX_HP;
+        }
+    }
+
+    public int getHP() { return health; }
 
     public int getTileX() {
         return (int) (x / GamePanel.TILE_SIZE);
@@ -87,6 +99,9 @@ public class Player extends Entity {
     public void update() {
         lastX = x;
         lastY = y;
+
+        int prevCol = getTileY();
+        int prevRow = getTileY();
 
         int dx = 0;
         int dy = 0;
@@ -127,6 +142,10 @@ public class Player extends Entity {
 //
 //        gp.interactionChecker.checkStepping(this);
 //
+
+        if (getTileX() != prevCol || getTileY() != prevRow) {
+            walkCount++;
+        }
 
         long curr = System.currentTimeMillis();
         spriteCounter += lastTime - curr;

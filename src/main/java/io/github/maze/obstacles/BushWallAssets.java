@@ -5,7 +5,6 @@ import io.github.maze.util.Util;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
-import java.io.WriteAbortedException;
 import java.util.ArrayList;
 import java.util.List;
 

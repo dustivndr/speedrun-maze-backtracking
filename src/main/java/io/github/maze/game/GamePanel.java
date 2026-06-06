@@ -15,12 +15,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Objects;
 
 public class GamePanel extends Pane {
 
@@ -47,6 +45,7 @@ public class GamePanel extends Pane {
     public final GraphicsContext gc;
     public final TileManager tileManager;
     public final InputHandler inputHandler;
+    public final UI ui;
     public Player player;
     public AnimationTimer gameTimer;
 
@@ -62,12 +61,17 @@ public class GamePanel extends Pane {
         setOnKeyPressed(inputHandler::keyPressed);
         setOnKeyReleased(inputHandler::keyReleased);
 
-        setFocusTraversable(true);
-        requestFocus();
-
         getChildren().add(canvas);
 
         setup();
+
+        ui = new UI(this);
+
+        String cssPath = Objects.requireNonNull(getClass().getResource("/styles/styles.css")).toExternalForm();
+        this.getStylesheets().add(cssPath);
+
+        setFocusTraversable(true);
+        requestFocus();
     }
 
     public void startGameThread() {
@@ -76,7 +80,6 @@ public class GamePanel extends Pane {
         gameTimer = new AnimationTimer() {
             private long lastTime = 0;
             private double delta = 0;
-
 
             // MAIN GAME LOOP
             @Override
@@ -104,11 +107,15 @@ public class GamePanel extends Pane {
 
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
     void setup() {
+
+        // add player
+        maze.addObject(5, 0, 0);
+
         // SPIKE
-//        maze.addObject(2, 1, 1);
-//        maze.addObject(2, 1, 2);
-//        maze.addObject(2, 2, 1);
-//        maze.addObject(2, 2, 2);
+        maze.addObject(2, 5, 0);
+        maze.addObject(2, 5, 1);
+        maze.addObject(2, 6, 1);
+        maze.addObject(2, 6, 2);
 
         // KEY
         maze.addObject(4, 6, 3);
@@ -130,9 +137,6 @@ public class GamePanel extends Pane {
         maze.addObject(1, 2, 7);
         maze.addObject(1, 3, 6);
         maze.addObject(1, 3, 7);
-
-        // add player
-        maze.addObject(5, 0, 0);
     }
 
     private void drawMap() {
@@ -174,6 +178,7 @@ public class GamePanel extends Pane {
 
         drawMap();
         drawObjects(gc);
+        ui.render();
     }
 
 }
