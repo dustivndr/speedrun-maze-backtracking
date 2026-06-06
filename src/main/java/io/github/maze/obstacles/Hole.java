@@ -31,6 +31,14 @@ public class Hole extends Obstacle {
 
         if (!hasOpened) return;
         gc.drawImage(holeAssets.getImage(animationCounter), camera.getScreenX(x), camera.getScreenY(y));
+
+        long curr = System.currentTimeMillis();
+        final long animationTimerMs = 100;
+        if (animationCounter < 2 &&
+                curr - lastTime > animationTimerMs) {
+            lastTime = curr;
+            animationCounter++;
+        }
     }
 
     @Override
