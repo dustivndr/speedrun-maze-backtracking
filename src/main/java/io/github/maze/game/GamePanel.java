@@ -147,13 +147,51 @@ public class GamePanel extends Pane {
 //        // NINJA
 //        maze.addObject(6, 6, 0);
 
-        maze.addObject(2, 4, 3);
+        maze.addObject(1, 4, 3);
+        maze.addObject(1, 5, 3);
+        maze.addObject(1, 6, 3);
+        maze.addObject(1, 7, 3);
+        maze.addObject(1, 8, 3);
         maze.addObject(1, 4, 4);
+        maze.addObject(1, 6, 4);
+        maze.addObject(1, 8, 4);
+        maze.addObject(1, 4, 5);
+        maze.addObject(1, 5, 5);
+        maze.addObject(1, 6, 5);
+        maze.addObject(1, 7, 5);
+        maze.addObject(1, 8, 5);
+        maze.addObject(1, 4, 6);
+        maze.addObject(1, 6, 6);
+        maze.addObject(1, 8, 6);
+        maze.addObject(1, 4, 7);
+        maze.addObject(1, 5, 7);
+        maze.addObject(1, 6, 7);
+        maze.addObject(1, 7, 7);
+        maze.addObject(1, 8, 7);
+
+        maze.addObject(1, 10, 1);
+        maze.addObject(1, 11, 1);
+        maze.addObject(1, 12, 1);
+        maze.addObject(1, 10, 2);
+        maze.addObject(1, 11, 2);
+        maze.addObject(1, 12, 2);
+        maze.addObject(1, 10, 3);
+        maze.addObject(1, 11, 3);
+        maze.addObject(1, 12, 3);
+
+        maze.addObject(1, 4, 10);
+        maze.addObject(1, 4, 11);
+        maze.addObject(1, 4, 12);
+        maze.addObject(1, 4, 13);
+        maze.addObject(1, 4, 14);
+        maze.addObject(1, 2, 12);
+        maze.addObject(1, 3, 12);
+        maze.addObject(1, 5, 12);
+        maze.addObject(1, 6, 12);
     }
 
     private void drawMap() {
 
-        Image grass = tileManager.getTile(1, 5);
 
         for (int row = 0; row < COL_HEIGHT; row++) {
             for (int col = 0; col < ROW_WIDTH; col++) {
@@ -169,10 +207,8 @@ public class GamePanel extends Pane {
         for (int i = 0; i < maze.objectList.size(); i++) {
 
             GameObject o = maze.objectList.get(i);
-            System.out.println(i + ". " + o.toString());
             o.render(g);
         }
-        System.out.println();
     }
 
     public void update() {
