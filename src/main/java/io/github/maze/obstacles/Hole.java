@@ -44,9 +44,6 @@ public class Hole extends Obstacle {
     @Override
     public void update() {
 
-        int col = (int) (x / GamePanel.TILE_SIZE);
-        int row = (int) (y / GamePanel.TILE_SIZE);
-
         Player p = gp.player;
         if (
                 p.getX() < x + width &&
