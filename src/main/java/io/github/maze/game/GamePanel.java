@@ -47,6 +47,7 @@ public class GamePanel extends Pane {
     public final GraphicsContext gc;
     public final TileManager tileManager;
     public final InputHandler inputHandler;
+    public final UI ui;
     public Player player;
     public AnimationTimer gameTimer;
 
@@ -61,6 +62,8 @@ public class GamePanel extends Pane {
         inputHandler = new InputHandler();
         setOnKeyPressed(inputHandler::keyPressed);
         setOnKeyReleased(inputHandler::keyReleased);
+
+        ui = new UI(this);
 
         setFocusTraversable(true);
         requestFocus();

@@ -12,7 +12,7 @@ public class Ninja extends Obstacle {
 
     final int damage = 5;
 
-    int playerWalkCount = 0;
+    int playerInsideWalkCounter = 0;
 
     public Ninja(GamePanel gp, double x, double y, double width, double height) {
         super(gp, x, y, width, height);
@@ -28,11 +28,14 @@ public class Ninja extends Obstacle {
                 p.getY() >= y - GamePanel.TILE_SIZE &&
                 p.getY() <= y + GamePanel.TILE_SIZE
         ) {
-            p.damage(damage);
-        } else {
+            if (playerInsideWalkCounter % 2 == 0) {
+                p.damage(damage);
+            }
 
-            // reset counter
-            playerWalkCount = 0;
+            playerInsideWalkCounter++;
+
+        } else {
+            playerInsideWalkCounter = 0;
         }
     }
 

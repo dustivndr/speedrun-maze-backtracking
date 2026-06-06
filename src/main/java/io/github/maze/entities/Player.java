@@ -9,6 +9,8 @@ public class Player extends Entity {
 
     final InputHandler inpH;
 
+    public int walkCount = 0;
+
     public static int animationCounter = 0;
     public double lastX, lastY;
 
@@ -88,6 +90,9 @@ public class Player extends Entity {
         lastX = x;
         lastY = y;
 
+        int prevCol = getTileY();
+        int prevRow = getTileY();
+
         int dx = 0;
         int dy = 0;
 
@@ -127,6 +132,10 @@ public class Player extends Entity {
 //
 //        gp.interactionChecker.checkStepping(this);
 //
+
+        if (getTileX() != prevCol || getTileY() != prevRow) {
+            walkCount++;
+        }
 
         long curr = System.currentTimeMillis();
         spriteCounter += lastTime - curr;
