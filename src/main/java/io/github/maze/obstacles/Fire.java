@@ -27,6 +27,7 @@ public class Fire extends Obstacle {
 
     @Override
     public void update() {
+
         // check damage player
         Player p = gp.player;
         if (Util.checkAABB(p, this)) {
