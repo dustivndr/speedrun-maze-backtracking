@@ -24,7 +24,9 @@ public class Wizard extends Obstacle {
     long currAnimationLength = 0;
 
     public Wizard(GamePanel gp, double x, double y) {
-        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+        super(gp, x, y,
+                GamePanel.TILE_SIZE,
+                GamePanel.TILE_SIZE + 2 * GamePanel.SCALE);
 
         wizardAssets = new WizardAssets();
         angleToPlayer = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
@@ -34,9 +36,9 @@ public class Wizard extends Obstacle {
     @Override
     public void render(GraphicsContext gc) {
         if (!isAttacking) {
-            gc.drawImage(wizardAssets.getDirection(spriteDirection), x, y);
+            gc.drawImage(wizardAssets.getDirection(spriteDirection), x, y - 2 * GamePanel.SCALE);
         } else {
-            gc.drawImage(wizardAssets.getAttackAnimation(attackAnimationCounter), x, y);
+            gc.drawImage(wizardAssets.getAttackAnimation(attackAnimationCounter), x, y - 2 * GamePanel.SCALE);
         }
     }
 
@@ -69,9 +71,7 @@ public class Wizard extends Obstacle {
 
             if (currAnimationLength >= animationLength) {
 
-                if (isPlayerInCoordinateRange()) {
-                    p.damage(20);
-                }
+                p.damage(20);
 
                 currAnimationLength = 0;
                 attackAnimationCounter = -1;
