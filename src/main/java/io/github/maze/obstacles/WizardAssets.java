@@ -7,12 +7,12 @@ import javafx.scene.image.WritableImage;
 
 public class WizardAssets {
 
-    private Image[] frames = new Image[11];
+    private Image[] frames = new Image[17];
 
     private Image sheet;
 
     public static final int BASE_WIDTH = 16;
-    public static final int BASE_HEIGHT = 16;
+    public static final int BASE_HEIGHT = 18;
     public static final int FRAME_WIDTH = BASE_WIDTH * GamePanel.SCALE;
     public static final int FRAME_HEIGHT = BASE_HEIGHT * GamePanel.SCALE;
 
