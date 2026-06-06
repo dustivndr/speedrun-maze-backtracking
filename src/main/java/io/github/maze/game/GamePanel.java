@@ -196,15 +196,24 @@ public class GamePanel extends Pane {
 
 
         // ======== map 3 : HOLES ========
-        maze.addObject(3, 3, 3);
-        maze.addObject(3, 4, 3);
-        maze.addObject(3, 5, 3);
-        maze.addObject(3, 3, 4);
-        maze.addObject(3, 4, 4);
-        maze.addObject(3, 5, 4);
-        maze.addObject(3, 3, 6);
-        maze.addObject(3, 4, 6);
-        maze.addObject(3, 5, 6);
+//        maze.addObject(3, 3, 3);
+//        maze.addObject(3, 4, 3);
+//        maze.addObject(3, 5, 3);
+//        maze.addObject(3, 3, 4);
+//        maze.addObject(3, 4, 4);
+//        maze.addObject(3, 5, 4);
+//        maze.addObject(3, 3, 6);
+//        maze.addObject(3, 4, 6);
+//        maze.addObject(3, 5, 6);
+
+
+        // ========= map 4 : FIRE ==========
+        maze.addObject(7, 2, 2);
+        maze.addObject(7, 2, 3);
+        maze.addObject(7, 2, 4);
+        maze.addObject(7, 4, 2);
+        maze.addObject(7, 4, 3);
+        maze.addObject(7, 4, 4);
     }
 
     private void drawMap() {
