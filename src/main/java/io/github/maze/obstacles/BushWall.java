@@ -16,7 +16,7 @@ public class BushWall extends Obstacle {
     public Image cachedFrame;
 
     public BushWall(GamePanel gp, double x, double y) {
-        super(gp, x, y, 1, 1.5);
+        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE * 1.5);
     }
 
     @Override public double getDepth() { return y + GamePanel.TILE_SIZE; }

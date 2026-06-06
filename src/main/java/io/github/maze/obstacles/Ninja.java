@@ -2,6 +2,7 @@ package io.github.maze.obstacles;
 
 import io.github.maze.entities.Entity;
 import io.github.maze.entities.Player;
+import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,10 +18,12 @@ public class Ninja extends Obstacle {
 
     final int damage = 5;
 
-    int playerInsideWalkCounter = 0;
+    private boolean playerWasInside = false;
+    private double playerStartX = 0;
+    private double playerStartY = 0;
 
-    public Ninja(GamePanel gp, double x, double y, double width, double height) {
-        super(gp, x, y, width, height);
+    public Ninja(GamePanel gp, double x, double y) {
+        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
         p = gp.player;
         angleToPlayer = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
     }
@@ -31,33 +34,45 @@ public class Ninja extends Obstacle {
         Player p = gp.player;
         angleToPlayer.lookAt(x, y, p.getX(), p.getY());
 
-        if (
-                p.getX() >= x - GamePanel.TILE_SIZE &&
+        boolean isPlayerInside = p.getX() >= x - GamePanel.TILE_SIZE &&
                 p.getX() <= x + GamePanel.TILE_SIZE &&
                 p.getY() >= y - GamePanel.TILE_SIZE &&
-                p.getY() <= y + GamePanel.TILE_SIZE
-        ) {
-            if (playerInsideWalkCounter % 2 == 0) {
+                p.getY() <= y + GamePanel.TILE_SIZE;
+
+        if (isPlayerInside) {
+            if (!playerWasInside) {
                 p.damage(damage);
+
+                // Lock in the player's current position as the new baseline
+                playerStartX = p.getX();
+                playerStartY = p.getY();
+                playerWasInside = true;
             }
 
-            playerInsideWalkCounter++;
+            else {
+                double distanceX = Math.abs(p.getX() - playerStartX);
+                double distanceY = Math.abs(p.getY() - playerStartY);
 
+                if (distanceX >= GamePanel.TILE_SIZE || distanceY >= GamePanel.TILE_SIZE) {
+                    p.damage(damage);
+
+                    playerStartX = p.getX();
+                    playerStartY = p.getY();
+                }
+            }
         } else {
-            playerInsideWalkCounter = 0;
+            playerWasInside = false;
         }
 
-        if (angleToPlayer.getRadians() >= 0 && angleToPlayer.getRadians() < Math.PI / 2) {
-            spriteDirection = "up";
-        }
-        else if (angleToPlayer.getRadians() >= Math.PI / 2 && angleToPlayer.getRadians() < Math.PI) {
-            spriteDirection = "right";
-        }
-        else if (angleToPlayer.getRadians() >= Math.PI && angleToPlayer.getRadians() < Math.PI / 2 * 3) {
+        angleToPlayer.lookAt(x, y, p.getX(), p.getY());
+        if (angleToPlayer.getRadians() >= Math.PI / 4 && angleToPlayer.getRadians() < Math.PI / 4 * 3) {
             spriteDirection = "down";
-        }
-        if (angleToPlayer.getRadians() >= Math.PI / 2 * 3 && angleToPlayer.getRadians() < Math.PI * 2) {
+        } else if (angleToPlayer.getRadians() >= Math.PI / 4 * 3 && angleToPlayer.getRadians() < Math.PI / 4 * 5) {
             spriteDirection = "left";
+        } else if (angleToPlayer.getRadians() >= Math.PI / 4 * 5 && angleToPlayer.getRadians() < Math.PI / 2 * 7) {
+            spriteDirection = "up";
+        } else {
+            spriteDirection = "right";
         }
     }
 

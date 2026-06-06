@@ -137,6 +137,9 @@ public class GamePanel extends Pane {
         maze.addObject(1, 2, 7);
         maze.addObject(1, 3, 6);
         maze.addObject(1, 3, 7);
+
+        // NINJA
+        maze.addObject(6, 6, 0);
     }
 
     private void drawMap() {
