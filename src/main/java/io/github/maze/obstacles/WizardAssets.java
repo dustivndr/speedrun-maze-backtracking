@@ -7,7 +7,7 @@ import javafx.scene.image.WritableImage;
 
 public class WizardAssets {
 
-    private Image[] frames = new Image[17];
+    private Image[] frames = new Image[11];
 
     private Image sheet;
 
@@ -29,6 +29,8 @@ public class WizardAssets {
         frames[6] = sliceImage(1, 1);
         frames[7] = sliceImage(2, 1);
         frames[8] = sliceImage(3, 1);
+        frames[9] = frames[7];
+        frames[10] = frames[8];
     }
 
     public Image getDirection(String dir) {
@@ -44,6 +46,8 @@ public class WizardAssets {
     public Image getAttackAnimation(int frame) {
         return frames[frame + 4];
     }
+
+    public int attackSize() { return 7; }
 
     private Image sliceImage(int col, int row) {
         return new WritableImage(

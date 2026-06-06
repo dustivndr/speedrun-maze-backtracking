@@ -64,6 +64,7 @@ public class Ninja extends Obstacle {
             playerWasInside = false;
         }
 
+        // update texture
         angleToPlayer.lookAt(x, y, p.getX(), p.getY());
         if (angleToPlayer.getRadians() >= Math.PI / 4 && angleToPlayer.getRadians() < Math.PI / 4 * 3) {
             spriteDirection = "down";
