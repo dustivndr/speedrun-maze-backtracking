@@ -37,6 +37,7 @@ public class Maze {
          * 5 = Player
          * 6 = Ninja
          * 7 = Fire
+         * 8 = Wizard
          *
          */
 
@@ -76,6 +77,11 @@ public class Maze {
                 Fire fire = new Fire(gp, x, y);
                 objectList.add(fire);
                 obstacleMap[col][row] = fire;
+            }
+            case 8 /* Wizard */ -> {
+                Wizard wizard = new Wizard(gp, x, y);
+                objectList.add(wizard);
+                obstacleMap[col][row] = wizard;
             }
         }
     }
