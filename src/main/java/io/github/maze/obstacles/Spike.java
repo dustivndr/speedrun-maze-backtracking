@@ -22,14 +22,20 @@ public class Spike extends Obstacle implements GameObject {
 
     @Override
     public void update() {
-        if (!triggered &&
-                player.getTileX() == x &&
-                player.getTileY() == y) {
+        if (player.getTileX() == x / GamePanel.TILE_SIZE &&
+                player.getTileY() == y / GamePanel.TILE_SIZE) {
+
+            if (triggered) {
+                return;
+            }
 
             triggered = true;
             active = true;
 
             player.damage(10);
+        } else {
+            active = false;
+            triggered = false;
         }
     }
 
