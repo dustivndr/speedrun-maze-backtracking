@@ -5,7 +5,7 @@ import io.github.maze.maze.GameObject;
 
 public abstract class Entity implements GameObject {
 
-    final GamePanel gp;
+    protected final GamePanel gp;
 
     protected double x;
     protected double y;

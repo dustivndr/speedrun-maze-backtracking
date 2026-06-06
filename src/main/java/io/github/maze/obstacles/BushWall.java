@@ -3,6 +3,7 @@ package io.github.maze.obstacles;
 import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
+import io.github.maze.render.Camera;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -14,9 +15,11 @@ public class BushWall extends Obstacle {
     static final StringBuilder sb = new StringBuilder(8);
 
     public Image cachedFrame;
+    private Camera camera;
 
     public BushWall(GamePanel gp, double x, double y) {
-        super(gp, x, y, 1, 1.5);
+        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE * 1.5);
+        camera = gp.camera;
     }
 
     @Override public double getDepth() { return y + GamePanel.TILE_SIZE; }
@@ -36,10 +39,10 @@ public class BushWall extends Obstacle {
 
             cachedFrame = frames.getTexture(sb.toString());
 
-            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
+//            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
         }
 
-        gc.drawImage(cachedFrame, x, y - GamePanel.TILE_SIZE);
+        gc.drawImage(cachedFrame, camera.getScreenX(x), camera.getScreenY(y - GamePanel.TILE_SIZE));
     }
 
     private void getBushWallConnections() {

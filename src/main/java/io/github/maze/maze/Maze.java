@@ -2,10 +2,7 @@ package io.github.maze.maze;
 
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
-import io.github.maze.obstacles.BushWall;
-import io.github.maze.obstacles.Hole;
-import io.github.maze.obstacles.Key;
-import io.github.maze.obstacles.Spike;
+import io.github.maze.obstacles.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +63,11 @@ public class Maze {
                 Player p = new Player(gp, x, y);
                 objectList.add(p);
                 gp.player = p;
+            }
+            case 6 /* Ninja */ -> {
+                Ninja ninja = new Ninja(gp, x, y);
+                objectList.add(ninja);
+                obstacleMap[col][row] = ninja;
             }
         }
     }

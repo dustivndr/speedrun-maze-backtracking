@@ -9,13 +9,13 @@ public class Player extends Entity {
 
     final InputHandler inpH;
 
-    public int walkCount = 0;
+    private int walkCount = 0;
 
     public static int animationCounter = 0;
     public double lastX, lastY;
 
-    private int health = 100;
-    private int MAX_HP = 100;
+    private int MAX_HP = 100000;
+    private int health = MAX_HP;
 
     public int keyCount = 0;
 
@@ -32,7 +32,7 @@ public class Player extends Entity {
     private boolean collisionDown = false;
     private boolean collisionLeft = false;
 
-    private double currentSpeed = 15;
+    private double currentSpeed = 7;
 
     private static StringBuilder sb = new StringBuilder();
 
@@ -92,7 +92,7 @@ public class Player extends Entity {
             sb.append("Stationary");
         }
 
-        gc.drawImage(playerAssets.getTexture(sb.toString()), x, y);
+        gc.drawImage(playerAssets.getTexture(sb.toString()), gp.camera.getScreenX(x), gp.camera.getScreenY(y));
     }
 
     @Override
@@ -100,8 +100,8 @@ public class Player extends Entity {
         lastX = x;
         lastY = y;
 
-        int prevCol = getTileY();
-        int prevRow = getTileY();
+        int prevCol = (int) (lastX / GamePanel.TILE_SIZE);
+        int prevRow = (int) (lastY / GamePanel.TILE_SIZE);
 
         int dx = 0;
         int dy = 0;
@@ -145,6 +145,10 @@ public class Player extends Entity {
 
         if (getTileX() != prevCol || getTileY() != prevRow) {
             walkCount++;
+            System.out.println("new tile: col: " + getTileX() + ", row: " + getTileY());
+            System.out.println("prev tile:     " + prevCol    + "       " + prevRow);
+            System.out.println("walk count:    " + walkCount);
+            System.out.println();
         }
 
         long curr = System.currentTimeMillis();
@@ -165,4 +169,6 @@ public class Player extends Entity {
     public double getDepth() {
         return 0;
     }
+
+    public int getWalkCount() { return walkCount; }
 }
