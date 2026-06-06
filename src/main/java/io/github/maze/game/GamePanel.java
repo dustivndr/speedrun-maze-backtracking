@@ -11,6 +11,7 @@ import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
 import io.github.maze.obstacles.Obstacle;
+import io.github.maze.render.Camera;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -46,6 +47,7 @@ public class GamePanel extends Pane {
     public final TileManager tileManager;
     public final InputHandler inputHandler;
     public final UI ui;
+    public final Camera camera;
     public Player player;
     public AnimationTimer gameTimer;
 
@@ -63,8 +65,9 @@ public class GamePanel extends Pane {
 
         getChildren().add(canvas);
 
-        setup();
-
+        maze.addObject(5, 0, 0); // init player
+        camera = new Camera(this, player);
+        initGameObjects();
         ui = new UI(this);
 
         String cssPath = Objects.requireNonNull(getClass().getResource("/styles/styles.css")).toExternalForm();
@@ -106,10 +109,7 @@ public class GamePanel extends Pane {
 
 
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
-    void setup() {
-
-        // add player
-        maze.addObject(5, 0, 0);
+    void initGameObjects() {
 
         // SPIKE
         maze.addObject(2, 5, 0);
@@ -149,7 +149,9 @@ public class GamePanel extends Pane {
         for (int row = 0; row < COL_HEIGHT; row++) {
             for (int col = 0; col < ROW_WIDTH; col++) {
 
-                gc.drawImage(grass, col * TILE_SIZE, row * TILE_SIZE);
+                gc.drawImage(grass,
+                        camera.getScreenX(col * TILE_SIZE),
+                        camera.getScreenY(row * TILE_SIZE));
             }
         }
     }
@@ -178,6 +180,8 @@ public class GamePanel extends Pane {
     }
 
     public void render() {
+
+        camera.setPos();
 
         drawMap();
         drawObjects(gc);

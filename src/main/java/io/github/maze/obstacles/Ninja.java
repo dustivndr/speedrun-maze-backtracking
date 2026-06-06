@@ -77,7 +77,10 @@ public class Ninja extends Obstacle {
 
     @Override
     public void render(GraphicsContext g) {
-        g.drawImage(ninjaAssets.getFrame(spriteDirection), x, y);
+        g.drawImage(
+                ninjaAssets.getFrame(spriteDirection),
+                gp.camera.getScreenX(x),
+                gp.camera.getScreenY(y));
     }
 
     @Override public double getDepth() { return y + height; }

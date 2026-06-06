@@ -2,6 +2,7 @@ package io.github.maze.entities.projectile;
 
 import io.github.maze.entities.Projectile;
 import io.github.maze.game.GamePanel;
+import io.github.maze.render.Camera;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -15,6 +16,8 @@ public class Kunai extends Projectile {
     private double damage = 10;
     private double speed = 20;
 
+    private Camera camera;
+
     private double travelledDistance = 0;
     private final double MAX_TRAVELLED_DISTANCE;
 
@@ -25,6 +28,7 @@ public class Kunai extends Projectile {
 
         angle = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
         cachedImage = (new KunaiAssets()).getRotatedKunai(angle);
+        camera = gp.camera;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class Kunai extends Projectile {
 
     @Override
     public void render(GraphicsContext g) {
-
+        g.drawImage(cachedImage, camera.getScreenX(x), camera.getScreenY(y));
     }
 
     @Override

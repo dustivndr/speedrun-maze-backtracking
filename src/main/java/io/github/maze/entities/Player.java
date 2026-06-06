@@ -92,7 +92,7 @@ public class Player extends Entity {
             sb.append("Stationary");
         }
 
-        gc.drawImage(playerAssets.getTexture(sb.toString()), x, y);
+        gc.drawImage(playerAssets.getTexture(sb.toString()), gp.camera.getScreenX(x), gp.camera.getScreenY(y));
     }
 
     @Override

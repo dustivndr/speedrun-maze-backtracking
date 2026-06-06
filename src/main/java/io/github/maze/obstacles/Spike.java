@@ -44,7 +44,7 @@ public class Spike extends Obstacle implements GameObject {
             texture = assets.getHiddenFrame();
         }
 
-        gc.drawImage(texture, x, y);
+        gc.drawImage(texture, gp.camera.getScreenX(x), gp.camera.getScreenY(y));
     }
 
     @Override public double getDepth() { return y + height; }

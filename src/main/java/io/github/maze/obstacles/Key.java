@@ -2,6 +2,7 @@ package io.github.maze.obstacles;
 
 import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
+import io.github.maze.render.Camera;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Key extends Obstacle {
@@ -11,6 +12,7 @@ public class Key extends Obstacle {
     int maxDY = 0; // exclusive
 
     static final KeyAssets assets = new KeyAssets();
+    private Camera camera;
 
     boolean dirUp = true;
 
@@ -26,6 +28,7 @@ public class Key extends Obstacle {
 
         dy = 0;
         lastTime = System.currentTimeMillis();
+        camera = gp.camera;
     }
 
     @Override public double getDepth() { return y + height; }
@@ -60,8 +63,8 @@ public class Key extends Obstacle {
             lastTime = currentTime;
         }
 
-        int screenX = (int) (this.x);
-        int screenY = (int) (this.y + dy - 5);
+        double screenX = camera.getScreenX(this.x);
+        double screenY = camera.getScreenY(this.y + dy - 5);
 
         g.drawImage(assets.getKeyImage(), screenX, screenY);
     }
