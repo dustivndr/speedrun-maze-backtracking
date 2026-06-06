@@ -22,7 +22,7 @@ public class Fire extends Obstacle {
 
     @Override
     public void render(GraphicsContext g) {
-
+        g.drawImage(fireAssets.getFrame(animationCounter), x, y);
     }
 
     @Override
