@@ -159,9 +159,9 @@ public class Player extends Entity {
         }
 
         if (newX < 0) collisionLeft = true;
-        if (newX >= GamePanel.WORLD_WIDTH) collisionRight = true;
+        if (newX + width >= GamePanel.WORLD_WIDTH) collisionRight = true;
         if (newY < 0) collisionUp = true;
-        if (newY >= GamePanel.WORLD_HEIGHT) collisionDown = true;
+        if (newY + height >= GamePanel.WORLD_HEIGHT) collisionDown = true;
     }
 
     @Override
