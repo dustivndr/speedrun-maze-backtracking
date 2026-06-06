@@ -27,7 +27,6 @@ public class BushWall extends Obstacle {
     @Override
     public void render(GraphicsContext gc) {
 
-
         if (cachedFrame == null) {
 
             sb.setLength(0);

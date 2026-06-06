@@ -26,6 +26,8 @@ public class FireAssets {
         frames[2] = sliceImage(2);
         frames[3] = sliceImage(3);
         frames[4] = sliceImage(4);
+
+        sheet = null;
     }
 
     private Image sliceImage(int row) {
@@ -38,4 +40,6 @@ public class FireAssets {
     public Image getFrame(int frame) {
         return frames[frame];
     }
+
+    public int size() { return frames.length; }
 }

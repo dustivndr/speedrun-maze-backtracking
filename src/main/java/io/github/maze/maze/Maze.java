@@ -35,6 +35,9 @@ public class Maze {
          * 3 = Hole
          * 4 = Key
          * 5 = Player
+         * 6 = Ninja
+         * 7 = Fire
+         * 8 = Wizard
          *
          */
 
@@ -69,6 +72,16 @@ public class Maze {
                 Ninja ninja = new Ninja(gp, x, y);
                 objectList.add(ninja);
                 obstacleMap[col][row] = ninja;
+            }
+            case 7 /* Fire */ -> {
+                Fire fire = new Fire(gp, x, y);
+                objectList.add(fire);
+                obstacleMap[col][row] = fire;
+            }
+            case 8 /* Wizard */ -> {
+                Wizard wizard = new Wizard(gp, x, y);
+                objectList.add(wizard);
+                obstacleMap[col][row] = wizard;
             }
         }
     }
