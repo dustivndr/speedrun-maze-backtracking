@@ -15,12 +15,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Objects;
 
 public class GamePanel extends Pane {
 
@@ -63,14 +61,17 @@ public class GamePanel extends Pane {
         setOnKeyPressed(inputHandler::keyPressed);
         setOnKeyReleased(inputHandler::keyReleased);
 
-        ui = new UI(this);
-
-        setFocusTraversable(true);
-        requestFocus();
-
         getChildren().add(canvas);
 
         setup();
+
+        ui = new UI(this);
+
+        String cssPath = Objects.requireNonNull(getClass().getResource("/styles/styles.css")).toExternalForm();
+        this.getStylesheets().add(cssPath);
+
+        setFocusTraversable(true);
+        requestFocus();
     }
 
     public void startGameThread() {
@@ -177,6 +178,7 @@ public class GamePanel extends Pane {
 
         drawMap();
         drawObjects(gc);
+        ui.render();
     }
 
 }

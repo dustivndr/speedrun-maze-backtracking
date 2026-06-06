@@ -38,7 +38,7 @@ public class Main extends Application {
 
         scene.getStylesheets().add(
                 Objects.requireNonNull(
-                        getClass().getResource("/styles/menu.css")
+                        getClass().getResource("/styles/styles.css")
                 ).toExternalForm()
         );
 

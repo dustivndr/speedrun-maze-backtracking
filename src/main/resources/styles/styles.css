@@ -9,3 +9,9 @@
     -fx-pref-width: 200px;
     -fx-pref-height: 50px;
 }
+
+.game-font {
+    -fx-font-family: "Jersey 10";
+    -fx-font-size: 30px;
+    -fx-text-fill: #ffffff;
+}
