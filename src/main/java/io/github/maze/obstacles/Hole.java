@@ -24,6 +24,7 @@ public class Hole extends Obstacle {
 
     @Override
     public void render(GraphicsContext gc) {
+        System.out.println("hole rendered");
         if (!hasOpened) return;
         gc.drawImage(holeAssets.getImage(animationCounter), camera.getScreenX(x), camera.getScreenY(y));
     }
@@ -40,6 +41,6 @@ public class Hole extends Obstacle {
         }
     }
 
-    @Override public double getDepth() { return height + y; }
+    @Override public double getDepth() { return -1; }
     @Override public boolean getCollision() { return collision; }
 }
