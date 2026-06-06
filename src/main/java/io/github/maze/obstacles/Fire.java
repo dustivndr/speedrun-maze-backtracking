@@ -12,6 +12,7 @@ public class Fire extends Obstacle {
 
     int animationCounter = 0;
     long lastTime;
+    int damage = 5;
 
     public Fire(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
@@ -29,7 +30,7 @@ public class Fire extends Obstacle {
         // check damage player
         Player p = gp.player;
         if (Util.checkAABB(p, this)) {
-//            p.damage();
+            p.damage(damage);
         }
 
         // update texture
