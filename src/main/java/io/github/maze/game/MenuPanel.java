@@ -5,7 +5,6 @@ package io.github.maze.game;
 *
 */
 
-import io.github.maze.util.Fonts;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

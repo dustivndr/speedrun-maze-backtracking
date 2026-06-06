@@ -114,7 +114,7 @@ public class GamePanel extends Pane {
     }
 
 
-    // TODO: TEMPORARY METHOD TO ADD OBJECTS
+    // TODO: TEMPORARY METHOD TO ADD OBSTACLES LATER REPLACE WITH map.txt FILES
     void initGameObjects() {
 
 //         SPIKE
