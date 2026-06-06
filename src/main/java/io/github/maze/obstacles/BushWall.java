@@ -18,7 +18,7 @@ public class BushWall extends Obstacle {
     private Camera camera;
 
     public BushWall(GamePanel gp, double x, double y) {
-        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE * 1.5);
+        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
         camera = gp.camera;
     }
 
@@ -38,8 +38,6 @@ public class BushWall extends Obstacle {
             }
 
             cachedFrame = frames.getTexture(sb.toString());
-
-//            System.out.println("col: " + x / GamePanel.TILE_SIZE + ", y: " + y / GamePanel.TILE_SIZE + "; " + sb);
         }
 
         gc.drawImage(cachedFrame, camera.getScreenX(x), camera.getScreenY(y - GamePanel.TILE_SIZE));

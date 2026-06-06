@@ -13,8 +13,7 @@ public class Kunai extends Projectile {
 
     private final Angle angle;
     private Image cachedImage;
-    private double damage = 10;
-    private double speed = 20;
+    private double speed = 15;
 
     private Camera camera;
 
@@ -60,7 +59,7 @@ public class Kunai extends Projectile {
 
     @Override
     public double getDepth() {
-        return y + height;
+        return GamePanel.TILE_SIZE * 1000;
     }
 
     @Override

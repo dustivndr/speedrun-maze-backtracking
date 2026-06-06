@@ -2,6 +2,7 @@ package io.github.maze.obstacles;
 
 import io.github.maze.entities.Entity;
 import io.github.maze.entities.Player;
+import io.github.maze.entities.projectile.Kunai;
 import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Angle;
@@ -41,7 +42,7 @@ public class Ninja extends Obstacle {
 
         if (isPlayerInside) {
             if (!playerWasInside) {
-                p.damage(damage);
+                attack();
 
                 playerStartX = p.getX();
                 playerStartY = p.getY();
@@ -53,7 +54,7 @@ public class Ninja extends Obstacle {
                 double distanceY = Math.abs(p.getY() - playerStartY);
 
                 if (distanceX >= GamePanel.TILE_SIZE || distanceY >= GamePanel.TILE_SIZE) {
-                    p.damage(damage);
+                    attack();
 
                     playerStartX = p.getX();
                     playerStartY = p.getY();
@@ -73,6 +74,11 @@ public class Ninja extends Obstacle {
         } else {
             spriteDirection = "right";
         }
+    }
+
+    private void attack() {
+        gp.maze.objectList.add(new Kunai(gp, x, y));
+        p.damage(damage);
     }
 
     @Override

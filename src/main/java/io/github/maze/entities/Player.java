@@ -1,5 +1,6 @@
 package io.github.maze.entities;
 
+import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.input.InputHandler;
 import javafx.scene.canvas.GraphicsContext;
@@ -118,56 +119,54 @@ public class Player extends Entity {
         else if (dy < 0) direction = "up";
         else if (dy > 0) direction = "down";
 
-        // Reset flags and check collisions
-        collisionUp = false;
-        collisionDown = false;
-        collisionLeft = false;
-        collisionRight = false;
+        // reset flags and check collisions
+        collisionUp = collisionDown = collisionLeft = collisionRight = false;
+        checkOutOfBound(dx, dy);
 
-        // checks and handles collision
-//        checkOutOfBound(dx, dy);
-//        gp.cChecker.checkObject(this, dx, dy);
-//        gp.cChecker.checkTile(this, dx, dy);
-//
-//        // checks and handles interactions
-//        gp.interactionChecker.checkPickup(this);
-//        gp.interactionChecker.checkOpenContainer(this);
-//
-//        // movement logic
-//        double currentSpeed = (dx != 0 && dy != 0) ? speedDiagonal : speed;
+        // movement logic
         if (dy < 0 && !collisionUp)    y -= currentSpeed;
         if (dy > 0 && !collisionDown)  y += currentSpeed;
         if (dx < 0 && !collisionLeft)  x -= currentSpeed;
         if (dx > 0 && !collisionRight) x += currentSpeed;
-//
-//        gp.interactionChecker.checkStepping(this);
-//
 
         if (getTileX() != prevCol || getTileY() != prevRow) {
             walkCount++;
-            System.out.println("new tile: col: " + getTileX() + ", row: " + getTileY());
-            System.out.println("prev tile:     " + prevCol    + "       " + prevRow);
-            System.out.println("walk count:    " + walkCount);
-            System.out.println();
         }
 
         long curr = System.currentTimeMillis();
-        spriteCounter += lastTime - curr;
+        spriteCounter += curr - lastTime;
         lastTime = curr;
-        final double animationTimerSc = 0.15; // change texture every 0.15 seconds
-        if (spriteCounter > animationTimerSc) {
+        final double animationTimerMs = 100; // change texture every 150 millisecond
+        if (spriteCounter > animationTimerMs) {
             spriteNum = (spriteNum % 4) + 1; // cycle 1-4
             spriteCounter = 0;
         }
     }
 
     public void checkOutOfBound(int dx, int dy) {
+        double newX = x;
+        double newY = y;
+        if (dx == 1) {
+            newX += currentSpeed;
+        } else if (dx == -1) {
+            newX -= currentSpeed;
+        }
 
+        if (dy == 1) {
+            newY += currentSpeed;
+        } else if (dy == -1) {
+            newY -= currentSpeed;
+        }
+
+        if (newX < 0) collisionLeft = true;
+        if (newX >= GamePanel.WORLD_WIDTH) collisionRight = true;
+        if (newY < 0) collisionUp = true;
+        if (newY >= GamePanel.WORLD_HEIGHT) collisionDown = true;
     }
 
     @Override
     public double getDepth() {
-        return 0;
+        return y + height;
     }
 
     public int getWalkCount() { return walkCount; }

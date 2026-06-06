@@ -33,9 +33,15 @@ public class GamePanel extends Pane {
     public static final int ROW_WIDTH = 40;
     public static final int COL_HEIGHT = 30;
 
+    public static final int WORLD_WIDTH;
+    public static final int WORLD_HEIGHT;
+
     static {
         SCALE = 2;
         TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
+
+        WORLD_WIDTH = TILE_SIZE * ROW_WIDTH;
+        WORLD_HEIGHT = TILE_SIZE * COL_HEIGHT;
     }
 
     public int FPS = 30;
@@ -111,35 +117,38 @@ public class GamePanel extends Pane {
     // TODO: TEMPORARY METHOD TO ADD OBJECTS
     void initGameObjects() {
 
-        // SPIKE
-        maze.addObject(2, 5, 0);
-        maze.addObject(2, 5, 1);
-        maze.addObject(2, 6, 1);
-        maze.addObject(2, 6, 2);
+//         SPIKE
+//        maze.addObject(2, 5, 0);
+//        maze.addObject(2, 5, 1);
+//        maze.addObject(2, 6, 1);
+//        maze.addObject(2, 6, 2);
+//
+//        // KEY
+//        maze.addObject(4, 6, 3);
+//
+//        // BUSH WALL
+//        maze.addObject(1, 0, 1);
+//
+//        maze.addObject(1, 2, 1);
+//        maze.addObject(1, 2, 2);
+//        maze.addObject(1, 2, 3);
+//        maze.addObject(1, 3, 1);
+//        maze.addObject(1, 3, 2);
+//        maze.addObject(1, 3, 3);
+//        maze.addObject(1, 4, 1);
+//        maze.addObject(1, 4, 2);
+//        maze.addObject(1, 4, 3);
+//
+//        maze.addObject(1, 2, 6);
+//        maze.addObject(1, 2, 7);
+//        maze.addObject(1, 3, 6);
+//        maze.addObject(1, 3, 7);
+//
+//        // NINJA
+//        maze.addObject(6, 6, 0);
 
-        // KEY
-        maze.addObject(4, 6, 3);
-
-        // BUSH WALL
-        maze.addObject(1, 0, 1);
-
-        maze.addObject(1, 2, 1);
-        maze.addObject(1, 2, 2);
-        maze.addObject(1, 2, 3);
-        maze.addObject(1, 3, 1);
-        maze.addObject(1, 3, 2);
-        maze.addObject(1, 3, 3);
-        maze.addObject(1, 4, 1);
-        maze.addObject(1, 4, 2);
-        maze.addObject(1, 4, 3);
-
-        maze.addObject(1, 2, 6);
-        maze.addObject(1, 2, 7);
-        maze.addObject(1, 3, 6);
-        maze.addObject(1, 3, 7);
-
-        // NINJA
-        maze.addObject(6, 6, 0);
+        maze.addObject(2, 4, 3);
+        maze.addObject(1, 4, 4);
     }
 
     private void drawMap() {
@@ -157,11 +166,13 @@ public class GamePanel extends Pane {
     }
 
     public void drawObjects(GraphicsContext g) {
-        maze.objectList.sort(Comparator.comparing(GameObject::getDepth));
         for (int i = 0; i < maze.objectList.size(); i++) {
+
             GameObject o = maze.objectList.get(i);
+            System.out.println(i + ". " + o.toString());
             o.render(g);
         }
+        System.out.println();
     }
 
     public void update() {
@@ -182,6 +193,7 @@ public class GamePanel extends Pane {
     public void render() {
 
         camera.setPos();
+        maze.objectList.sort(Comparator.comparing(GameObject::getDepth));
 
         drawMap();
         drawObjects(gc);
