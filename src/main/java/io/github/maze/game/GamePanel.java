@@ -192,6 +192,7 @@ public class GamePanel extends Pane {
 
     private void drawMap() {
 
+        Image grass = tileManager.grass;
 
         for (int row = 0; row < COL_HEIGHT; row++) {
             for (int col = 0; col < ROW_WIDTH; col++) {
