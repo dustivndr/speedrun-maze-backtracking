@@ -3,6 +3,7 @@ package io.github.maze.maze;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.obstacles.*;
+import io.github.maze.particle.Particle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Maze {
     final GamePanel gp;
     public List<GameObject> objectList = new ArrayList<>();
     public GameObject[][] obstacleMap = new GameObject[GamePanel.ROW_HEIGHT][GamePanel.COL_WIDTH];
+    public List<Particle> particleList = new ArrayList<>();
 
     public Player player;
 
