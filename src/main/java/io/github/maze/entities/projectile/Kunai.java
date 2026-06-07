@@ -2,6 +2,7 @@ package io.github.maze.entities.projectile;
 
 import io.github.maze.entities.Projectile;
 import io.github.maze.game.GamePanel;
+import io.github.maze.maze.GameObject;
 import io.github.maze.render.Camera;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
@@ -59,7 +60,7 @@ public class Kunai extends Projectile {
 
     @Override
     public double getDepth() {
-        return GamePanel.TILE_SIZE * 1000;
+        return GameObject.FOREGROUND_OBJECT;
     }
 
     @Override
