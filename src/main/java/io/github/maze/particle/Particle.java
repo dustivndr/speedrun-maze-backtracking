@@ -14,13 +14,13 @@ public abstract class Particle implements GameObject {
     private int life;
     private int timerMs;
 
-    public Particle(GamePanel gp, double x, double y, double width, double height, int life) {
+    public Particle(GamePanel gp, double x, double y, double width, double height, int lifetime) {
         this.gp = gp;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.life = life;
+        this.life = lifetime;
     }
 
     public int getLife() { return life; }
@@ -33,6 +33,9 @@ public abstract class Particle implements GameObject {
     @Override public void setY(double y) { this.y = y; }
     @Override public void setWidth(double width) { this.width = width; }
     @Override public void setHeight(double height) { this.height = height; }
+
+    @Override public boolean getCollision() { return false; }
+    @Override public double getDepth() { return GameObject.PARTICLE_LAYER; }
 
     @Override
     public void update() {
