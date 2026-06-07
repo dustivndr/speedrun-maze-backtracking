@@ -10,7 +10,7 @@ import io.github.maze.util.Util;
 
 public class HoleAssets {
 
-    private Image[] frames = new Image[3];
+    private final Image[] frames = new Image[3];
     private Image sheet;
 
     public static int BASE_WIDTH = 16;

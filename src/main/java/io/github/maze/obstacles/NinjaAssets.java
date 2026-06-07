@@ -10,7 +10,7 @@ import java.util.List;
 
 public class NinjaAssets {
 
-    private List<Image> frames = new ArrayList<>();
+    private final List<Image> frames = new ArrayList<>();
     Image sheet;
 
     public static final int BASE_WIDTH = 16;

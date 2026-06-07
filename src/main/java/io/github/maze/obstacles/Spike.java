@@ -11,7 +11,7 @@ public class Spike extends Obstacle implements GameObject {
     private static final SpikeAssets assets = new SpikeAssets();
     private boolean active;
     private boolean triggered;
-    private Player player;
+    private final Player player;
 
     public Spike(GamePanel gp, double x, double y) {
         super(gp, x, y,

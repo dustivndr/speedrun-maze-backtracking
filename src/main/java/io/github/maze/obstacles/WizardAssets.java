@@ -7,9 +7,9 @@ import javafx.scene.image.WritableImage;
 
 public class WizardAssets {
 
-    private Image[] frames = new Image[17];
+    private final Image[] frames = new Image[17];
 
-    private Image sheet;
+    private final Image sheet;
 
     public static final int BASE_WIDTH = 16;
     public static final int BASE_HEIGHT = 18;
