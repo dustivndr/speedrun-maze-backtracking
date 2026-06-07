@@ -20,7 +20,7 @@ public class Maze {
     public void addObject(int id, int col, int row) {
 
         if (col < 0 || col >= GamePanel.ROW_WIDTH || row < 0 || row >= GamePanel.ROW_WIDTH) {
-            throw new IllegalArgumentException("col: " + col + ", row: " + row);
+            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
         }
 
         double x = col * GamePanel.TILE_SIZE;
