@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Fire extends Obstacle {
 
-    final FireAssets fireAssets = new FireAssets();
+    private static final FireAssets fireAssets = new FireAssets();
     final Player p;
 
     int animationCounter = 0;

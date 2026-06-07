@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Ninja extends Obstacle {
 
-    NinjaAssets ninjaAssets = new NinjaAssets();
+    private static final NinjaAssets ninjaAssets = new NinjaAssets();
     Player p;
 
     Angle angleToPlayer;

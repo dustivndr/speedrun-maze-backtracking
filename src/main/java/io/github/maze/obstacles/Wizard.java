@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Wizard extends Obstacle {
 
-    final WizardAssets wizardAssets;
+    private static final WizardAssets wizardAssets = new WizardAssets();
 
     final Player p;
 
@@ -28,7 +28,6 @@ public class Wizard extends Obstacle {
                 GamePanel.TILE_SIZE,
                 GamePanel.TILE_SIZE + 2 * GamePanel.SCALE);
 
-        wizardAssets = new WizardAssets();
         angleToPlayer = new Angle(Angle.between(x, y, gp.maze.player.getX(), gp.maze.player.getY()));
         p = gp.maze.player;
     }
@@ -79,7 +78,7 @@ public class Wizard extends Obstacle {
 
                 gp.maze.addThunder(playerCenterX, playerBottomY);
 
-                p.damage(20);
+                p.damage(10);
 
                 currAnimationLength = 0;
                 attackAnimationCounter = -1;
