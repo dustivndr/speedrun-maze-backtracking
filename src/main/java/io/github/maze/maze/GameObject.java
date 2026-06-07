@@ -5,21 +5,21 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface GameObject {
 
-    public static final int BACKGROUND_OBJECT = -1;
-    public static final int FOREGROUND_OBJECT = GamePanel.TILE_SIZE * GamePanel.ROW_HEIGHT + 1;
+    int BACKGROUND_OBJECT = -1;
+    int FOREGROUND_OBJECT = GamePanel.TILE_SIZE * GamePanel.ROW_HEIGHT + 1;
 
-    public void render(GraphicsContext g);
-    public void update();
-    public double getDepth();
-    public double getY();
-    public double getX();
-    public double getHeight();
-    public double getWidth();
+    void render(GraphicsContext g);
+    void update();
+    double getDepth();
+    double getY();
+    double getX();
+    double getHeight();
+    double getWidth();
 
-    public void setX(double x);
-    public void setY(double y);
-    public void setHeight(double height);
-    public void setWidth(double width);
+    void setX(double x);
+    void setY(double y);
+    void setHeight(double height);
+    void setWidth(double width);
 
-    public boolean getCollision();
+    boolean getCollision();
 }
