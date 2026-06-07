@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class FireMonster extends Obstacle {
 
+    private static final FireMonsterAssets fireMonsterAssets = new FireMonsterAssets();
     public FireMonster(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE * 2, GamePanel.TILE_SIZE);
     }
