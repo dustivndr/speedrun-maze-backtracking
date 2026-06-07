@@ -1,6 +1,8 @@
 package io.github.maze.maze.loader;
 
-package io.github.maze.maze.loader;
+import io.github.maze.entities.Player;
+import io.github.maze.game.GamePanel;
+import io.github.maze.maze.Maze;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,14 +14,48 @@ import java.io.InputStreamReader;
  */
 public class MazeLoader {
 
-    // Asumsi 'gp' itu parameter dari class GamePanel / Main class kamu
-    public void loadMap(String mapPath, GamePanel gp) {
-        try {
-            // Ambil file txt (pake getResourceAsStream biar jalan walau udah di-build jadi .jar)
-            InputStream is = getClass().getResourceAsStream(mapPath);
-            
+    final GamePanel gp;
+
+    List<String> files;
+    public int currentFile = 0;
+
+    public MazeLoader(GamePanel gp) {
+        this.gp = gp;
+
+        files = new ArrayList<>();
+        int index = 0;
+        while (true) {
+            String path = "/maps/map" + index + ".txt";
+            if (getClass().getResource(path) != null) {
+                files.add(path);
+                index++;
+            } else {
+                break;
+            }
+        }
+
+        if (files.isEmpty()) {
+            throw new IllegalStateException("No map files found/defined!");
+        }
+
+    }
+
+
+    public void loadNextMapObstacles() {
+        loadObstacles(files.get(currentFile), gp.maze);
+        currentFile = (currentFile + 1) % files.size();
+    }
+
+    public void loadNextMapPlayer() {
+        loadPlayer(files.get(currentFile), gp.maze);
+        currentFile = (currentFile + 1) % files.size();
+    }
+
+    public void loadObstacles(String mapPath, Maze maze) {
+
+        try (InputStream is = getClass().getResourceAsStream(mapPath)) {
+
             if (is == null) {
-                System.err.println("Waduh, file map di " + mapPath + " gak ketemu!");
                 return;
             }
 
@@ -27,31 +63,66 @@ public class MazeLoader {
             String line;
             int row = 0;
 
-            // Loop baca file txt baris per baris
             while ((line = br.readLine()) != null) {
-                
-                // Pisah karakter yang ada di baris itu pake spasi
+
                 String[] numbers = line.split(" ");
-                
-                // Loop ke samping untuk ngambil col dan id-nya
+
                 for (int col = 0; col < numbers.length; col++) {
-                    
-                    // Ambil id dari array string, ubah jadi integer
-                    int id = Integer.parseInt(numbers[col]);
-                    
-                    // Execute method sesuai request kamu
-                    gp.maze.addObject(id, col, row);
+
+                    if (!numbers[col].isEmpty()) {
+                        int id = Integer.parseInt(numbers[col]);
+
+                        // ignore player
+                        if (id != 5) {
+                            maze.addObject(id, col, row);
+                        }
+                    }
                 }
-                
-                // Setelah selesai 1 baris (ke samping), baris (row) nambah 1 ke bawah
+
                 row++;
             }
-            
-            br.close();
-            System.out.println("Map berhasil di-load!");
 
-        } catch (Exception e) {
-            System.err.println("Ada error pas baca file map:");
+            br.close();
+
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Error parsing map file: " + mapPath);
+            e.printStackTrace();
+        }
+    }
+
+    public void loadPlayer(String mapPath, Maze maze) {
+
+        try (InputStream is = getClass().getResourceAsStream(mapPath);
+             BufferedReader br = (is != null) ? new BufferedReader(new InputStreamReader(is)) : null) {
+
+            if (is == null) return;
+
+            String line;
+            int row = 0;
+
+            while ((line = br.readLine()) != null) {
+                String[] numbers = line.split(" ");
+                for (int col = 0; col < numbers.length; col++) {
+                    if (!numbers[col].isEmpty()) {
+                        int id = Integer.parseInt(numbers[col]);
+
+                        if (id == 5) {
+                            double pixelX = col * GamePanel.TILE_SIZE;
+                            double pixelY = row * GamePanel.TILE_SIZE;
+
+                            // add a new player to the maze instance
+                            Player p = new Player(gp, pixelX, pixelY);
+                            maze.player = p;
+                            maze.objectList.add(p);
+
+                            return;
+                        }
+                    }
+                }
+                row++;
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Error parsing player in map file: " + mapPath);
             e.printStackTrace();
         }
     }

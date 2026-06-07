@@ -12,7 +12,7 @@ public class UI {
     public UI(GamePanel gp) {
         this.gp = gp;
 
-        lastHP = gp.player.getHP();
+        lastHP = gp.maze.player.getHP();
         hpLabel = new Label("HP: " + lastHP);
         hpLabel.getStyleClass().add("game-font");
         hpLabel.setLayoutX(20);
@@ -22,7 +22,7 @@ public class UI {
     }
 
     public void render() {
-        int currHP = gp.player.getHP();
+        int currHP = gp.maze.player.getHP();
         if (currHP != lastHP) {
             hpLabel.setText("HP: " + currHP);
             lastHP = currHP;

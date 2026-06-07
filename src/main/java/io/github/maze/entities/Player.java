@@ -12,7 +12,6 @@ public class Player extends Entity {
 
     private int walkCount = 0;
 
-    public static int animationCounter = 0;
     public double lastX, lastY;
 
     private int MAX_HP = 100000;
@@ -47,11 +46,6 @@ public class Player extends Entity {
         lastX = this.x;
         lastY = this.y;
         lastTime = System.currentTimeMillis();
-
-        if (animationCounter + 1 > 1) {
-            throw new IllegalArgumentException("Cannot add more than one player.");
-        }
-        animationCounter++;
     }
 
     public void damage(int hp) {

@@ -25,14 +25,14 @@ public class Ninja extends Obstacle {
 
     public Ninja(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-        p = gp.player;
-        angleToPlayer = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
+        p = gp.maze.player;
+        angleToPlayer = new Angle(Angle.between(x, y, gp.maze.player.getX(), gp.maze.player.getY()));
     }
 
     @Override
     public void update() {
 
-        Player p = gp.player;
+        Player p = gp.maze.player;
         angleToPlayer.lookAt(x, y, p.getX(), p.getY());
 
         boolean isPlayerInside = p.getX() >= x - GamePanel.TILE_SIZE &&

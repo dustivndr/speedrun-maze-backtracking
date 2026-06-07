@@ -31,8 +31,8 @@ public class GamePanel extends Pane {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 
-    public static final int ROW_WIDTH = 40;
-    public static final int COL_HEIGHT = 30;
+    public static final int COL_WIDTH = 40;
+    public static final int ROW_HEIGHT = 30;
 
     public static final int WORLD_WIDTH;
     public static final int WORLD_HEIGHT;
@@ -41,8 +41,8 @@ public class GamePanel extends Pane {
         SCALE = 2;
         TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
 
-        WORLD_WIDTH = TILE_SIZE * ROW_WIDTH;
-        WORLD_HEIGHT = TILE_SIZE * COL_HEIGHT;
+        WORLD_WIDTH = TILE_SIZE * COL_WIDTH;
+        WORLD_HEIGHT = TILE_SIZE * ROW_HEIGHT;
     }
 
     public int FPS = 30;
@@ -56,7 +56,6 @@ public class GamePanel extends Pane {
     public final UI ui;
     public final Camera camera;
     public final MazeLoader mazeLoader;
-    public Player player;
     public AnimationTimer gameTimer;
 
     public GamePanel(Game game) {
@@ -73,11 +72,13 @@ public class GamePanel extends Pane {
 
         getChildren().add(canvas);
 
-        maze.addObject(5, 0, 0); // init player
-        camera = new Camera(this, player);
-        initGameObjects();
-        ui = new UI(this);
         mazeLoader = new MazeLoader(this);
+        mazeLoader.loadNextMapPlayer();
+
+        camera = new Camera(this, maze.player);
+        mazeLoader.loadNextMapObstacles();
+
+        ui = new UI(this);
 
         String cssPath = Objects.requireNonNull(getClass().getResource("/styles/styles.css")).toExternalForm();
         this.getStylesheets().add(cssPath);
@@ -220,15 +221,15 @@ public class GamePanel extends Pane {
 
 
         // ========= map 5 : WIZARD =========
-        maze.addObject(8, 5, 5);
+//        maze.addObject(8, 5, 5);
     }
 
     private void drawMap() {
 
         Image grass = tileManager.grass;
 
-        for (int row = 0; row < COL_HEIGHT; row++) {
-            for (int col = 0; col < ROW_WIDTH; col++) {
+        for (int row = 0; row < ROW_HEIGHT; row++) {
+            for (int col = 0; col < COL_WIDTH; col++) {
 
                 gc.drawImage(grass,
                         camera.getScreenX(col * TILE_SIZE),

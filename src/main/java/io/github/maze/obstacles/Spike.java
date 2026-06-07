@@ -17,7 +17,7 @@ public class Spike extends Obstacle implements GameObject {
         super(gp, x, y,
               GamePanel.TILE_SIZE * GamePanel.SCALE,
               GamePanel.TILE_SIZE * GamePanel.SCALE);
-        this.player = gp.player;
+        this.player = gp.maze.player;
     }
 
     @Override

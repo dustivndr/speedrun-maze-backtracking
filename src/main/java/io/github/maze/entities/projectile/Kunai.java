@@ -25,7 +25,7 @@ public class Kunai extends Projectile {
 
         MAX_TRAVELLED_DISTANCE = GamePanel.TILE_SIZE * 2;
 
-        angle = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
+        angle = new Angle(Angle.between(x, y, gp.maze.player.getX(), gp.maze.player.getY()));
         cachedImage = (new KunaiAssets()).getRotatedKunai(angle);
         camera = gp.camera;
     }
@@ -45,7 +45,7 @@ public class Kunai extends Projectile {
 
         int col = (int) (x / GamePanel.TILE_SIZE);
         int row = (int) (y / GamePanel.TILE_SIZE);
-        if (col == gp.player.getTileX() && row == gp.player.getTileY()) {
+        if (col == gp.maze.player.getTileX() && row == gp.maze.player.getTileY()) {
             return true;
         }
 

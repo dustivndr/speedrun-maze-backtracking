@@ -73,9 +73,9 @@ public class Key extends Obstacle {
     public void update() {
         int col = (int) (x / GamePanel.TILE_SIZE);
         int row = (int) (y / GamePanel.TILE_SIZE);
-        if (gp.player.getTileX() == col &&
-                gp.player.getTileY() == row) {
-            gp.player.keyCount++;
+        if (gp.maze.player.getTileX() == col &&
+                gp.maze.player.getTileY() == row) {
+            gp.maze.player.keyCount++;
             removeObject = true;
         }
     }
