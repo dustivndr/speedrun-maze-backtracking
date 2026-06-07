@@ -10,6 +10,7 @@ import io.github.maze.input.InputHandler;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
+import io.github.maze.maze.loader.MazeLoader;
 import io.github.maze.obstacles.Obstacle;
 import io.github.maze.render.Camera;
 import javafx.animation.AnimationTimer;
@@ -54,6 +55,7 @@ public class GamePanel extends Pane {
     public final InputHandler inputHandler;
     public final UI ui;
     public final Camera camera;
+    public final MazeLoader mazeLoader;
     public Player player;
     public AnimationTimer gameTimer;
 
@@ -75,6 +77,7 @@ public class GamePanel extends Pane {
         camera = new Camera(this, player);
         initGameObjects();
         ui = new UI(this);
+        mazeLoader = new MazeLoader(this);
 
         String cssPath = Objects.requireNonNull(getClass().getResource("/styles/styles.css")).toExternalForm();
         this.getStylesheets().add(cssPath);
