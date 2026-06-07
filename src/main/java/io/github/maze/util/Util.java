@@ -11,10 +11,14 @@ public class Util {
     public static final Random rand = new Random(System.nanoTime());
 
     public static Image getScaledImage(String path) {
+        return getScaledImage(path, GamePanel.SCALE);
+    }
+
+    public static Image getScaledImage(String path, double scale) {
         Image ogSheet = new Image(path);
 
-        double scaledWidth = ogSheet.getWidth() * GamePanel.SCALE;
-        double scaledHeight = ogSheet.getHeight() * GamePanel.SCALE;
+        double scaledWidth = ogSheet.getWidth() * scale;
+        double scaledHeight = ogSheet.getHeight() * scale;
 
         return new Image(
                 path,
