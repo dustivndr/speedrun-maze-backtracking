@@ -16,7 +16,7 @@ public class Fire extends Obstacle {
 
     public Fire(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
-        p = gp.player;
+        p = gp.maze.player;
         lastTime = System.currentTimeMillis();
     }
 
@@ -29,7 +29,7 @@ public class Fire extends Obstacle {
     public void update() {
 
         // check damage player
-        Player p = gp.player;
+        Player p = gp.maze.player;
         if (Util.checkAABB(p, this)) {
             p.damage(damage);
         }

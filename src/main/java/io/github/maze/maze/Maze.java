@@ -11,7 +11,9 @@ public class Maze {
 
     final GamePanel gp;
     public List<GameObject> objectList = new ArrayList<>();
-    public GameObject[][] obstacleMap = new GameObject[GamePanel.COL_HEIGHT][GamePanel.ROW_WIDTH];
+    public GameObject[][] obstacleMap = new GameObject[GamePanel.ROW_HEIGHT][GamePanel.COL_WIDTH];
+
+    public Player player;
 
     public Maze(GamePanel gp) {
         this.gp = gp;
@@ -19,7 +21,7 @@ public class Maze {
 
     public void addObject(int id, int col, int row) {
 
-        if (col < 0 || col >= GamePanel.ROW_WIDTH || row < 0 || row >= GamePanel.ROW_WIDTH) {
+        if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
             throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
         }
 
@@ -46,43 +48,52 @@ public class Maze {
             case 1 /* BushWall */ -> {
                 BushWall bushWall = new BushWall(gp, x, y);
                 objectList.add(bushWall);
-                obstacleMap[col][row] = bushWall;
+                obstacleMap[row][col] = bushWall;
             }
             case 2 /* Spike */ -> {
                 Spike spike = new Spike(gp, x, y);
                 objectList.add(spike);
-                obstacleMap[col][row] = spike;
+                obstacleMap[row][col] = spike;
             }
             case 3 /* Hole */ -> {
                 Hole hole = new Hole(gp, col, row);
                 objectList.add(hole);
-                obstacleMap[col][row] = hole;
+                obstacleMap[row][col] = hole;
             }
             case 4 /* Key */ -> {
                 Key key = new Key(gp, col, row);
                 objectList.add(key);
-                obstacleMap[col][row] = key;
+                obstacleMap[row][col] = key;
             }
             case 5 /* Player */ -> {
                 Player p = new Player(gp, x, y);
                 objectList.add(p);
-                gp.player = p;
+
+                if (this == gp.maze) {
+                    gp.maze.player = p;
+                }
             }
             case 6 /* Ninja */ -> {
                 Ninja ninja = new Ninja(gp, x, y);
                 objectList.add(ninja);
-                obstacleMap[col][row] = ninja;
+                obstacleMap[row][col] = ninja;
             }
             case 7 /* Fire */ -> {
                 Fire fire = new Fire(gp, x, y);
                 objectList.add(fire);
-                obstacleMap[col][row] = fire;
+                obstacleMap[row][col] = fire;
             }
             case 8 /* Wizard */ -> {
                 Wizard wizard = new Wizard(gp, x, y);
                 objectList.add(wizard);
-                obstacleMap[col][row] = wizard;
+                obstacleMap[row][col] = wizard;
             }
         }
+    }
+
+    public void copyFrom(Maze replacement) {
+        objectList = replacement.objectList;
+        obstacleMap = replacement.obstacleMap;
+        player = replacement.player;
     }
 }

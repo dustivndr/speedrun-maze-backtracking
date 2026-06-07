@@ -45,7 +45,7 @@ public class Hole extends Obstacle {
     @Override
     public void update() {
 
-        Player p = gp.player;
+        Player p = gp.maze.player;
         if (Util.checkAABB(p, this)) {
             hasOpened = true;
             collision = true;

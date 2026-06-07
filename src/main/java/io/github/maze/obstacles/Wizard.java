@@ -29,8 +29,8 @@ public class Wizard extends Obstacle {
                 GamePanel.TILE_SIZE + 2 * GamePanel.SCALE);
 
         wizardAssets = new WizardAssets();
-        angleToPlayer = new Angle(Angle.between(x, y, gp.player.getX(), gp.player.getY()));
-        p = gp.player;
+        angleToPlayer = new Angle(Angle.between(x, y, gp.maze.player.getX(), gp.maze.player.getY()));
+        p = gp.maze.player;
     }
 
     @Override

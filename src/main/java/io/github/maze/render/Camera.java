@@ -25,16 +25,16 @@ public class Camera {
         if (x < 0) {
             x = 0;
         }
-        if (x > GamePanel.ROW_WIDTH * GamePanel.TILE_SIZE - GamePanel.SCREEN_WIDTH) {
-            x = GamePanel.ROW_WIDTH * GamePanel.TILE_SIZE - GamePanel.SCREEN_WIDTH;
+        if (x > GamePanel.COL_WIDTH * GamePanel.TILE_SIZE - GamePanel.SCREEN_WIDTH) {
+            x = GamePanel.COL_WIDTH * GamePanel.TILE_SIZE - GamePanel.SCREEN_WIDTH;
         }
 
         // clamps Y to left right bounds
         if (y < 0) {
             y = 0;
         }
-        if (y > GamePanel.COL_HEIGHT * GamePanel.TILE_SIZE - GamePanel.SCREEN_HEIGHT) {
-            y = GamePanel.COL_HEIGHT * GamePanel.TILE_SIZE - GamePanel.SCREEN_HEIGHT;
+        if (y > GamePanel.ROW_HEIGHT * GamePanel.TILE_SIZE - GamePanel.SCREEN_HEIGHT) {
+            y = GamePanel.ROW_HEIGHT * GamePanel.TILE_SIZE - GamePanel.SCREEN_HEIGHT;
         }
     }
 
