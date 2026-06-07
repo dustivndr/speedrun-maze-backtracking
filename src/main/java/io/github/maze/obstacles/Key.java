@@ -34,7 +34,6 @@ public class Key extends Obstacle {
     @Override public double getDepth() { return y + height; }
     @Override public boolean getCollision() { return false; }
 
-
     @Override
     public void render(GraphicsContext g) {
 
@@ -61,12 +60,14 @@ public class Key extends Obstacle {
             }
 
             lastTime = currentTime;
+
         }
 
         double screenX = camera.getScreenX(this.x);
         double screenY = camera.getScreenY(this.y + dy - 5);
 
         g.drawImage(assets.getKeyImage(), screenX, screenY);
+
     }
 
     @Override

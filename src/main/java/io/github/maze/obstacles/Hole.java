@@ -9,11 +9,11 @@ import javafx.scene.shape.Rectangle;
 
 public class Hole extends Obstacle {
 
-    private static HoleAssets holeAssets = new HoleAssets();
+    private static final HoleAssets holeAssets = new HoleAssets();
 
     boolean hasOpened = false;
     boolean collision = false;
-    private Camera camera;
+    private final Camera camera;
 
     int animationCounter = 0;
 

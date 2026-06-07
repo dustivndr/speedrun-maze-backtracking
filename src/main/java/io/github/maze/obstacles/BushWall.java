@@ -39,9 +39,11 @@ public class BushWall extends Obstacle {
         }
 
         gc.drawImage(cachedFrame, camera.getScreenX(x), camera.getScreenY(y - GamePanel.TILE_SIZE));
+
     }
 
     private void getBushWallConnections() {
+
         int col = (int) (x / GamePanel.TILE_SIZE);
         int row = (int) (y / GamePanel.TILE_SIZE);
 
@@ -93,6 +95,7 @@ public class BushWall extends Obstacle {
         if (!found) {
             sb.append("single");
         }
+
     }
 
     @Override

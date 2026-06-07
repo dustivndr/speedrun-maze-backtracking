@@ -42,6 +42,7 @@ public class Main extends Application {
                 ).toExternalForm()
         );
 
+        // SYSTEM LOG
         System.out.println(
                 getClass().getResource(
                         "/image/tiles/gentle-forest-v01.png"
@@ -53,6 +54,8 @@ public class Main extends Application {
                         "/image/tiles/gentle-forest-v01.png"
                 )
         );
+
+        // END OF SYSTEM LOG
 
         stage.setTitle("Maze");
         stage.setScene(scene);

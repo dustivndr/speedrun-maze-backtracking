@@ -1,5 +1,10 @@
 package io.github.maze.maze.loader;
 
+/*
+ * Load Map from TXT (~/maze/maps/mapX.txt)
+ *
+*/
+
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.Maze;
@@ -7,11 +12,9 @@ import io.github.maze.maze.Maze;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
-/*
- * Load Map from TXT (~/maze/maps/mapX.txt)
- *
- */
 public class MazeLoader {
 
     final GamePanel gp;

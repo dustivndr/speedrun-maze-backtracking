@@ -13,6 +13,7 @@ import io.github.maze.maze.TileManager;
 import io.github.maze.maze.loader.MazeLoader;
 import io.github.maze.obstacles.Obstacle;
 import io.github.maze.render.Camera;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -59,6 +60,7 @@ public class GamePanel extends Pane {
     public AnimationTimer gameTimer;
 
     public GamePanel(Game game) {
+        
         this.game = game;
 
         canvas = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -85,9 +87,11 @@ public class GamePanel extends Pane {
 
         setFocusTraversable(true);
         requestFocus();
+
     }
 
     public void startGameThread() {
+
         long drawInterval = 1_000_000_000 / FPS;
 
         gameTimer = new AnimationTimer() {
@@ -115,6 +119,7 @@ public class GamePanel extends Pane {
         };
 
         gameTimer.start();
+
     }
 
 
@@ -236,14 +241,17 @@ public class GamePanel extends Pane {
                         camera.getScreenY(row * TILE_SIZE));
             }
         }
+
     }
 
     public void drawObjects(GraphicsContext g) {
+
         for (int i = 0; i < maze.objectList.size(); i++) {
 
             GameObject o = maze.objectList.get(i);
             o.render(g);
         }
+
     }
 
     public void update() {
@@ -259,6 +267,7 @@ public class GamePanel extends Pane {
                 }
             }
         }
+
     }
 
     public void render() {
@@ -269,6 +278,7 @@ public class GamePanel extends Pane {
         drawMap();
         drawObjects(gc);
         ui.render();
+
     }
 
 }

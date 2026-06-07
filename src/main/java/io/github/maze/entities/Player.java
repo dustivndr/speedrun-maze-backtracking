@@ -88,10 +88,12 @@ public class Player extends Entity {
         }
 
         gc.drawImage(playerAssets.getTexture(sb.toString()), gp.camera.getScreenX(x), gp.camera.getScreenY(y));
+
     }
 
     @Override
     public void update() {
+
         lastX = x;
         lastY = y;
 
@@ -135,9 +137,11 @@ public class Player extends Entity {
             spriteNum = (spriteNum % 4) + 1; // cycle 1-4
             spriteCounter = 0;
         }
+
     }
 
     public void checkOutOfBound(int dx, int dy) {
+
         double newX = x;
         double newY = y;
         if (dx == 1) {
@@ -156,6 +160,7 @@ public class Player extends Entity {
         if (newX + width >= GamePanel.WORLD_WIDTH) collisionRight = true;
         if (newY < 0) collisionUp = true;
         if (newY + height >= GamePanel.WORLD_HEIGHT) collisionDown = true;
+
     }
 
     @Override
@@ -164,4 +169,5 @@ public class Player extends Entity {
     }
 
     public int getWalkCount() { return walkCount; }
+
 }
