@@ -35,7 +35,6 @@ public abstract class Particle implements GameObject {
     @Override public void setHeight(double height) { this.height = height; }
 
     @Override public boolean getCollision() { return false; }
-    @Override public double getDepth() { return GameObject.PARTICLE_LAYER; }
 
     @Override
     public void update() {
@@ -51,6 +50,6 @@ public abstract class Particle implements GameObject {
     public abstract void onUpdate();
 
     private void selfDelete() {
-        gp.maze.particleList.remove(this);
+        gp.maze.objectList.remove(this);
     }
 }

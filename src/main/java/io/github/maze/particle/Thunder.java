@@ -24,11 +24,15 @@ public class Thunder extends Particle {
 
     @Override
     public void render(GraphicsContext g) {
-        g.drawImage(thunderAssets.getFrame(frameCounter), getX(), getY());
+        double screenX = gp.camera.getScreenX(getX());
+        double screenY = gp.camera.getScreenY(getY());
+        g.drawImage(thunderAssets.getFrame(frameCounter), screenX, screenY);
     }
 
     @Override
     public void onUpdate() {
         frameCounter++;
     }
+
+    @Override public double getDepth() { return getY() + getHeight(); }
 }

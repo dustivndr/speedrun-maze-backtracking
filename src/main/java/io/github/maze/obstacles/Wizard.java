@@ -2,6 +2,7 @@ package io.github.maze.obstacles;
 
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
+import io.github.maze.maze.GameObject;
 import io.github.maze.util.Angle;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,10 +36,13 @@ public class Wizard extends Obstacle {
 
     @Override
     public void render(GraphicsContext gc) {
+        double screenX = gp.camera.getScreenX(x);
+        double screenY = gp.camera.getScreenY(y);
+
         if (!isAttacking) {
-            gc.drawImage(wizardAssets.getDirection(spriteDirection), x, y - 2 * GamePanel.SCALE);
+            gc.drawImage(wizardAssets.getDirection(spriteDirection), screenX, screenY);
         } else {
-            gc.drawImage(wizardAssets.getAttackAnimation(attackAnimationCounter), x, y - 2 * GamePanel.SCALE);
+            gc.drawImage(wizardAssets.getAttackAnimation(attackAnimationCounter), screenX, screenY);
         }
     }
 
@@ -71,12 +75,17 @@ public class Wizard extends Obstacle {
 
             if (currAnimationLength >= animationLength) {
 
+                double playerCenterX = p.getX() + (p.getWidth() / 2.0);
+                double playerBottomY = p.getY() + p.getHeight();
+
+                gp.maze.addThunder(playerCenterX, playerBottomY);
+
                 p.damage(20);
 
                 currAnimationLength = 0;
                 attackAnimationCounter = -1;
 
-                // If player left the 5x5 area during the animation, drop aggro entirely
+                // if player left the 5x5 area during the animation, drop aggro
                 if (!playerInRange) {
                     isAttacking = false;
                 }
