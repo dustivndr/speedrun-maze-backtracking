@@ -8,6 +8,8 @@ public class Thunder extends Particle {
 
     ThunderAssets thunderAssets;
 
+    int frameCounter = 0;
+
     public Thunder(GamePanel gp, double centerX, double bottomY) {
         super(gp,
                 centerX - ThunderAssets.FRAME_WIDTH / 2.0,
@@ -22,11 +24,11 @@ public class Thunder extends Particle {
 
     @Override
     public void render(GraphicsContext g) {
-//        g.drawImage(thunderAssets);
+        g.drawImage(thunderAssets.getFrame(frameCounter), getX(), getY());
     }
 
     @Override
     public void onUpdate() {
-
+        frameCounter++;
     }
 }
