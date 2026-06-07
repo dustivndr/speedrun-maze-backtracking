@@ -1,6 +1,7 @@
 package io.github.maze.obstacles;
 
 import io.github.maze.game.GamePanel;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class FlagGreen extends Obstacle {
@@ -13,11 +14,19 @@ public class FlagGreen extends Obstacle {
 
     @Override
     public void render(GraphicsContext g) {
-
+        g.drawImage(flagGreenAssets.getFlagGreenImage(), x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
     }
 
     @Override
     public void update() {
+
+        int col = (int) (x / GamePanel.TILE_SIZE);
+        int row = (int) (y / GamePanel.TILE_SIZE);
+        if (gp.maze.player.getTileX() == col &&
+                gp.maze.player.getTileY() == row) {
+            gp.maze.player.flagCount++;
+            removeObject = true;
+        }
 
     }
 
