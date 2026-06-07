@@ -4,6 +4,7 @@ import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.obstacles.*;
 import io.github.maze.particle.Particle;
+import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,16 @@ public class Maze {
     final GamePanel gp;
     public List<GameObject> objectList = new ArrayList<>();
     public GameObject[][] obstacleMap = new GameObject[GamePanel.ROW_HEIGHT][GamePanel.COL_WIDTH];
-    public List<Particle> particleList = new ArrayList<>();
 
     public Player player;
 
     public Maze(GamePanel gp) {
         this.gp = gp;
+    }
+
+    public void addThunder(double centerX, double bottomY) {
+        Thunder thunder = new Thunder(gp, centerX, bottomY);
+        objectList.add(thunder);
     }
 
     public void addObject(int id, int col, int row) {
