@@ -3,7 +3,6 @@ package io.github.maze.obstacles;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Angle;
-import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Wizard extends Obstacle {
@@ -99,6 +98,7 @@ public class Wizard extends Obstacle {
                 spriteDirection = "right";
             }
         }
+
     }
 
     public boolean isPlayerInCoordinateRange() {
@@ -123,8 +123,10 @@ public class Wizard extends Obstacle {
         // check if player is inside bounds
         return playerCenterX >= minX && playerCenterX <= maxX &&
                 playerCenterY >= minY && playerCenterY <= maxY;
+
     }
 
     @Override public double getDepth() { return y + height; }
     @Override public boolean getCollision() { return true; }
+
 }

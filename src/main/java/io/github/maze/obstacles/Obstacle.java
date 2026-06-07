@@ -5,10 +5,8 @@ package io.github.maze.obstacles;
 *
 */
 
-import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
-import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Obstacle implements GameObject {
 

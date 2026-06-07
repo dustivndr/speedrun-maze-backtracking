@@ -5,8 +5,6 @@ import io.github.maze.util.Util;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 
-import java.util.Objects;
-
 public class SpikeAssets {
 
     private static final int BASE_WIDTH = 16;

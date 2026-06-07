@@ -1,9 +1,7 @@
 package io.github.maze.obstacles;
 
-import io.github.maze.entities.Entity;
 import io.github.maze.entities.Player;
 import io.github.maze.entities.projectile.Kunai;
-import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
