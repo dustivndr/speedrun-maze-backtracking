@@ -13,12 +13,12 @@ public class FireMonsterAssets {
 
     public final int BASE_WIDTH = 32;
     public final int BASE_HEIGHT = 32;
-    public final int FRAME_WIDTH = BASE_WIDTH * GamePanel.SCALE / 2;
-    public final int FRAME_HEIGHT= BASE_HEIGHT * GamePanel.SCALE / 2;
+    public final int FRAME_WIDTH = BASE_WIDTH * GamePanel.SCALE;
+    public final int FRAME_HEIGHT= BASE_HEIGHT * GamePanel.SCALE;
 
     public FireMonsterAssets() {
 
-        sheet = Util.getScaledImage("/image/firemonster/FIRE MONSTER.png");
+        sheet = Util.getScaledImage("/image/firemonster/FIRE MONSTER.png", GamePanel.SCALE / 2.0);
 
         frames[0] = sliceImage(0, 0);
         frames[1] = sliceImage(1, 0);
@@ -47,8 +47,8 @@ public class FireMonsterAssets {
         return frames[frame + idleSize()];
     }
 
-    public int idleSize() { return 3; }
-    public int attackSize() { return 3; }
+    public int idleSize() { return 2; }
+    public int attackSize() { return 4; }
 
     private Image sliceImage(int col, int row) {
         return new WritableImage(
