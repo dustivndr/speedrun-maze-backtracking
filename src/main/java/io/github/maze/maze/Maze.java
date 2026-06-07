@@ -95,6 +95,11 @@ public class Maze {
                 objectList.add(wizard);
                 obstacleMap[row][col] = wizard;
             }
+            case 9 /* FireMonster */ -> {
+                FireMonster fireMonster = new FireMonster(gp, x, y);
+                objectList.add(fireMonster);
+                obstacleMap[row][col] = fireMonster;
+            }
         }
     }
 
