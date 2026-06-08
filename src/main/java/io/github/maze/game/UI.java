@@ -20,7 +20,7 @@ public class UI {
         hpLabel.setLayoutX(20);
         hpLabel.setLayoutY(20);
 
-        lastFlagCount = gp.maze.player.flagCount;
+        lastFlagCount = 0;
         flagCountLabel = new Label("FlagCount: " + lastFlagCount);
         flagCountLabel.getStyleClass().add("game-font");
         flagCountLabel.setLayoutX(20);
@@ -39,7 +39,7 @@ public class UI {
 
         int currFlagCount = gp.maze.player.flagCount;
         if (currFlagCount != lastFlagCount) {
-            hpLabel.setText("HP: " + currHP);
+            flagCountLabel.setText("flag count: " + currFlagCount);
             lastFlagCount = currFlagCount;
         }
     }
