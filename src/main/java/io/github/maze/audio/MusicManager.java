@@ -15,11 +15,11 @@ public class MusicManager {
 
     public static void playMenuMusic() {
 
-//        Media media = new Media(
-//                MusicManager.class
-//                        .getResource("/audio/bgm.mp3")
-//                        .toExternalForm()
-//        );
+        Media media = new Media(
+                MusicManager.class
+                        .getResource("/audio/bgm.mp3")
+                        .toExternalForm()
+        );
 
         MediaPlayer player = new MediaPlayer(media);
 
