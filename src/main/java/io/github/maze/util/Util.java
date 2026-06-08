@@ -2,8 +2,12 @@ package io.github.maze.util;
 
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
+import java.io.InputStream;
 import java.util.Random;
 
 public class Util {
@@ -15,18 +19,25 @@ public class Util {
     }
 
     public static Image getScaledImage(String path, double scale) {
-        Image ogSheet = new Image(path);
+        InputStream is = Util.class.getResourceAsStream(path);
+        if (is == null) {
+            throw new IllegalArgumentException("Resource asset not found at path: " + path);
+        }
+        Image originalImage = new Image(is);
 
-        double scaledWidth = ogSheet.getWidth() * scale;
-        double scaledHeight = ogSheet.getHeight() * scale;
+        double targetWidth = originalImage.getWidth() * scale;
+        double targetHeight = originalImage.getHeight() * scale;
 
-        return new Image(
-                path,
-                scaledWidth,
-                scaledHeight,
-                true,
-                false
-        );
+        ImageView imageView = new ImageView(originalImage);
+        imageView.setFitWidth(targetWidth);
+        imageView.setFitHeight(targetHeight);
+
+        imageView.setSmooth(false);
+
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        return imageView.snapshot(params, null);
     }
 
     public static boolean checkAABB(GameObject a, GameObject b) {
