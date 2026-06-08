@@ -33,10 +33,7 @@ public class Ninja extends Obstacle {
         Player p = gp.maze.player;
         angleToPlayer.lookAt(x, y, p.getX(), p.getY());
 
-        boolean isPlayerInside = p.getX() >= x - GamePanel.TILE_SIZE &&
-                p.getX() <= x + GamePanel.TILE_SIZE &&
-                p.getY() >= y - GamePanel.TILE_SIZE &&
-                p.getY() <= y + GamePanel.TILE_SIZE;
+        boolean isPlayerInside = isPlayerInCoordinateRange();
 
         if (isPlayerInside) {
 
@@ -75,6 +72,31 @@ public class Ninja extends Obstacle {
         } else {
             spriteDirection = "right";
         }
+    }
+
+    public boolean isPlayerInCoordinateRange() {
+
+        // ninja center pos
+        double centerX = this.x + (this.width / 2.0);
+        double centerY = this.y + (this.height / 2.0);
+
+        // get radius
+        double rangeRadius = (3 * GamePanel.TILE_SIZE) / 2.0;
+
+        // boundaries
+        double minX = centerX - rangeRadius;
+        double maxX = centerX + rangeRadius;
+        double minY = centerY - rangeRadius;
+        double maxY = centerY + rangeRadius;
+
+        // player center pos
+        double playerCenterX = p.getX() + (p.getWidth() / 2.0);
+        double playerCenterY = p.getY() + (p.getHeight() / 2.0);
+
+        // check if player is inside bounds
+        return playerCenterX >= minX && playerCenterX <= maxX &&
+                playerCenterY >= minY && playerCenterY <= maxY;
+
     }
 
     private void attack() {
