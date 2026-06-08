@@ -18,6 +18,8 @@ public class Maze {
 
     public Player player;
 
+    public int flagCount = 0;
+
     public Maze(GamePanel gp) {
         this.gp = gp;
     }

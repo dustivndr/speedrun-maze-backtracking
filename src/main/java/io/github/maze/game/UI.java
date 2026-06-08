@@ -26,7 +26,9 @@ public class UI {
         hpLabel.setLayoutY(20);
 
         lastFlagCount = 0;
-        flagCountLabel = new Label(lastFlagCount + " / 1", new ImageView(Util.getScaledImage("/image/flag/flag.png")));
+        flagCountLabel = new Label(
+                lastFlagCount + " / " + gp.maze.flagCount,
+                new ImageView(Util.getScaledImage("/image/flag/flag.png")));
         flagCountLabel.setGraphicTextGap(7.0);
         flagCountLabel.getStyleClass().add("game-font");
         flagCountLabel.setLayoutX(18);
@@ -48,7 +50,7 @@ public class UI {
         // flag
         int currFlagCount = gp.maze.player.flagCount;
         if (currFlagCount != lastFlagCount) {
-            flagCountLabel.setText(currFlagCount + " / 1");
+            flagCountLabel.setText(currFlagCount + " / " + gp.maze.flagCount);
             lastFlagCount = currFlagCount;
         }
     }
