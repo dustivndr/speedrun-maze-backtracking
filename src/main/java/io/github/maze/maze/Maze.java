@@ -54,7 +54,6 @@ public class Maze {
          * 0 = air
          * B = BushWall
          * S = Spike
-         * s = Speed spell
          * H = Hole
          * K = Key
          * P = Player
@@ -63,6 +62,10 @@ public class Maze {
          * W = Wizard
          * M = FireMonster
          * F = Flag
+         * s = Speed spell
+         * p = Poison spell
+         * h = Heal spell
+         * E = Elf
          *
          */
 
@@ -135,6 +138,11 @@ public class Maze {
                 HealSpell s = new HealSpell(gp, x, y);
                 objectList.add(s);
                 obstacleMap[col][row] = s;
+            }
+            case 'E' /* Elf */ -> {
+                Elf e = new Elf(gp, x, y);
+                objectList.add(e);
+                obstacleMap[col][row] = e;
             }
         }
     }
