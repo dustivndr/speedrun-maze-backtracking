@@ -14,7 +14,7 @@ public class Player extends Entity {
 
     public double lastX, lastY;
 
-    private int MAX_HP = 100000;
+    public int MAX_HP = 100;
     private int health = MAX_HP;
 
     public int keyCount = 0;
@@ -135,16 +135,16 @@ public class Player extends Entity {
         boolean movedTile = getTileX() != prevCol || getTileY() != prevRow;
         if (movedTile) {
 
-            if (poisonLength > 0) {
-                damage(1);
-
-                poisonLength--;
-            }
 
             if (speedLength > 0) {
                 tilesWalkedWithSpeed++;
 
                 if (tilesWalkedWithSpeed % 2 == 0) {
+                    if (poisonLength > 0) {
+                        damage(1);
+
+                        poisonLength--;
+                    }
                     walkCount++;
                 }
 
@@ -156,6 +156,13 @@ public class Player extends Entity {
                 }
             }
             else {
+
+                if (poisonLength > 0) {
+                    damage(1);
+
+                    poisonLength--;
+                }
+
                 tilesWalkedWithSpeed = 0;
                 walkCount++;
                 currentSpeed = NORMAL_SPEED;
