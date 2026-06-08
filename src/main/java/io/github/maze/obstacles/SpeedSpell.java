@@ -60,7 +60,7 @@ public class SpeedSpell extends Obstacle {
     public void update() {
 
         if (Util.checkAABB(gp.maze.player, this)) {
-            gp.maze.player.setSpeedLength(1000);
+            gp.maze.player.setSpeedLength(20);
             removeObject = true;
         }
     }
