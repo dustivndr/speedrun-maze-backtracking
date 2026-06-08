@@ -33,7 +33,13 @@ public class Player extends Entity {
     private boolean collisionDown = false;
     private boolean collisionLeft = false;
 
-    private double currentSpeed = 3;
+    private final double NORMAL_SPEED = 3;
+    private double currentSpeed = NORMAL_SPEED;
+
+    private int poisonLength = 0;
+
+    private int speedLength = 0;
+    private int tilesWalkedWithSpeed = 0;
 
     private static StringBuilder sb = new StringBuilder();
 
@@ -126,8 +132,34 @@ public class Player extends Entity {
         if (dx < 0 && !collisionLeft)  x -= currentSpeed;
         if (dx > 0 && !collisionRight) x += currentSpeed;
 
-        if (getTileX() != prevCol || getTileY() != prevRow) {
-            walkCount++;
+        boolean movedTile = getTileX() != prevCol || getTileY() != prevRow;
+        if (movedTile) {
+
+            if (poisonLength > 0) {
+                damage(1);
+
+                poisonLength--;
+            }
+
+            if (speedLength > 0) {
+                tilesWalkedWithSpeed++;
+
+                if (tilesWalkedWithSpeed % 2 == 0) {
+                    walkCount++;
+                }
+
+                currentSpeed = NORMAL_SPEED * 2;
+                speedLength--;
+
+                if (speedLength <= 0) {
+                    tilesWalkedWithSpeed = 0;
+                }
+            }
+            else {
+                tilesWalkedWithSpeed = 0;
+                walkCount++;
+                currentSpeed = NORMAL_SPEED;
+            }
         }
 
         long curr = System.currentTimeMillis();
@@ -170,5 +202,10 @@ public class Player extends Entity {
     }
 
     public int getWalkCount() { return walkCount; }
+
+    public void setPoisonLength(int poisonLength) { this.poisonLength = poisonLength; }
+    public void setSpeedLength(int speedLength) {
+        this.speedLength = speedLength;
+    }
 
 }

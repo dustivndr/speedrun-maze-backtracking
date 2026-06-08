@@ -54,6 +54,7 @@ public class Maze {
          * 0 = air
          * B = BushWall
          * S = Spike
+         * s = Speed spell
          * H = Hole
          * K = Key
          * P = Player
@@ -67,7 +68,7 @@ public class Maze {
 
         switch (id) {
             case '0' /* air */ -> { /* do nothing */ }
-            case '1' /* BushWall */ -> {
+            case 'B' /* BushWall */ -> {
                 BushWall bushWall = new BushWall(gp, x, y);
                 objectList.add(bushWall);
                 obstacleMap[row][col] = bushWall;
@@ -120,7 +121,37 @@ public class Maze {
                 objectList.add(flagGreen);
                 obstacleMap[row][col] = flagGreen;
             }
+            case 's' /* Speed Spell */ -> {
+                SpeedSpell s = new SpeedSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
+            }
+            case 'p' /* Poison Spell */ -> {
+                PoisonSpell s = new PoisonSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
+            }
+            case 'h' /* Heal Spell */ -> {
+                HealSpell s = new HealSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
+            }
         }
+    }
+
+    public Portal addPortal(int col, int row, int num) {
+        if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
+            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+        }
+
+        double x = col * GamePanel.TILE_SIZE;
+        double y = row * GamePanel.TILE_SIZE;
+
+        Portal p = new Portal(gp, x, y, num);
+        objectList.add(p);
+        obstacleMap[col][row] = p;
+
+        return p;
     }
 
     public void copyFrom(Maze replacement) {

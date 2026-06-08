@@ -8,13 +8,16 @@ package io.github.maze.maze.loader;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.Maze;
+import io.github.maze.obstacles.Portal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MazeLoader {
 
@@ -56,6 +59,9 @@ public class MazeLoader {
 
     public void loadObstacles(String mapPath, Maze maze) {
 
+        Map<Integer, Portal> unpairedPortals = new HashMap<>();
+        Map<Integer, List<Portal>> portalGroups = new HashMap<>();
+
         try (InputStream is = getClass().getResourceAsStream(mapPath)) {
 
             if (is == null) {
@@ -79,8 +85,23 @@ public class MazeLoader {
                             maze.flagCount++;
                         }
 
+                        if (id == 'O') {
+
+                            if (str[col].length() <= 1) {
+                                throw new IndexOutOfBoundsException(
+                                        "Portal 'O' at col: " + col + ", row: " + row +
+                                        " is not followed by an id");
+                            }
+
+                            int num = Integer.parseInt(str[col].substring(1));
+                            Portal portal = maze.addPortal(col, row, num);
+
+                            portalGroups.computeIfAbsent(num,
+                                    k -> new ArrayList<>()).add(portal);
+                        }
+
                         // ignore player
-                        if (id != 'P') {
+                        if (id != 'P' && id != 'O') {
                             maze.addObject(id, col, row);
                         }
                     }
@@ -90,6 +111,22 @@ public class MazeLoader {
             }
 
             br.close();
+
+            for (Map.Entry<Integer, List<Portal>> entry : portalGroups.entrySet()) {
+                int portalID = entry.getKey();
+                List<Portal> list = entry.getValue();
+
+                // check if portal id duplicates are exactly 2
+                if (list.size() != 2) {
+                    throw new IllegalStateException("Portal ID '" + portalID +
+                            "' must appear exactly 2 times, but found " + list.size());
+                }
+
+                Portal p1 = list.get(0);
+                Portal p2 = list.get(1);
+                p1.setConnection(p2);
+                p2.setConnection(p1);
+            }
 
         } catch (IOException | NumberFormatException e) {
             System.err.println("Error parsing map file: " + mapPath);
