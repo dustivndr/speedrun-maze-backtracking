@@ -69,13 +69,19 @@ public class Meteor extends Projectile {
     }
 
     @Override
+    public void onDelete() {
+
+        gp.maze.addMeteorImpactFrame(targetX, targetY);
+    }
+
+    @Override
     public void render(GraphicsContext gc) {
         gc.drawImage(meteorAssets.getFrame(frameNum), gp.camera.getScreenX(x), gp.camera.getScreenY(y));
     }
 
     @Override
     public double getDepth() {
-        return y + height;
+        return targetY + height;
     }
 
     @Override

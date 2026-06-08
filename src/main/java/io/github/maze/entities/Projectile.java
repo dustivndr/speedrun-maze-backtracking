@@ -14,12 +14,14 @@ public abstract class Projectile extends Entity {
         onUpdate();
 
         if (checkDelete()) {
+            onDelete();
             selfDelete();
         }
     }
 
-    abstract protected void onUpdate();
-    abstract protected boolean checkDelete();
+    public void onDelete() {}
+    abstract public void onUpdate();
+    abstract public boolean checkDelete();
 
     private void selfDelete() {
         gp.maze.objectList.remove(this);

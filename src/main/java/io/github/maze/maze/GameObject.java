@@ -7,6 +7,7 @@ public interface GameObject {
 
     int BACKGROUND_OBJECT = -1;
     int FOREGROUND_OBJECT = GamePanel.TILE_SIZE * GamePanel.ROW_HEIGHT + 1;
+    int TOP_LAYER = FOREGROUND_OBJECT + 1;
 
     void render(GraphicsContext g);
     void update();

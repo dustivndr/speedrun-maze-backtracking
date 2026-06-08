@@ -63,8 +63,6 @@ public class FireMonster extends Obstacle {
 
                 gp.maze.addMeteor(playerCenterX, playerBottomY);
 
-                System.out.println("fire monster attacked player");
-
                 currAnimationLength = 0;
                 attackAnimationCounter = 0;
 
