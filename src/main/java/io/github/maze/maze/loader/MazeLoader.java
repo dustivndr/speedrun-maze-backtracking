@@ -44,7 +44,6 @@ public class MazeLoader {
 
     }
 
-
     public void loadNextMapObstacles() {
         loadObstacles(files.get(currentFile), gp.maze);
         currentFile = (currentFile + 1) % files.size();
@@ -75,6 +74,10 @@ public class MazeLoader {
 
                     if (!numbers[col].isEmpty()) {
                         int id = Integer.parseInt(numbers[col]);
+
+                        if (id == 10) {
+                            maze.flagCount++;
+                        }
 
                         // ignore player
                         if (id != 5) {
