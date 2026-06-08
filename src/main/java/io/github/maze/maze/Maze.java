@@ -1,9 +1,10 @@
 package io.github.maze.maze;
 
+import io.github.maze.entities.projectile.Meteor;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.obstacles.*;
-import io.github.maze.particle.Particle;
+import io.github.maze.particle.MeteorImpactFrame;
 import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
@@ -24,6 +25,16 @@ public class Maze {
     public void addThunder(double centerX, double bottomY) {
         Thunder thunder = new Thunder(gp, centerX, bottomY);
         objectList.add(thunder);
+    }
+
+    public void addMeteorImpactFrame(double centerX, double centerY) {
+        MeteorImpactFrame mif = new MeteorImpactFrame(gp, centerX, centerY);
+        objectList.add(mif);
+    }
+
+    public void addMeteor(double targetX, double targetY) {
+        Meteor meteor = new Meteor(gp, targetX, targetY);
+        objectList.add(meteor);
     }
 
     public void addObject(int id, int col, int row) {
@@ -47,6 +58,8 @@ public class Maze {
          * 6 = Ninja
          * 7 = Fire
          * 8 = Wizard
+         * 9 = FireMonster
+         * 10 = Flag
          *
          */
 
@@ -99,6 +112,11 @@ public class Maze {
                 FireMonster fireMonster = new FireMonster(gp, x, y);
                 objectList.add(fireMonster);
                 obstacleMap[row][col] = fireMonster;
+            }
+            case 10 /* Flag */ -> {
+                FlagGreen flagGreen = new FlagGreen(gp, x, y);
+                objectList.add(flagGreen);
+                obstacleMap[row][col] = flagGreen;
             }
         }
     }

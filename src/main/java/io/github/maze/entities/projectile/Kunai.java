@@ -32,14 +32,14 @@ public class Kunai extends Projectile {
     }
 
     @Override
-    protected void onUpdate() {
+    public void onUpdate() {
         travelledDistance += speed;
         x += angle.cos() * speed;
         y += angle.sin() * speed;
     }
 
     @Override
-    protected boolean checkDelete() {
+    public boolean checkDelete() {
         if (travelledDistance >= MAX_TRAVELLED_DISTANCE) {
             return true;
         }

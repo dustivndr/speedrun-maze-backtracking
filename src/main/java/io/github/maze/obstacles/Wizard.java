@@ -35,7 +35,7 @@ public class Wizard extends Obstacle {
     @Override
     public void render(GraphicsContext gc) {
         double screenX = gp.camera.getScreenX(x);
-        double screenY = gp.camera.getScreenY(y);
+        double screenY = gp.camera.getScreenY(y - 2 * GamePanel.SCALE);
 
         if (!isAttacking) {
             gc.drawImage(wizardAssets.getDirection(spriteDirection), screenX, screenY);

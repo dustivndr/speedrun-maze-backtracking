@@ -14,7 +14,7 @@ public class FireMonster extends Obstacle {
     long lastTime = 0;
     long idleTimerMs = 150;
 
-    int attackAnimationCounter = -1;
+    int attackAnimationCounter = 0;
     final long animationTimerMs = 150;
     final long animationLength = animationTimerMs * 4;
     long currAnimationLength = 0;
@@ -61,12 +61,10 @@ public class FireMonster extends Obstacle {
                 double playerCenterX = gp.maze.player.getX() + (gp.maze.player.getWidth() / 2.0);
                 double playerBottomY = gp.maze.player.getY() + gp.maze.player.getHeight();
 
-//                gp.maze.addThunder(playerCenterX, playerBottomY);
-
-                System.out.println("fire monster attacked player");
+                gp.maze.addMeteor(playerCenterX, playerBottomY);
 
                 currAnimationLength = 0;
-                attackAnimationCounter = -1;
+                attackAnimationCounter = 0;
 
                 // if player left the 5x5 area during the animation, drop aggro
                 if (!playerInRange) {
