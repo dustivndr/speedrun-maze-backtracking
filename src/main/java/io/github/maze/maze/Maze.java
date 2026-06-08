@@ -54,6 +54,7 @@ public class Maze {
          * 0 = air
          * B = BushWall
          * S = Spike
+         * s = Speed spell
          * H = Hole
          * K = Key
          * P = Player
@@ -119,6 +120,21 @@ public class Maze {
                 FlagGreen flagGreen = new FlagGreen(gp, x, y);
                 objectList.add(flagGreen);
                 obstacleMap[row][col] = flagGreen;
+            }
+            case 's' /* Speed Spell */ -> {
+                SpeedSpell s = new SpeedSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
+            }
+            case 'p' /* Poison Spell */ -> {
+                PoisonSpell s = new PoisonSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
+            }
+            case 'h' /* Heal Spell */ -> {
+                HealSpell s = new HealSpell(gp, x, y);
+                objectList.add(s);
+                obstacleMap[col][row] = s;
             }
         }
     }

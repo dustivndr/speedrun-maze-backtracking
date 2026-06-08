@@ -39,7 +39,7 @@ public class Player extends Entity {
     private int poisonLength = 0;
 
     private int speedLength = 0;
-    private int walkCountAtSpeedActivation = 0;
+    private int tilesWalkedWithSpeed = 0;
 
     private static StringBuilder sb = new StringBuilder();
 
@@ -142,12 +142,21 @@ public class Player extends Entity {
             }
 
             if (speedLength > 0) {
-                if ((walkCount - walkCountAtSpeedActivation) % 2 == 0) {
+                tilesWalkedWithSpeed++;
+
+                if (tilesWalkedWithSpeed % 2 == 0) {
                     walkCount++;
                 }
+
                 currentSpeed = NORMAL_SPEED * 2;
+                speedLength--;
+
+                if (speedLength <= 0) {
+                    tilesWalkedWithSpeed = 0;
+                }
             }
             else {
+                tilesWalkedWithSpeed = 0;
                 walkCount++;
                 currentSpeed = NORMAL_SPEED;
             }
@@ -197,7 +206,6 @@ public class Player extends Entity {
     public void setPoisonLength(int poisonLength) { this.poisonLength = poisonLength; }
     public void setSpeedLength(int speedLength) {
         this.speedLength = speedLength;
-        walkCountAtSpeedActivation = walkCount;
     }
 
 }
