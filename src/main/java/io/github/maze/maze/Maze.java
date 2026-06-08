@@ -1,9 +1,9 @@
 package io.github.maze.maze;
 
+import io.github.maze.entities.projectile.Meteor;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.obstacles.*;
-import io.github.maze.particle.Particle;
 import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
@@ -24,6 +24,11 @@ public class Maze {
     public void addThunder(double centerX, double bottomY) {
         Thunder thunder = new Thunder(gp, centerX, bottomY);
         objectList.add(thunder);
+    }
+
+    public void addMeteor(double targetX, double targetY) {
+        Meteor meteor = new Meteor(gp, targetX, targetY);
+        objectList.add(meteor);
     }
 
     public void addObject(int id, int col, int row) {

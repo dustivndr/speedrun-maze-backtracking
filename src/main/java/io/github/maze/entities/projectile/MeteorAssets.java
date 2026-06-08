@@ -1,4 +1,4 @@
-package io.github.maze.entities;
+package io.github.maze.entities.projectile;
 
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;

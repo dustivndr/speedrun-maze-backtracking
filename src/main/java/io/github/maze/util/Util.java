@@ -23,21 +23,18 @@ public class Util {
         if (is == null) {
             throw new IllegalArgumentException("Resource asset not found at path: " + path);
         }
-        Image originalImage = new Image(is);
+        Image ogImage = new Image(is);
 
-        double targetWidth = originalImage.getWidth() * scale;
-        double targetHeight = originalImage.getHeight() * scale;
+        double scaledWidth = ogImage.getWidth() * scale;
+        double scaledHeight = ogImage.getHeight() * scale;
 
-        ImageView imageView = new ImageView(originalImage);
-        imageView.setFitWidth(targetWidth);
-        imageView.setFitHeight(targetHeight);
-
-        imageView.setSmooth(false);
-
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT);
-
-        return imageView.snapshot(params, null);
+        return new Image(
+                path,
+                scaledWidth,
+                scaledHeight,
+                true,
+                false
+        );
     }
 
     public static boolean checkAABB(GameObject a, GameObject b) {
