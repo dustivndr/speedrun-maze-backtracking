@@ -1,6 +1,7 @@
 package io.github.maze.obstacles;
 
 import io.github.maze.game.GamePanel;
+import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Portal extends Obstacle {
@@ -13,14 +14,34 @@ public class Portal extends Obstacle {
     private Portal connection;
     private int portalNumber;
 
+    protected int state = NONE;
+
+    private static final int NONE = 0;
+    private static final int EXITED = 1;
+    private static final int ENTERED = 2;
+
     public Portal(GamePanel gp, double x, double y, int num) {
-        super(gp, x, y, GamePanel.TILE_SIZE * 2, GamePanel.TILE_SIZE);
+        super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
 
         portalNumber = num;
     }
 
     @Override
     public void update() {
+
+        if (state == EXITED) {
+
+            if (!Util.checkAABB(gp.maze.player, this)) {
+                state = NONE;
+            }
+        }
+
+        if (state == NONE && Util.checkAABB(this, gp.maze.player)) {
+            connection.state = EXITED;
+
+            gp.maze.player.setX(connection.x);
+            gp.maze.player.setY(connection.y);
+        }
 
         final int gap = 3;
         animationTimer++;

@@ -87,7 +87,7 @@ public class MazeLoader {
 
                         if (id == 'O') {
 
-                            if (str[col].length() > 1) {
+                            if (str[col].length() <= 1) {
                                 throw new IndexOutOfBoundsException(
                                         "Portal 'O' at col: " + col + ", row: " + row +
                                         " is not followed by an id");
