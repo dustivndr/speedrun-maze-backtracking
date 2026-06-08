@@ -19,6 +19,8 @@ public class FireMonster extends Obstacle {
     final long animationLength = animationTimerMs * 4;
     long currAnimationLength = 0;
 
+    private boolean hasAttackedThisEncounter = false;
+
     public FireMonster(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE * 2, GamePanel.TILE_SIZE);
     }
@@ -28,8 +30,12 @@ public class FireMonster extends Obstacle {
 
         boolean playerInRange = isPlayerInCoordinateRange();
 
+        if (!playerInRange) {
+            hasAttackedThisEncounter = false;
+        }
+
         // check state change
-        if (playerInRange && !isAttacking) {
+        if (playerInRange && !isAttacking && !hasAttackedThisEncounter) {
             isAttacking = true;
             currAnimationLength = 0;
             attackAnimationCounter = 0;
@@ -57,7 +63,6 @@ public class FireMonster extends Obstacle {
 
 //                gp.maze.addThunder(playerCenterX, playerBottomY);
 
-                gp.maze.player.damage(20);
                 System.out.println("fire monster attacked player");
 
                 currAnimationLength = 0;
