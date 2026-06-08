@@ -6,8 +6,10 @@ public class UI {
 
     final GamePanel gp;
     private Label hpLabel;
+    private Label flagCountLabel;
 
     private int lastHP;
+    private int lastFlagCount;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -18,7 +20,14 @@ public class UI {
         hpLabel.setLayoutX(20);
         hpLabel.setLayoutY(20);
 
+        lastFlagCount = gp.maze.player.flagCount;
+        flagCountLabel = new Label("FlagCount: " + lastFlagCount);
+        flagCountLabel.getStyleClass().add("game-font");
+        flagCountLabel.setLayoutX(20);
+        flagCountLabel.setLayoutY(50);
+
         gp.getChildren().add(hpLabel);
+        gp.getChildren().add(flagCountLabel);
     }
 
     public void render() {
@@ -26,6 +35,12 @@ public class UI {
         if (currHP != lastHP) {
             hpLabel.setText("HP: " + currHP);
             lastHP = currHP;
+        }
+
+        int currFlagCount = gp.maze.player.flagCount;
+        if (currFlagCount != lastFlagCount) {
+            hpLabel.setText("HP: " + currHP);
+            lastFlagCount = currFlagCount;
         }
     }
 }
