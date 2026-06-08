@@ -58,6 +58,8 @@ public class Maze {
          * 6 = Ninja
          * 7 = Fire
          * 8 = Wizard
+         * 9 = FireMonster
+         * 10 = Flag
          *
          */
 
@@ -110,6 +112,11 @@ public class Maze {
                 FireMonster fireMonster = new FireMonster(gp, x, y);
                 objectList.add(fireMonster);
                 obstacleMap[row][col] = fireMonster;
+            }
+            case 10 /* Flag */ -> {
+                FlagGreen flagGreen = new FlagGreen(gp, x, y);
+                objectList.add(flagGreen);
+                obstacleMap[row][col] = flagGreen;
             }
         }
     }
