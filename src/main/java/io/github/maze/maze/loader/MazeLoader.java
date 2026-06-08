@@ -68,19 +68,19 @@ public class MazeLoader {
 
             while ((line = br.readLine()) != null) {
 
-                String[] numbers = line.split(" ");
+                String[] str = line.split(" ");
 
-                for (int col = 0; col < numbers.length; col++) {
+                for (int col = 0; col < str.length; col++) {
 
-                    if (!numbers[col].isEmpty()) {
-                        int id = Integer.parseInt(numbers[col]);
+                    if (!str[col].isEmpty()) {
+                        char id = str[col].charAt(0);
 
-                        if (id == 10) {
+                        if (id == 'F') {
                             maze.flagCount++;
                         }
 
                         // ignore player
-                        if (id != 5) {
+                        if (id != 'P') {
                             maze.addObject(id, col, row);
                         }
                     }
@@ -108,12 +108,12 @@ public class MazeLoader {
             int row = 0;
 
             while ((line = br.readLine()) != null) {
-                String[] numbers = line.split(" ");
-                for (int col = 0; col < numbers.length; col++) {
-                    if (!numbers[col].isEmpty()) {
-                        int id = Integer.parseInt(numbers[col]);
+                String[] str = line.split(" ");
+                for (int col = 0; col < str.length; col++) {
+                    if (!str[col].isEmpty()) {
+                        int id = str[col].charAt(0);
 
-                        if (id == 5) {
+                        if (id == 'P') {
                             double pixelX = col * GamePanel.TILE_SIZE;
                             double pixelY = row * GamePanel.TILE_SIZE;
 

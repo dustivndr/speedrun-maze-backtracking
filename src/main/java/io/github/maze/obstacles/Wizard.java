@@ -14,6 +14,10 @@ public class Wizard extends Obstacle {
 
     private boolean isAttacking = false;
 
+    private int walkCountOnEntry = -1;
+    private int walkCountAtLastAttack = -1;
+    private boolean playerWasInRangeLastFrame = false;
+
     Angle angleToPlayer;
     String spriteDirection = "down";
 
@@ -49,12 +53,27 @@ public class Wizard extends Obstacle {
 
         boolean playerInRange = isPlayerInCoordinateRange();
 
+        // 1. Handle initial entry into range
+        if (playerInRange && !playerWasInRangeLastFrame) {
+            walkCountOnEntry = p.getWalkCount();
+            walkCountAtLastAttack = -1; // Reset history on fresh entry
+        }
+        playerWasInRangeLastFrame = playerInRange; // Update tracking state
+
         // check state change
         if (playerInRange && !isAttacking) {
-            isAttacking = true;
-            currAnimationLength = 0;
-            attackAnimationCounter = 0;
-            lastTime = System.currentTimeMillis();
+
+            // Calculate how many tiles the player has walked *since entering range*
+            int tilesWalkedSinceEntry = p.getWalkCount() - walkCountOnEntry;
+
+            // Trigger attack on initial entry (0 tiles) and every 4 tiles thereafter (2, 4, 6...)
+            if (tilesWalkedSinceEntry % 4 == 0 && p.getWalkCount() != walkCountAtLastAttack) {
+                isAttacking = true;
+                walkCountAtLastAttack = p.getWalkCount();
+                currAnimationLength = 0;
+                attackAnimationCounter = 0;
+                lastTime = System.currentTimeMillis();
+            }
         }
 
         // attacking
@@ -83,10 +102,7 @@ public class Wizard extends Obstacle {
                 currAnimationLength = 0;
                 attackAnimationCounter = -1;
 
-                // if player left the 5x5 area during the animation, drop aggro
-                if (!playerInRange) {
-                    isAttacking = false;
-                }
+                isAttacking = false;
             }
         }
 
@@ -95,7 +111,6 @@ public class Wizard extends Obstacle {
             angleToPlayer.lookAt(x, y, p.getX(), p.getY());
             double rads = angleToPlayer.getRadians();
 
-            // Standardized directional check mapping (handling normalization boundaries)
             if (rads >= Math.PI / 4 && rads < Math.PI / 4 * 3) {
                 spriteDirection = "down";
             } else if (rads >= Math.PI / 4 * 3 && rads < Math.PI / 4 * 5) {

@@ -29,10 +29,11 @@ public class Spike extends Obstacle implements GameObject {
                 return;
             }
 
+            player.damage(10);
+
             triggered = true;
             active = true;
 
-            player.damage(10);
         } else {
             active = false;
             triggered = false;

@@ -17,6 +17,8 @@ public class Hole extends Obstacle {
 
     int animationCounter = 0;
 
+    private boolean triggered = false;
+
     long lastTime = 0;
 
     public Hole(GamePanel gp, int col, int row) {
@@ -47,10 +49,14 @@ public class Hole extends Obstacle {
 
         Player p = gp.maze.player;
         if (Util.checkAABB(p, this)) {
+
+            if (!hasOpened) {
+                p.damage(5);
+            }
+
             hasOpened = true;
             collision = true;
 
-            p.damage(5);
         }
     }
 
