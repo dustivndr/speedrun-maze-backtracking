@@ -18,6 +18,7 @@ public class Player extends Entity {
     private int health = MAX_HP;
 
     public int keyCount = 0;
+    public int flagCount = 0;
 
     static final PlayerAssets playerAssets = new PlayerAssets();
 

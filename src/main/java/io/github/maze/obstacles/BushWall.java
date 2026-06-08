@@ -4,6 +4,7 @@ import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
 import io.github.maze.render.Camera;
 import io.github.maze.util.Util;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
