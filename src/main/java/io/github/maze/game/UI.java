@@ -1,9 +1,7 @@
 package io.github.maze.game;
 
 import io.github.maze.util.Util;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class UI {
@@ -11,6 +9,7 @@ public class UI {
     final GamePanel gp;
     private Label hpLabel;
     private Label flagCountLabel;
+    private Label walk;
 
     private int lastHP;
     private int lastFlagCount;
@@ -19,7 +18,9 @@ public class UI {
         this.gp = gp;
 
         lastHP = gp.maze.player.getHP();
-        hpLabel = new Label("HP: " + lastHP, new ImageView(Util.getScaledImage("/image/ui/heart.png", GamePanel.SCALE * 1.5)));
+        hpLabel = new Label(
+                "HP: " + lastHP,
+                new ImageView(Util.getScaledImage("/image/ui/heart.png", GamePanel.SCALE * 1.5)));
         hpLabel.setGraphicTextGap(10.0);
         hpLabel.getStyleClass().add("game-font");
         hpLabel.setLayoutX(20);
@@ -34,8 +35,14 @@ public class UI {
         flagCountLabel.setLayoutX(18);
         flagCountLabel.setLayoutY(50);
 
+        walk = new Label("Walk: " + gp.maze.player.getWalkCount());
+        walk.getStyleClass().add("game-font");
+        walk.setLayoutX(18);
+        walk.setLayoutY(80);
+
         gp.getChildren().add(hpLabel);
         gp.getChildren().add(flagCountLabel);
+        gp.getChildren().add(walk);
     }
 
     public void render() {
@@ -53,5 +60,7 @@ public class UI {
             flagCountLabel.setText(currFlagCount + " / " + gp.maze.flagCount);
             lastFlagCount = currFlagCount;
         }
+
+        walk.setText("walk: " + gp.maze.player.getWalkCount());
     }
 }

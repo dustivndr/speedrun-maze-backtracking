@@ -33,7 +33,7 @@ public class Player extends Entity {
     private boolean collisionDown = false;
     private boolean collisionLeft = false;
 
-    private double currentSpeed = 7;
+    private double currentSpeed = 3;
 
     private static StringBuilder sb = new StringBuilder();
 

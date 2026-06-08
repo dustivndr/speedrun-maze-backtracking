@@ -18,8 +18,8 @@ public class Ninja extends Obstacle {
     final int damage = 5;
 
     private boolean playerWasInside = false;
-    private double playerStartX = 0;
-    private double playerStartY = 0;
+    private int walkCountOnEntry = -1;
+    private int walkCountAtLastAttack = -1;
 
     public Ninja(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
@@ -39,27 +39,29 @@ public class Ninja extends Obstacle {
                 p.getY() <= y + GamePanel.TILE_SIZE;
 
         if (isPlayerInside) {
-            if (!playerWasInside) {
-                attack();
 
-                playerStartX = p.getX();
-                playerStartY = p.getY();
+            if (!playerWasInside) {
+                walkCountOnEntry = p.getWalkCount();
+                walkCountAtLastAttack = p.getWalkCount();
+
+                attack();
                 playerWasInside = true;
             }
 
             else {
-                double distanceX = Math.abs(p.getX() - playerStartX);
-                double distanceY = Math.abs(p.getY() - playerStartY);
+                int currentWalkCount = p.getWalkCount();
+                int tilesWalkedSinceEntry = currentWalkCount - walkCountOnEntry;
 
-                if (distanceX >= GamePanel.TILE_SIZE || distanceY >= GamePanel.TILE_SIZE) {
+                if (tilesWalkedSinceEntry % 2 == 0 && currentWalkCount != walkCountAtLastAttack) {
                     attack();
-
-                    playerStartX = p.getX();
-                    playerStartY = p.getY();
+                    walkCountAtLastAttack = currentWalkCount;
                 }
             }
         } else {
+
             playerWasInside = false;
+            walkCountOnEntry = -1;
+            walkCountAtLastAttack = -1;
         }
 
         // update texture

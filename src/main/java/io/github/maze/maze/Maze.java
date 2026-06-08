@@ -39,7 +39,7 @@ public class Maze {
         objectList.add(meteor);
     }
 
-    public void addObject(int id, int col, int row) {
+    public void addObject(char id, int col, int row) {
 
         if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
             throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
@@ -52,42 +52,42 @@ public class Maze {
          * ID List
          *
          * 0 = air
-         * 1 = BushWall
-         * 2 = Spike
-         * 3 = Hole
-         * 4 = Key
-         * 5 = Player
-         * 6 = Ninja
-         * 7 = Fire
-         * 8 = Wizard
-         * 9 = FireMonster
-         * 10 = Flag
+         * B = BushWall
+         * S = Spike
+         * H = Hole
+         * K = Key
+         * P = Player
+         * N = Ninja
+         * R = Fire
+         * W = Wizard
+         * M = FireMonster
+         * F = Flag
          *
          */
 
         switch (id) {
-            case 0 /* air */ -> { /* do nothing */ }
-            case 1 /* BushWall */ -> {
+            case '0' /* air */ -> { /* do nothing */ }
+            case '1' /* BushWall */ -> {
                 BushWall bushWall = new BushWall(gp, x, y);
                 objectList.add(bushWall);
                 obstacleMap[row][col] = bushWall;
             }
-            case 2 /* Spike */ -> {
+            case 'S' /* Spike */ -> {
                 Spike spike = new Spike(gp, x, y);
                 objectList.add(spike);
                 obstacleMap[row][col] = spike;
             }
-            case 3 /* Hole */ -> {
+            case 'H' /* Hole */ -> {
                 Hole hole = new Hole(gp, col, row);
                 objectList.add(hole);
                 obstacleMap[row][col] = hole;
             }
-            case 4 /* Key */ -> {
+            case 'K' /* Key */ -> {
                 Key key = new Key(gp, col, row);
                 objectList.add(key);
                 obstacleMap[row][col] = key;
             }
-            case 5 /* Player */ -> {
+            case 'P' /* Player */ -> {
                 Player p = new Player(gp, x, y);
                 objectList.add(p);
 
@@ -95,27 +95,27 @@ public class Maze {
                     gp.maze.player = p;
                 }
             }
-            case 6 /* Ninja */ -> {
+            case 'N' /* Ninja */ -> {
                 Ninja ninja = new Ninja(gp, x, y);
                 objectList.add(ninja);
                 obstacleMap[row][col] = ninja;
             }
-            case 7 /* Fire */ -> {
+            case 'R' /* Fire */ -> {
                 Fire fire = new Fire(gp, x, y);
                 objectList.add(fire);
                 obstacleMap[row][col] = fire;
             }
-            case 8 /* Wizard */ -> {
+            case 'W' /* Wizard */ -> {
                 Wizard wizard = new Wizard(gp, x, y);
                 objectList.add(wizard);
                 obstacleMap[row][col] = wizard;
             }
-            case 9 /* FireMonster */ -> {
+            case 'M' /* FireMonster */ -> {
                 FireMonster fireMonster = new FireMonster(gp, x, y);
                 objectList.add(fireMonster);
                 obstacleMap[row][col] = fireMonster;
             }
-            case 10 /* Flag */ -> {
+            case 'F' /* Flag */ -> {
                 FlagGreen flagGreen = new FlagGreen(gp, x, y);
                 objectList.add(flagGreen);
                 obstacleMap[row][col] = flagGreen;

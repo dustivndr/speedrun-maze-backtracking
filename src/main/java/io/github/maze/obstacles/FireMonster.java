@@ -20,6 +20,8 @@ public class FireMonster extends Obstacle {
     long currAnimationLength = 0;
 
     private boolean hasAttackedThisEncounter = false;
+    private int walkCountOnEntry = -1;
+    private boolean playerWasInRangeLastFrame = false;
 
     public FireMonster(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE * 2, GamePanel.TILE_SIZE);
@@ -32,14 +34,23 @@ public class FireMonster extends Obstacle {
 
         if (!playerInRange) {
             hasAttackedThisEncounter = false;
+            walkCountOnEntry = -1;
         }
+        else if (!playerWasInRangeLastFrame) {
+            walkCountOnEntry = gp.maze.player.getWalkCount();
+        }
+        playerWasInRangeLastFrame = playerInRange;
 
         // check state change
         if (playerInRange && !isAttacking && !hasAttackedThisEncounter) {
-            isAttacking = true;
-            currAnimationLength = 0;
-            attackAnimationCounter = 0;
-            lastTime = System.currentTimeMillis();
+
+            if (gp.maze.player.getWalkCount() == walkCountOnEntry) {
+                isAttacking = true;
+                hasAttackedThisEncounter = true;
+                currAnimationLength = 0;
+                attackAnimationCounter = 0;
+                lastTime = System.currentTimeMillis();
+            }
         }
 
         // attacking
@@ -66,10 +77,7 @@ public class FireMonster extends Obstacle {
                 currAnimationLength = 0;
                 attackAnimationCounter = 0;
 
-                // if player left the 5x5 area during the animation, drop aggro
-                if (!playerInRange) {
-                    isAttacking = false;
-                }
+                isAttacking = false;
             }
         }
 
