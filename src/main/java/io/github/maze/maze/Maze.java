@@ -49,7 +49,7 @@ public class Maze {
         double y = row * GamePanel.TILE_SIZE;
 
         /*
-         * ID List
+         * ID List 
          *
          * 0 = air
          * B = BushWall
