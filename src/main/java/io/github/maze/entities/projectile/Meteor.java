@@ -10,7 +10,7 @@ public class Meteor extends Projectile {
     MeteorAssets meteorAssets;
     private int frameNum = 0;
 
-    private static Angle angle = new Angle(Math.toRadians(135));
+    private static final Angle angle = new Angle(Math.toRadians(135));
 
     private final double targetX;
     private final double targetY;
