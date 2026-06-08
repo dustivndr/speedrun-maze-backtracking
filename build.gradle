@@ -22,8 +22,13 @@ dependencies {
 }
 
 javafx {
-    version = "17.0.1" // Specify your JavaFX version
-    modules = [ 'javafx.controls', 'javafx.fxml' ] // List required modules
+    version = "17.0.1" // JavaFX version
+    // List required modules
+    modules = [
+            'javafx.controls',
+            'javafx.fxml',
+            'javafx.media'
+    ]
 }
 
 application {
