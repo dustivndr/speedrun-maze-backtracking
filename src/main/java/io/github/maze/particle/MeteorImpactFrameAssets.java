@@ -11,11 +11,16 @@ public class MeteorImpactFrameAssets {
 
     Image sheet;
 
-    public static final int BASE_IMPACT_FRAME_WIDTH = 512;
-    public static final int BASE_IMPACT_FRAME_HEIGHT = 384;
+    public static final int BASE_WIDTH = 512;
+    public static final int BASE_HEIGHT = 384;
     public static final int IMPACT_SCALE = GamePanel.SCALE * 2;
-    public static final int FRAME_IMPACT_FRAME_WIDTH = BASE_IMPACT_FRAME_WIDTH * IMPACT_SCALE;
-    public static final int FRAME_IMPACT_FRAME_HEIGHT = BASE_IMPACT_FRAME_HEIGHT * IMPACT_SCALE;
+    public static final int FRAME_WIDTH = BASE_WIDTH * IMPACT_SCALE;
+    public static final int FRAME_HEIGHT = BASE_HEIGHT * IMPACT_SCALE;
+
+    public static final int BASE_CENTER_X = 243;
+    public static final int BASE_CENTER_Y = 206;
+    public static final int CENTER_X = BASE_CENTER_X * IMPACT_SCALE;
+    public static final int CENTER_Y = BASE_CENTER_Y * IMPACT_SCALE;
 
     public MeteorImpactFrameAssets() {
 
@@ -50,9 +55,9 @@ public class MeteorImpactFrameAssets {
     private Image sliceImage(int col, int row) {
         return new WritableImage(
                 sheet.getPixelReader(),
-                col * FRAME_IMPACT_FRAME_WIDTH,
-                row * FRAME_IMPACT_FRAME_HEIGHT,
-                FRAME_IMPACT_FRAME_WIDTH,
-                FRAME_IMPACT_FRAME_HEIGHT);
+                col * FRAME_WIDTH,
+                row * FRAME_HEIGHT,
+                FRAME_WIDTH,
+                FRAME_HEIGHT);
     }
 }
