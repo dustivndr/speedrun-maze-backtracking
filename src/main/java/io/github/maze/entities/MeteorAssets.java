@@ -14,6 +14,11 @@ public class MeteorAssets {
     public static final int FRAME_METEOR_WIDTH = BASE_METEOR_WIDTH * GamePanel.SCALE;
     public static final int FRAME_METEOR_HEIGHT = BASE_METEOR_HEIGHT * GamePanel.SCALE;
 
+    public static final int BASE_METEOR_CENTER_X = 19;
+    public static final int BASE_METEOR_CENTER_Y = 46;
+    public static final int FRAME_METEOR_CENTER_X = BASE_METEOR_CENTER_X * GamePanel.SCALE;
+    public static final int FRAME_METEOR_CENTER_Y = BASE_METEOR_CENTER_Y * GamePanel.SCALE;
+
     Image sheet;
 
     public MeteorAssets() {
