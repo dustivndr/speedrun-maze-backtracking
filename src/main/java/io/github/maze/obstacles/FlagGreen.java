@@ -14,7 +14,10 @@ public class FlagGreen extends Obstacle {
 
     @Override
     public void render(GraphicsContext g) {
-        g.drawImage(flagGreenAssets.getFlagGreenImage(), x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
+        double screenX = gp.camera.getScreenX(x);
+        double screenY = gp.camera.getScreenY(y);
+
+        g.drawImage(flagGreenAssets.getFlagGreenImage(), screenX, screenY, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
     }
 
     @Override
@@ -27,12 +30,11 @@ public class FlagGreen extends Obstacle {
             gp.maze.player.flagCount++;
             removeObject = true;
         }
-
     }
 
     @Override
     public double getDepth() {
-        return 0;
+        return y + height;
     }
 
     @Override
