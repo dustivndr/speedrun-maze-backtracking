@@ -39,7 +39,7 @@ public class AutoPlayer {
             return;
         }
 
-        // ✅ selesai semua langkah
+        // selesai semua langkah
         if (currentStep >= path.length()) {
             player.setAutoDirection(0, 0);
             player.setAutoMode(false);
@@ -57,7 +57,7 @@ public class AutoPlayer {
             case 'R': dx = 1; break;
         }
 
-        // 🎯 set target tile
+        // set target tile
         targetTileX = player.getTileX() + dx;
         targetTileY = player.getTileY() + dy;
 
