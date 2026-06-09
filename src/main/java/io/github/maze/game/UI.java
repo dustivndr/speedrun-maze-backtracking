@@ -9,10 +9,12 @@ public class UI {
     final GamePanel gp;
     private Label hpLabel;
     private Label flagCountLabel;
+    private Label keyLabel;
     private Label walk;
 
     private int lastHP;
     private int lastFlagCount;
+    private int lastKeyCount;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -35,13 +37,23 @@ public class UI {
         flagCountLabel.setLayoutX(18);
         flagCountLabel.setLayoutY(50);
 
+        lastKeyCount = 0;
+        keyLabel = new Label(
+                "" + lastKeyCount,
+                new ImageView(Util.getScaledImage("/image/key/key.png", GamePanel.SCALE * 0.75)));
+        keyLabel.setGraphicTextGap(7.0);
+        keyLabel.getStyleClass().add("game-font");
+        keyLabel.setLayoutX(18);
+        keyLabel.setLayoutY(80);
+
         walk = new Label("Walk: " + gp.maze.player.getWalkCount());
         walk.getStyleClass().add("game-font");
         walk.setLayoutX(18);
-        walk.setLayoutY(80);
+        walk.setLayoutY(110);
 
         gp.getChildren().add(hpLabel);
         gp.getChildren().add(flagCountLabel);
+        gp.getChildren().add(keyLabel);
         gp.getChildren().add(walk);
     }
 
@@ -59,6 +71,13 @@ public class UI {
         if (currFlagCount != lastFlagCount) {
             flagCountLabel.setText(currFlagCount + " / " + gp.maze.flagCount);
             lastFlagCount = currFlagCount;
+        }
+
+        // key
+        int currKeyCount = gp.maze.player.keyCount;
+        if (currKeyCount != lastKeyCount) {
+            keyLabel.setText("" + currKeyCount);
+            lastKeyCount = currKeyCount;
         }
 
         walk.setText("walk: " + gp.maze.player.getWalkCount());

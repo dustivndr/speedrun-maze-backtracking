@@ -20,6 +20,30 @@ public class Maze {
 
     public int flagCount = 0;
 
+    /*
+     * ID List
+     *
+     * 0 = air
+     * B = BushWall (gk bs ditembus)
+     * S = Spike (5 dmg)
+     * H = Hole (awal no collision. wkt nyentuh 5 dmg trs dpt collision, gk bisa di jalani)
+     * K = Key (perlu buat unlock flag locked)
+     * P = Player
+     * N = Ninja (5 dmg, 3x3 range)
+     * R = Fire (5 dmg)
+     * W = Wizard (summon lightning 10 dmg, 5x5 range)
+     * M = FireMonster (jatuhin meteor 20 dmg, 6x5 range)
+     * F = Flag Green (perlu ngambil semua spy menang)
+     * f = Flag Red (flag palsu, buat algoritma asli tpi gk perlu spy menang)
+     * L = Flag Locked (sm kek flag green tpi perlu kunci spy bs diambil)
+     * s = Speed spell (speed buat 20 tile gerak)
+     * p = Poison spell (1 dmg tiap tile gerak)
+     * h = Heal spell (heal 20 hp)
+     * E = Elf (heal ke full)
+     * O = Portal (teleport ke koneksinya)
+     *
+     */
+
     public Maze(GamePanel gp) {
         this.gp = gp;
     }
@@ -47,27 +71,6 @@ public class Maze {
 
         double x = col * GamePanel.TILE_SIZE;
         double y = row * GamePanel.TILE_SIZE;
-
-        /*
-         * ID List
-         *
-         * 0 = air
-         * B = BushWall
-         * S = Spike
-         * H = Hole
-         * K = Key
-         * P = Player
-         * N = Ninja
-         * R = Fire
-         * W = Wizard
-         * M = FireMonster
-         * F = Flag
-         * s = Speed spell
-         * p = Poison spell
-         * h = Heal spell
-         * E = Elf
-         *
-         */
 
         switch (id) {
             case '0' /* air */ -> { /* do nothing */ }
@@ -119,10 +122,22 @@ public class Maze {
                 objectList.add(fireMonster);
                 obstacleMap[row][col] = fireMonster;
             }
-            case 'F' /* Flag */ -> {
+            case 'F' /* Flag Green */ -> {
                 FlagGreen flagGreen = new FlagGreen(gp, x, y);
                 objectList.add(flagGreen);
                 obstacleMap[row][col] = flagGreen;
+                flagCount++;
+            }
+            case 'f' /* Flag Red */ -> {
+                FlagRed flagRed = new FlagRed(gp, x, y);
+                objectList.add(flagRed);
+                obstacleMap[row][col] = flagRed;
+            }
+            case 'L' /* Flag Locked */ -> {
+                FlagLocked fl = new FlagLocked(gp, x, y);
+                objectList.add(fl);
+                obstacleMap[row][col] = fl;
+                flagCount++;
             }
             case 's' /* Speed Spell */ -> {
                 SpeedSpell s = new SpeedSpell(gp, x, y);

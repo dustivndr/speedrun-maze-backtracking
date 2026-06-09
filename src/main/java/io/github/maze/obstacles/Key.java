@@ -3,6 +3,7 @@ package io.github.maze.obstacles;
 import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.render.Camera;
+import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Key extends Obstacle {
@@ -21,10 +22,10 @@ public class Key extends Obstacle {
 
     public Key(GamePanel gp, int col, int row) {
         super(gp,
-                col * GamePanel.SCALE * GamePanel.TILE_SIZE,
-                row * GamePanel.SCALE * GamePanel.TILE_SIZE,
-                GamePanel.TILE_SIZE * GamePanel.SCALE,
-                GamePanel.TILE_SIZE * GamePanel.SCALE);
+                col * GamePanel.TILE_SIZE,
+                row * GamePanel.TILE_SIZE,
+                GamePanel.TILE_SIZE,
+                GamePanel.TILE_SIZE);
 
         dy = 0;
         lastTime = System.currentTimeMillis();
@@ -72,10 +73,8 @@ public class Key extends Obstacle {
 
     @Override
     public void update() {
-        int col = (int) (x / GamePanel.TILE_SIZE);
-        int row = (int) (y / GamePanel.TILE_SIZE);
-        if (gp.maze.player.getTileX() == col &&
-                gp.maze.player.getTileY() == row) {
+
+        if (Util.checkAABB(this, gp.maze.player)) {
             gp.maze.player.keyCount++;
             removeObject = true;
         }
