@@ -4,7 +4,7 @@ package io.github.maze.audio;
 * CONTROL SOUND EFFECT IN THE GAME
 *
 * example on how to use in game:
-* SoundManager.CLICK.play();
+* SoundManager.<SOUND-NAME>.play();
 *
 */
 
