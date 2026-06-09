@@ -45,16 +45,16 @@ public class MazeSolverBest {
         int rows = maze.length;
         int cols = maze[0].length;
 
-        // ❌ Out of bounds
+        // out of bounds
         if (row < 0 || col < 0 || row >= rows || col >= cols) return;
 
-        // ❌ Tembok
+        // tembok
         if (maze[row][col] == 'B') return;
 
-        // ❌ Sudah dikunjungi di jalur ini
+        // sudah dikunjungi di jalur ini
         if (visited[row][col]) return;
 
-        // ✅ APPLY DAMAGE DI TILE SEKARANG
+        // apply damage di tile sekarang
         char tile = maze[row][col];
         switch (tile) {
             case 'S': hp -= 10; break;
@@ -63,7 +63,7 @@ public class MazeSolverBest {
             case 'H': hp = 0; break;
         }
 
-        // ❌ Mati setelah kena tile
+        // mati setelah kena tile
         if (hp <= 0) return;
 
         // ✅ GOAL CHECK (SETELAH DAMAGE)

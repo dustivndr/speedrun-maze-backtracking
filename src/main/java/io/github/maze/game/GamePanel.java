@@ -86,16 +86,14 @@ public class GamePanel extends Pane {
         camera = new Camera(this, maze.player);
         mazeLoader.loadNextMapObstacles();
 
-       String bestPath =
-    MazeSolverBest.solve(
-        maze.toCharMap(),
-        maze.player.getTileY(),
-        maze.player.getTileX(),
-        maze.player.getHP()
-    );
+        String bestPath = MazeSolverBest.solve(
+                maze.toCharMap(),
+                maze.player.getTileY(),
+                maze.player.getTileX(),
+                maze.player.getHP()
+        );
 
-    autoPlayer =
-        new AutoPlayer(
+        autoPlayer = new AutoPlayer(
                 maze.player,
                 bestPath
         );
@@ -144,113 +142,6 @@ public class GamePanel extends Pane {
 
     }
 
-
-    // TODO: TEMPORARY METHOD TO ADD OBSTACLES LATER REPLACE WITH map.txt FILES
-    void initGameObjects() {
-
-        // ====== map 1 ========
-//         SPIKE
-//        maze.addObject(2, 5, 0);
-//        maze.addObject(2, 5, 1);
-//        maze.addObject(2, 6, 1);
-//        maze.addObject(2, 6, 2);
-//
-//        // KEY
-//        maze.addObject(4, 6, 3);
-//
-//        // BUSH WALL
-//        maze.addObject(1, 0, 1);
-//
-//        maze.addObject(1, 2, 1);
-//        maze.addObject(1, 2, 2);
-//        maze.addObject(1, 2, 3);
-//        maze.addObject(1, 3, 1);
-//        maze.addObject(1, 3, 2);
-//        maze.addObject(1, 3, 3);
-//        maze.addObject(1, 4, 1);
-//        maze.addObject(1, 4, 2);
-//        maze.addObject(1, 4, 3);
-//
-//        maze.addObject(1, 2, 6);
-//        maze.addObject(1, 2, 7);
-//        maze.addObject(1, 3, 6);
-//        maze.addObject(1, 3, 7);
-//
-//        // NINJA
-//        maze.addObject(6, 6, 0);
-
-
-
-        // ======== map 2 : GRASS DEBUG =========
-//        maze.addObject(1, 4, 3);
-//        maze.addObject(1, 5, 3);
-//        maze.addObject(1, 6, 3);
-//        maze.addObject(1, 7, 3);
-//        maze.addObject(1, 8, 3);
-//        maze.addObject(1, 4, 4);
-//        maze.addObject(1, 6, 4);
-//        maze.addObject(1, 8, 4);
-//        maze.addObject(1, 4, 5);
-//        maze.addObject(1, 5, 5);
-//        maze.addObject(1, 6, 5);
-//        maze.addObject(1, 7, 5);
-//        maze.addObject(1, 8, 5);
-//        maze.addObject(1, 4, 6);
-//        maze.addObject(1, 6, 6);
-//        maze.addObject(1, 8, 6);
-//        maze.addObject(1, 4, 7);
-//        maze.addObject(1, 5, 7);
-//        maze.addObject(1, 6, 7);
-//        maze.addObject(1, 7, 7);
-//        maze.addObject(1, 8, 7);
-//
-//        maze.addObject(1, 10, 1);
-//        maze.addObject(1, 11, 1);
-//        maze.addObject(1, 12, 1);
-//        maze.addObject(1, 10, 2);
-//        maze.addObject(1, 11, 2);
-//        maze.addObject(1, 12, 2);
-//        maze.addObject(1, 10, 3);
-//        maze.addObject(1, 11, 3);
-//        maze.addObject(1, 12, 3);
-//
-//        maze.addObject(1, 4, 10);
-//        maze.addObject(1, 4, 11);
-//        maze.addObject(1, 4, 12);
-//        maze.addObject(1, 4, 13);
-//        maze.addObject(1, 4, 14);
-//        maze.addObject(1, 2, 12);
-//        maze.addObject(1, 3, 12);
-//        maze.addObject(1, 5, 12);
-//        maze.addObject(1, 6, 12);
-
-
-
-        // ======== map 3 : HOLES ========
-//        maze.addObject(3, 3, 3);
-//        maze.addObject(3, 4, 3);
-//        maze.addObject(3, 5, 3);
-//        maze.addObject(3, 3, 4);
-//        maze.addObject(3, 4, 4);
-//        maze.addObject(3, 5, 4);
-//        maze.addObject(3, 3, 6);
-//        maze.addObject(3, 4, 6);
-//        maze.addObject(3, 5, 6);
-
-
-        // ========= map 4 : FIRE ==========
-//        maze.addObject(7, 2, 2);
-//        maze.addObject(7, 2, 3);
-//        maze.addObject(7, 2, 4);
-//        maze.addObject(7, 4, 2);
-//        maze.addObject(7, 4, 3);
-//        maze.addObject(7, 4, 4);
-
-
-        // ========= map 5 : WIZARD =========
-//        maze.addObject(8, 5, 5);
-    }
-
     private void drawMap() {
 
         Image grass = tileManager.grass;
@@ -279,10 +170,10 @@ public class GamePanel extends Pane {
     public void update() {
 
         if(autoPlayer != null) {
-    autoPlayer.update();
-}
+            autoPlayer.update();
+        }
 
-maze.player.update();
+        maze.player.update();
 
         for (int i = maze.objectList.size() - 1; i >= 0; i--) {
             GameObject obj = maze.objectList.get(i);

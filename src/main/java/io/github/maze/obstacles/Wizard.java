@@ -66,7 +66,7 @@ public class Wizard extends Obstacle {
             // Calculate how many tiles the player has walked *since entering range*
             int tilesWalkedSinceEntry = p.getWalkCount() - walkCountOnEntry;
 
-            // Trigger attack on initial entry (0 tiles) and every 4 tiles thereafter (2, 4, 6...)
+            // Trigger attack on initial entry (0 tiles) and every 4 tiles thereafter (4, 8, 12...)
             if (tilesWalkedSinceEntry % 4 == 0 && p.getWalkCount() != walkCountAtLastAttack) {
                 isAttacking = true;
                 walkCountAtLastAttack = p.getWalkCount();
