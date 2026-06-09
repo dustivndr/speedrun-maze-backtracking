@@ -43,6 +43,14 @@ public class Player extends Entity {
 
     private static StringBuilder sb = new StringBuilder();
 
+    private int autoDx = 0;
+private int autoDy = 0;
+
+public void setAutoDirection(int dx, int dy) {
+    autoDx = dx;
+    autoDy = dy;
+}
+
     public Player(GamePanel gp) {
         this(gp, 0, 0);
     }
@@ -68,6 +76,28 @@ public class Player extends Entity {
             health = MAX_HP;
         }
     }
+
+    public void moveUp() {
+    y -= currentSpeed;
+}
+
+public void moveDown() {
+    y += currentSpeed;
+}
+
+public void moveLeft() {
+    x -= currentSpeed;
+}
+
+public void moveRight() {
+    x += currentSpeed;
+}
+
+private boolean autoMode = false;
+
+public void setAutoMode(boolean autoMode) {
+    this.autoMode = autoMode;
+}
 
     public int getHP() { return health; }
 

@@ -1,3 +1,7 @@
+package io.github.maze.maze.solver;
+
+import java.util.Arrays;
+
 public class MazeSolverBest {
 
     private static final int[] DR = {-1, 1, 0, 0};
@@ -5,74 +9,106 @@ public class MazeSolverBest {
     private static final char[] DIR = {'U', 'D', 'L', 'R'};
 
     private static String bestPath;
+    private static int bestRemainingHp;
 
-    public static String solve(char[][] maze) {
+    // Semi Dynamic Programming
+    private static int[][] bestHpAtCell;
+
+    public static String solve(
+            char[][] maze,
+            int startRow,
+            int startCol,
+            int startHp
+    ) {
 
         int rows = maze.length;
         int cols = maze[0].length;
 
-        int startRow = -1;
-        int startCol = -1;
+        bestPath = null;
+        bestRemainingHp = -1;
 
-        // Cari posisi start
+        bestHpAtCell = new int[rows][cols];
+
         for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (maze[r][c] == 'P') {
-                    startRow = r;
-                    startCol = c;
-                }
-            }
+            Arrays.fill(bestHpAtCell[r], -1);
         }
 
-        bestPath = null;
+        boolean[][] visited =
+                new boolean[rows][cols];
 
-        boolean[][] visited = new boolean[rows][cols];
-
-        dfs(
-            maze,
-            startRow,
-            startCol,
-            visited,
-            new StringBuilder()
+        backtrack(
+                maze,
+                startRow,
+                startCol,
+                startHp,
+                visited,
+                new StringBuilder()
         );
 
-        return bestPath == null
-                ? "Path tidak ditemukan"
-                : bestPath;
+        if (bestPath == null) {
+            return "Path tidak ditemukan";
+        }
+
+        return bestPath;
     }
 
-    private static void dfs(
+    private static void backtrack(
             char[][] maze,
             int row,
             int col,
+            int hp,
             boolean[][] visited,
-            StringBuilder currentPath) {
+            StringBuilder currentPath
+    ) {
 
         int rows = maze.length;
         int cols = maze[0].length;
 
+        // Out of bound
         if (row < 0 || col < 0 ||
-            row >= rows || col >= cols) {
+                row >= rows || col >= cols) {
             return;
         }
 
+        // Tembok
         if (maze[row][col] == 'B') {
             return;
         }
 
+        // HP habis
+        if (hp <= 0) {
+            return;
+        }
+
+        // Sudah dikunjungi di jalur saat ini
         if (visited[row][col]) {
             return;
         }
 
-        // Pruning
-        if (bestPath != null &&
-            currentPath.length() >= bestPath.length()) {
+        // Semi Dynamic Programming
+        if (hp <= bestHpAtCell[row][col]) {
             return;
         }
 
-        // Goal ditemukan
+        bestHpAtCell[row][col] = hp;
+
+        // Real Flag ditemukan
         if (maze[row][col] == 'F') {
-            bestPath = currentPath.toString();
+
+            if (hp > bestRemainingHp) {
+
+                bestRemainingHp = hp;
+                bestPath = currentPath.toString();
+
+            } else if (
+                    hp == bestRemainingHp &&
+                    bestPath != null &&
+                    currentPath.length() < bestPath.length()
+            ) {
+
+                bestPath = currentPath.toString();
+            }
+
             return;
         }
 
@@ -80,21 +116,64 @@ public class MazeSolverBest {
 
         for (int i = 0; i < 4; i++) {
 
+            int nextRow = row + DR[i];
+            int nextCol = col + DC[i];
+
+            int nextHp = hp;
+
+            if (nextRow >= 0 &&
+                    nextCol >= 0 &&
+                    nextRow < rows &&
+                    nextCol < cols) {
+
+                char tile = maze[nextRow][nextCol];
+
+                /*
+                 * Contoh damage tile
+                 * Sesuaikan dengan map milikmu
+                 */
+
+                switch (tile) {
+
+                    case 'S': // Spike
+                        nextHp -= 10;
+                        break;
+
+                    case 'R': // Rock
+                        nextHp -= 15;
+                        break;
+
+                    case 'L': // Lava
+                        nextHp -= 25;
+                        break;
+
+                    case 'H': // Hole = langsung mati
+                        nextHp = 0;
+                        break;
+                }
+            }
+
             currentPath.append(DIR[i]);
 
-            dfs(
-                maze,
-                row + DR[i],
-                col + DC[i],
-                visited,
-                currentPath
+            backtrack(
+                    maze,
+                    nextRow,
+                    nextCol,
+                    nextHp,
+                    visited,
+                    currentPath
             );
 
+            // Undo langkah (Backtracking)
             currentPath.deleteCharAt(
-                currentPath.length() - 1
+                    currentPath.length() - 1
             );
         }
 
         visited[row][col] = false;
+    }
+
+    public static int getBestRemainingHp() {
+        return bestRemainingHp;
     }
 }

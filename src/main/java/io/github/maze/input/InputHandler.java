@@ -23,4 +23,16 @@ public class InputHandler {
         return pressedKeys.contains(key);
     }
 
+    public void press(KeyCode key) {
+        pressedKeys.add(key);
+    }
+    
+    public void release(KeyCode key) {
+        pressedKeys.remove(key);
+    }
+
+    public void releaseAll() {
+        pressedKeys.clear();
+    }
+
 }
