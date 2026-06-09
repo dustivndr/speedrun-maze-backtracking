@@ -4,8 +4,8 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-group 'io.github.maze'
-version '0.1.0'
+group = 'io.github.maze'
+version = '0.1.0'
 
 java {
     toolchain {
