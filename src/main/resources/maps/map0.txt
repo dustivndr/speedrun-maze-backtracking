@@ -1,6 +1,6 @@
 B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B
-B P 0 s 0 0 0 W B 0 0 0 0 0 0 0 0 0 0 B B 0 0 0 0 0 0 0 0 0 B 0 0 0 0 0 0 0 0 B
-B 0 0 B B B B 0 B 0 B B B B B B B B 0 B B 0 B B B B B B B 0 B 0 B B B B B B 0 B
+B P 0 s 0 0 0 K B 0 0 0 0 0 0 0 0 0 0 B B 0 0 0 0 0 0 0 0 0 B 0 0 0 0 0 0 0 0 B
+B 0 B B B B B 0 B 0 B B B B B B B B 0 B B 0 B B B B B B B 0 B 0 B B B B B B 0 B
 B 0 B 0 0 0 B 0 B 0 B O1 0 0 0 0 0 B 0 B B 0 B 0 0 0 0 0 B 0 B 0 B 0 0 0 0 B 0 B
 B 0 B 0 B 0 B 0 B 0 B 0 B B B B 0 B O1 B B 0 B 0 B B B 0 B 0 B 0 B 0 B B 0 B 0 B
 B 0 0 0 0 0 0 0 0 0 0 0 0 0 F B 0 B 0 0 0 0 B 0 B 0 B 0 B 0 0 0 B 0 B 0 0 B 0 B
@@ -18,8 +18,8 @@ B 0 B 0 B B 0 B 0 B 0 B 0 B 0 B 0 B 0 B B 0 B 0 B 0 B 0 B 0 B B B B 0 B 0 B 0 B
 B 0 B 0 B 0 0 B 0 B 0 B 0 B 0 B 0 B 0 0 B 0 B 0 B 0 B 0 B 0 0 0 0 0 0 B 0 B 0 B
 B 0 B 0 B B B B 0 B 0 B 0 B 0 B 0 B B B B 0 B 0 B 0 B 0 B B B B B B B B 0 B 0 B
 B 0 B 0 0 0 0 0 0 B 0 B 0 B 0 B 0 0 0 0 0 0 B 0 B 0 B 0 0 0 0 0 0 0 0 0 0 B 0 B
-B 0 B B B B B B B B 0 B 0 B 0 B B B B B B B B 0 B 0 B B B B B B B B B B B B 0 B
-B 0 0 0 0 0 0 0 0 0 0 B 0 B 0 0 0 0 0 0 0 0 0 0 B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B
+B K B B B B B B B B 0 B 0 B 0 B B B B B B B B 0 B 0 B B B B B B B B B B B B 0 B
+B 0 0 0 0 K K 0 L 0 f B 0 B 0 0 0 0 0 0 0 0 0 0 B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B
 B B B B B B B B B B B B 0 B B B B B B B B B B B B B B B B B B B B B B B B B 0 B
 B 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 B
 B 0 B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B B 0 B
