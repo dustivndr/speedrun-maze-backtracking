@@ -282,6 +282,8 @@ public class GamePanel extends Pane {
     autoPlayer.update();
 }
 
+maze.player.update();
+
         for (int i = maze.objectList.size() - 1; i >= 0; i--) {
             GameObject obj = maze.objectList.get(i);
             obj.update();

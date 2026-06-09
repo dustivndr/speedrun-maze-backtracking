@@ -43,13 +43,19 @@ public class Player extends Entity {
 
     private static StringBuilder sb = new StringBuilder();
 
+    // 🔥 AUTO PLAYER
     private int autoDx = 0;
-private int autoDy = 0;
+    private int autoDy = 0;
+    private boolean autoMode = false;
 
-public void setAutoDirection(int dx, int dy) {
-    autoDx = dx;
-    autoDy = dy;
-}
+    public void setAutoDirection(int dx, int dy) {
+        autoDx = dx;
+        autoDy = dy;
+    }
+
+    public void setAutoMode(boolean autoMode) {
+        this.autoMode = autoMode;
+    }
 
     public Player(GamePanel gp) {
         this(gp, 0, 0);
@@ -65,39 +71,18 @@ public void setAutoDirection(int dx, int dy) {
 
     public void damage(int hp) {
         health -= hp;
-
-        if (health <= 0)
-            health = 0;
+        if (health <= 0) health = 0;
     }
 
     public void heal(int hp) {
         health += hp;
-        if (health >= MAX_HP) {
-            health = MAX_HP;
-        }
+        if (health >= MAX_HP) health = MAX_HP;
     }
 
-    public void moveUp() {
-    y -= currentSpeed;
-}
-
-public void moveDown() {
-    y += currentSpeed;
-}
-
-public void moveLeft() {
-    x -= currentSpeed;
-}
-
-public void moveRight() {
-    x += currentSpeed;
-}
-
-private boolean autoMode = false;
-
-public void setAutoMode(boolean autoMode) {
-    this.autoMode = autoMode;
-}
+    public void moveUp() { y -= currentSpeed; }
+    public void moveDown() { y += currentSpeed; }
+    public void moveLeft() { x -= currentSpeed; }
+    public void moveRight() { x += currentSpeed; }
 
     public int getHP() { return health; }
 
@@ -109,7 +94,14 @@ public void setAutoMode(boolean autoMode) {
         return (int) (y / GamePanel.TILE_SIZE);
     }
 
-    @Override public boolean getCollision() { return true; }
+    // 🔥 SNAP BIAR PRESISI GRID
+    public void snapToTile() {
+        x = getTileX() * GamePanel.TILE_SIZE;
+        y = getTileY() * GamePanel.TILE_SIZE;
+    }
+
+    @Override
+    public boolean getCollision() { return true; }
 
     @Override
     public void render(GraphicsContext gc) {
@@ -119,13 +111,15 @@ public void setAutoMode(boolean autoMode) {
         sb.append(direction);
         if (isMoving) {
             sb.append("Walk").append(spriteNum);
-
         } else {
             sb.append("Stationary");
         }
 
-        gc.drawImage(playerAssets.getTexture(sb.toString()), gp.camera.getScreenX(x), gp.camera.getScreenY(y));
-
+        gc.drawImage(
+            playerAssets.getTexture(sb.toString()),
+            gp.camera.getScreenX(x),
+            gp.camera.getScreenY(y)
+        );
     }
 
     @Override
@@ -140,10 +134,16 @@ public void setAutoMode(boolean autoMode) {
         int dx = 0;
         int dy = 0;
 
-        if (inpH.isPressed(KeyCode.W)) dy--;
-        if (inpH.isPressed(KeyCode.S)) dy++;
-        if (inpH.isPressed(KeyCode.A)) dx--;
-        if (inpH.isPressed(KeyCode.D)) dx++;
+        // 🔥 PRIORITAS AUTO PLAYER
+        if (autoMode) {
+            dx = autoDx;
+            dy = autoDy;
+        } else {
+            if (inpH.isPressed(KeyCode.W)) dy--;
+            if (inpH.isPressed(KeyCode.S)) dy++;
+            if (inpH.isPressed(KeyCode.A)) dx--;
+            if (inpH.isPressed(KeyCode.D)) dx++;
+        }
 
         isMoving = dy != 0 || dx != 0;
 
@@ -152,29 +152,36 @@ public void setAutoMode(boolean autoMode) {
         else if (dy < 0) direction = "up";
         else if (dy > 0) direction = "down";
 
-        // reset flags and check collisions
+        // reset collision
         collisionUp = collisionDown = collisionLeft = collisionRight = false;
         checkOutOfBound(dx, dy);
 
-        // movement logic
+        // movement
         if (dy < 0 && !collisionUp)    y -= currentSpeed;
         if (dy > 0 && !collisionDown)  y += currentSpeed;
         if (dx < 0 && !collisionLeft)  x -= currentSpeed;
         if (dx > 0 && !collisionRight) x += currentSpeed;
 
         boolean movedTile = getTileX() != prevCol || getTileY() != prevRow;
+
         if (movedTile) {
 
+            // 🔥 SNAP ke grid (penting untuk AutoPlayer)
+            if (autoMode) {
+                snapToTile();
+            }
 
             if (speedLength > 0) {
+
                 tilesWalkedWithSpeed++;
 
                 if (tilesWalkedWithSpeed % 2 == 0) {
+
                     if (poisonLength > 0) {
                         damage(1);
-
                         poisonLength--;
                     }
+
                     walkCount++;
                 }
 
@@ -184,12 +191,11 @@ public void setAutoMode(boolean autoMode) {
                 if (speedLength <= 0) {
                     tilesWalkedWithSpeed = 0;
                 }
-            }
-            else {
+
+            } else {
 
                 if (poisonLength > 0) {
                     damage(1);
-
                     poisonLength--;
                 }
 
@@ -202,35 +208,28 @@ public void setAutoMode(boolean autoMode) {
         long curr = System.currentTimeMillis();
         spriteCounter += curr - lastTime;
         lastTime = curr;
-        final double animationTimerMs = 100; // change texture every 150 millisecond
-        if (spriteCounter > animationTimerMs) {
-            spriteNum = (spriteNum % 4) + 1; // cycle 1-4
+
+        if (spriteCounter > 100) {
+            spriteNum = (spriteNum % 4) + 1;
             spriteCounter = 0;
         }
-
     }
 
     public void checkOutOfBound(int dx, int dy) {
 
         double newX = x;
         double newY = y;
-        if (dx == 1) {
-            newX += currentSpeed;
-        } else if (dx == -1) {
-            newX -= currentSpeed;
-        }
 
-        if (dy == 1) {
-            newY += currentSpeed;
-        } else if (dy == -1) {
-            newY -= currentSpeed;
-        }
+        if (dx == 1) newX += currentSpeed;
+        else if (dx == -1) newX -= currentSpeed;
+
+        if (dy == 1) newY += currentSpeed;
+        else if (dy == -1) newY -= currentSpeed;
 
         if (newX < 0) collisionLeft = true;
         if (newX + width >= GamePanel.WORLD_WIDTH) collisionRight = true;
         if (newY < 0) collisionUp = true;
         if (newY + height >= GamePanel.WORLD_HEIGHT) collisionDown = true;
-
     }
 
     @Override
@@ -240,9 +239,11 @@ public void setAutoMode(boolean autoMode) {
 
     public int getWalkCount() { return walkCount; }
 
-    public void setPoisonLength(int poisonLength) { this.poisonLength = poisonLength; }
+    public void setPoisonLength(int poisonLength) {
+        this.poisonLength = poisonLength;
+    }
+
     public void setSpeedLength(int speedLength) {
         this.speedLength = speedLength;
     }
-
 }

@@ -8,7 +8,11 @@ public class AutoPlayer {
     private final String path;
 
     private int currentStep = 0;
-    private long lastMove = 0;
+
+    // 🔥 tracking target tile
+    private int targetTileX;
+    private int targetTileY;
+    private boolean isMovingToTile = false;
 
     public AutoPlayer(Player player, String path) {
         this.player = player;
@@ -22,40 +26,44 @@ public class AutoPlayer {
         if (path == null || path.isEmpty())
             return;
 
-        long now = System.currentTimeMillis();
+        // 🔒 kalau masih menuju tile, tunggu selesai dulu
+        if (isMovingToTile) {
 
-        if (now - lastMove < 300)
+            if (player.getTileX() == targetTileX &&
+                player.getTileY() == targetTileY) {
+
+                isMovingToTile = false;
+                player.setAutoDirection(0, 0);
+            }
+
             return;
+        }
 
-        lastMove = now;
-
+        // ✅ selesai semua langkah
         if (currentStep >= path.length()) {
-
             player.setAutoDirection(0, 0);
+            player.setAutoMode(false);
             return;
         }
 
         char move = path.charAt(currentStep);
 
+        int dx = 0, dy = 0;
+
         switch (move) {
-
-            case 'U':
-                player.setAutoDirection(0, -1);
-                break;
-
-            case 'D':
-                player.setAutoDirection(0, 1);
-                break;
-
-            case 'L':
-                player.setAutoDirection(-1, 0);
-                break;
-
-            case 'R':
-                player.setAutoDirection(1, 0);
-                break;
+            case 'U': dy = -1; break;
+            case 'D': dy = 1; break;
+            case 'L': dx = -1; break;
+            case 'R': dx = 1; break;
         }
 
+        // 🎯 set target tile
+        targetTileX = player.getTileX() + dx;
+        targetTileY = player.getTileY() + dy;
+
+        player.setAutoDirection(dx, dy);
+
+        isMovingToTile = true;
         currentStep++;
     }
 }

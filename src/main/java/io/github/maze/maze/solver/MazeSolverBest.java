@@ -1,7 +1,5 @@
 package io.github.maze.maze.solver;
 
-import java.util.Arrays;
-
 public class MazeSolverBest {
 
     private static final int[] DR = {-1, 1, 0, 0};
@@ -11,9 +9,6 @@ public class MazeSolverBest {
     private static String bestPath;
     private static int bestRemainingHp;
 
-    // Semi Dynamic Programming
-    private static int[][] bestHpAtCell;
-
     public static String solve(
             char[][] maze,
             int startRow,
@@ -21,20 +16,10 @@ public class MazeSolverBest {
             int startHp
     ) {
 
-        int rows = maze.length;
-        int cols = maze[0].length;
-
         bestPath = null;
         bestRemainingHp = -1;
 
-        bestHpAtCell = new int[rows][cols];
-
-        for (int r = 0; r < rows; r++) {
-            Arrays.fill(bestHpAtCell[r], -1);
-        }
-
-        boolean[][] visited =
-                new boolean[rows][cols];
+        boolean[][] visited = new boolean[maze.length][maze[0].length];
 
         backtrack(
                 maze,
@@ -45,11 +30,7 @@ public class MazeSolverBest {
                 new StringBuilder()
         );
 
-        if (bestPath == null) {
-            return "Path tidak ditemukan";
-        }
-
-        return bestPath;
+        return (bestPath == null) ? "Path tidak ditemukan" : bestPath;
     }
 
     private static void backtrack(
@@ -64,51 +45,37 @@ public class MazeSolverBest {
         int rows = maze.length;
         int cols = maze[0].length;
 
-        // Out of bound
-        if (row < 0 || col < 0 ||
-                row >= rows || col >= cols) {
-            return;
+        // ❌ Out of bounds
+        if (row < 0 || col < 0 || row >= rows || col >= cols) return;
+
+        // ❌ Tembok
+        if (maze[row][col] == 'B') return;
+
+        // ❌ Sudah dikunjungi di jalur ini
+        if (visited[row][col]) return;
+
+        // ✅ APPLY DAMAGE DI TILE SEKARANG
+        char tile = maze[row][col];
+        switch (tile) {
+            case 'S': hp -= 10; break;
+            case 'R': hp -= 15; break;
+            case 'L': hp -= 25; break;
+            case 'H': hp = 0; break;
         }
 
-        // Tembok
-        if (maze[row][col] == 'B') {
-            return;
-        }
+        // ❌ Mati setelah kena tile
+        if (hp <= 0) return;
 
-        // HP habis
-        if (hp <= 0) {
-            return;
-        }
-
-        // Sudah dikunjungi di jalur saat ini
-        if (visited[row][col]) {
-            return;
-        }
-
-        // Semi Dynamic Programming
-        if (hp <= bestHpAtCell[row][col]) {
-            return;
-        }
-
-        bestHpAtCell[row][col] = hp;
-
-        // Real Flag ditemukan
-        if (maze[row][col] == 'F') {
-
+        // ✅ GOAL CHECK (SETELAH DAMAGE)
+        if (tile == 'F') {
             if (hp > bestRemainingHp) {
-
                 bestRemainingHp = hp;
                 bestPath = currentPath.toString();
-
-            } else if (
-                    hp == bestRemainingHp &&
+            } else if (hp == bestRemainingHp &&
                     bestPath != null &&
-                    currentPath.length() < bestPath.length()
-            ) {
-
+                    currentPath.length() < bestPath.length()) {
                 bestPath = currentPath.toString();
             }
-
             return;
         }
 
@@ -119,55 +86,19 @@ public class MazeSolverBest {
             int nextRow = row + DR[i];
             int nextCol = col + DC[i];
 
-            int nextHp = hp;
-
-            if (nextRow >= 0 &&
-                    nextCol >= 0 &&
-                    nextRow < rows &&
-                    nextCol < cols) {
-
-                char tile = maze[nextRow][nextCol];
-
-                /*
-                 * Contoh damage tile
-                 * Sesuaikan dengan map milikmu
-                 */
-
-                switch (tile) {
-
-                    case 'S': // Spike
-                        nextHp -= 10;
-                        break;
-
-                    case 'R': // Rock
-                        nextHp -= 15;
-                        break;
-
-                    case 'L': // Lava
-                        nextHp -= 25;
-                        break;
-
-                    case 'H': // Hole = langsung mati
-                        nextHp = 0;
-                        break;
-                }
-            }
-
             currentPath.append(DIR[i]);
 
             backtrack(
                     maze,
                     nextRow,
                     nextCol,
-                    nextHp,
+                    hp,
                     visited,
                     currentPath
             );
 
-            // Undo langkah (Backtracking)
-            currentPath.deleteCharAt(
-                    currentPath.length() - 1
-            );
+            // undo langkah
+            currentPath.deleteCharAt(currentPath.length() - 1);
         }
 
         visited[row][col] = false;
