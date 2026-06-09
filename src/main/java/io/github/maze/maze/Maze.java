@@ -41,7 +41,7 @@ public class Maze {
      * p = Poison spell (1 dmg tiap tile gerak)
      * h = Heal spell (heal 20 hp)
      * E = Elf (heal ke full)
-     * O = Portal (teleport ke koneksinya)
+     * O = Portal (teleport ke portal koneksinya)
      *
      */
 
