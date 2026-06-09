@@ -81,10 +81,6 @@ public class MazeLoader {
                     if (!str[col].isEmpty()) {
                         char id = str[col].charAt(0);
 
-                        if (id == 'F') {
-                            maze.flagCount++;
-                        }
-
                         if (id == 'O') {
 
                             if (str[col].length() <= 1) {
