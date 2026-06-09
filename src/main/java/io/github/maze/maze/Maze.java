@@ -9,6 +9,7 @@ import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.github.maze.obstacles.*;
 
 public class Maze {
 
@@ -182,4 +183,41 @@ public class Maze {
         obstacleMap = replacement.obstacleMap;
         player = replacement.player;
     }
+
+    public char[][] toCharMap() {
+
+    char[][] map =
+        new char[GamePanel.ROW_HEIGHT]
+                [GamePanel.COL_WIDTH];
+
+    for(int r = 0; r < GamePanel.ROW_HEIGHT; r++) {
+
+        for(int c = 0; c < GamePanel.COL_WIDTH; c++) {
+
+            GameObject obj =
+                    obstacleMap[r][c];
+
+            if(obj == null) {
+                map[r][c] = '0';
+            }
+            else if(obj instanceof BushWall) {
+                map[r][c] = 'B';
+            }
+            else if(obj instanceof Spike) {
+                map[r][c] = 'S';
+            }
+            else if(obj instanceof Hole) {
+                map[r][c] = 'H';
+            }
+            else if(obj instanceof FlagGreen) {
+                map[r][c] = 'F';
+            }
+            else {
+                map[r][c] = '0';
+            }
+        }
+    }
+
+    return map;
+}
 }

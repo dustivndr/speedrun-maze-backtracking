@@ -1,3 +1,5 @@
+package io.github.maze.maze.solver;
+
 public class MazeSolverBest {
 
     private static final int[] DR = {-1, 1, 0, 0};
@@ -5,74 +7,75 @@ public class MazeSolverBest {
     private static final char[] DIR = {'U', 'D', 'L', 'R'};
 
     private static String bestPath;
+    private static int bestRemainingHp;
 
-    public static String solve(char[][] maze) {
-
-        int rows = maze.length;
-        int cols = maze[0].length;
-
-        int startRow = -1;
-        int startCol = -1;
-
-        // Cari posisi start
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                if (maze[r][c] == 'P') {
-                    startRow = r;
-                    startCol = c;
-                }
-            }
-        }
+    public static String solve(
+            char[][] maze,
+            int startRow,
+            int startCol,
+            int startHp
+    ) {
 
         bestPath = null;
+        bestRemainingHp = -1;
 
-        boolean[][] visited = new boolean[rows][cols];
+        boolean[][] visited = new boolean[maze.length][maze[0].length];
 
-        dfs(
-            maze,
-            startRow,
-            startCol,
-            visited,
-            new StringBuilder()
+        backtrack(
+                maze,
+                startRow,
+                startCol,
+                startHp,
+                visited,
+                new StringBuilder()
         );
 
-        return bestPath == null
-                ? "Path tidak ditemukan"
-                : bestPath;
+        return (bestPath == null) ? "Path tidak ditemukan" : bestPath;
     }
 
-    private static void dfs(
+    private static void backtrack(
             char[][] maze,
             int row,
             int col,
+            int hp,
             boolean[][] visited,
-            StringBuilder currentPath) {
+            StringBuilder currentPath
+    ) {
 
         int rows = maze.length;
         int cols = maze[0].length;
 
-        if (row < 0 || col < 0 ||
-            row >= rows || col >= cols) {
-            return;
+        // ❌ Out of bounds
+        if (row < 0 || col < 0 || row >= rows || col >= cols) return;
+
+        // ❌ Tembok
+        if (maze[row][col] == 'B') return;
+
+        // ❌ Sudah dikunjungi di jalur ini
+        if (visited[row][col]) return;
+
+        // ✅ APPLY DAMAGE DI TILE SEKARANG
+        char tile = maze[row][col];
+        switch (tile) {
+            case 'S': hp -= 10; break;
+            case 'R': hp -= 15; break;
+            case 'L': hp -= 25; break;
+            case 'H': hp = 0; break;
         }
 
-        if (maze[row][col] == 'B') {
-            return;
-        }
+        // ❌ Mati setelah kena tile
+        if (hp <= 0) return;
 
-        if (visited[row][col]) {
-            return;
-        }
-
-        // Pruning
-        if (bestPath != null &&
-            currentPath.length() >= bestPath.length()) {
-            return;
-        }
-
-        // Goal ditemukan
-        if (maze[row][col] == 'F') {
-            bestPath = currentPath.toString();
+        // ✅ GOAL CHECK (SETELAH DAMAGE)
+        if (tile == 'F') {
+            if (hp > bestRemainingHp) {
+                bestRemainingHp = hp;
+                bestPath = currentPath.toString();
+            } else if (hp == bestRemainingHp &&
+                    bestPath != null &&
+                    currentPath.length() < bestPath.length()) {
+                bestPath = currentPath.toString();
+            }
             return;
         }
 
@@ -80,21 +83,28 @@ public class MazeSolverBest {
 
         for (int i = 0; i < 4; i++) {
 
+            int nextRow = row + DR[i];
+            int nextCol = col + DC[i];
+
             currentPath.append(DIR[i]);
 
-            dfs(
-                maze,
-                row + DR[i],
-                col + DC[i],
-                visited,
-                currentPath
+            backtrack(
+                    maze,
+                    nextRow,
+                    nextCol,
+                    hp,
+                    visited,
+                    currentPath
             );
 
-            currentPath.deleteCharAt(
-                currentPath.length() - 1
-            );
+            // undo langkah
+            currentPath.deleteCharAt(currentPath.length() - 1);
         }
 
         visited[row][col] = false;
+    }
+
+    public static int getBestRemainingHp() {
+        return bestRemainingHp;
     }
 }
