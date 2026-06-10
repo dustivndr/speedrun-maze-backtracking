@@ -17,8 +17,6 @@ public class Maze {
     public List<GameObject> objectList = new ArrayList<>();
     public GameObject[][] obstacleMap = new GameObject[GamePanel.ROW_HEIGHT][GamePanel.COL_WIDTH];
 
-    public String[][] strMap = new String[GamePanel.ROW_HEIGHT][GamePanel.COL_WIDTH];
-
     public Player player;
 
     public int flagCount = 0;
@@ -131,32 +129,26 @@ public class Maze {
         double y = row * GamePanel.TILE_SIZE;
 
         switch (id) {
-            case '0' /* air */ -> {
-                strMap[row][col] = "0";
-            }
+            case '0' /* air */ -> {}
             case 'B' /* BushWall */ -> {
                 BushWall bushWall = new BushWall(gp, x, y);
                 objectList.add(bushWall);
                 obstacleMap[row][col] = bushWall;
-                strMap[row][col] = "B";
             }
             case 'S' /* Spike */ -> {
                 Spike spike = new Spike(gp, x, y);
                 objectList.add(spike);
                 obstacleMap[row][col] = spike;
-                strMap[row][col] = "S";
             }
             case 'H' /* Hole */ -> {
                 Hole hole = new Hole(gp, col, row);
                 objectList.add(hole);
                 obstacleMap[row][col] = hole;
-                strMap[row][col] = "H";
             }
             case 'K' /* Key */ -> {
                 Key key = new Key(gp, col, row);
                 objectList.add(key);
                 obstacleMap[row][col] = key;
-                strMap[row][col] = "K";
             }
             case 'P' /* Player */ -> {
                 Player p = new Player(gp, x, y);
@@ -165,76 +157,63 @@ public class Maze {
                 if (this == gp.maze) {
                     gp.maze.player = p;
                 }
-
-                strMap[row][col] = "0";
             }
             case 'N' /* Ninja */ -> {
                 Ninja ninja = new Ninja(gp, x, y);
                 objectList.add(ninja);
                 obstacleMap[row][col] = ninja;
-                strMap[row][col] = "N";
             }
             case 'R' /* Fire */ -> {
                 Fire fire = new Fire(gp, x, y);
                 objectList.add(fire);
                 obstacleMap[row][col] = fire;
-                strMap[row][col] = "R";
             }
             case 'W' /* Wizard */ -> {
                 Wizard wizard = new Wizard(gp, x, y);
                 objectList.add(wizard);
                 obstacleMap[row][col] = wizard;
-                strMap[row][col] = "W";
             }
             case 'M' /* FireMonster */ -> {
                 FireMonster fireMonster = new FireMonster(gp, x, y);
                 objectList.add(fireMonster);
                 obstacleMap[row][col] = fireMonster;
-                strMap[row][col] = "M";
             }
             case 'F' /* Flag Green */ -> {
                 FlagGreen flagGreen = new FlagGreen(gp, x, y);
                 objectList.add(flagGreen);
                 obstacleMap[row][col] = flagGreen;
                 flagCount++;
-                strMap[row][col] = "F";
             }
             case 'f' /* Flag Red */ -> {
                 FlagRed flagRed = new FlagRed(gp, x, y);
                 objectList.add(flagRed);
                 obstacleMap[row][col] = flagRed;
-                strMap[row][col] = "f";
             }
             case 'L' /* Flag Locked */ -> {
                 FlagLocked fl = new FlagLocked(gp, x, y);
                 objectList.add(fl);
                 obstacleMap[row][col] = fl;
                 flagCount++;
-                strMap[row][col] = "L";
             }
             case 's' /* Speed Spell */ -> {
                 SpeedSpell s = new SpeedSpell(gp, x, y);
                 objectList.add(s);
-                obstacleMap[col][row] = s;
-                strMap[row][col] = "s";
+                obstacleMap[row][col] = s;
             }
             case 'p' /* Poison Spell */ -> {
                 PoisonSpell s = new PoisonSpell(gp, x, y);
                 objectList.add(s);
-                obstacleMap[col][row] = s;
-                strMap[row][col] = "p";
+                obstacleMap[row][col] = s;
             }
             case 'h' /* Heal Spell */ -> {
                 HealSpell s = new HealSpell(gp, x, y);
                 objectList.add(s);
-                obstacleMap[col][row] = s;
-                strMap[row][col] = "h";
+                obstacleMap[row][col] = s;
             }
             case 'E' /* Elf */ -> {
                 Elf e = new Elf(gp, x, y);
                 objectList.add(e);
-                obstacleMap[col][row] = e;
-                strMap[row][col] = "E";
+                obstacleMap[row][col] = e;
             }
         }
     }
@@ -249,8 +228,7 @@ public class Maze {
 
         Portal p = new Portal(gp, x, y, num);
         objectList.add(p);
-        obstacleMap[col][row] = p;
-        strMap[row][col] = "O" + num;
+        obstacleMap[row][col] = p;
 
         return p;
     }
@@ -260,77 +238,4 @@ public class Maze {
         obstacleMap = replacement.obstacleMap;
         player = replacement.player;
     }
-
-    public String[][] getStrMap() {
-        return strMap;
-    }
-
-   public char[][] toCharMap() {
-
-    char[][] map =
-            new char[GamePanel.ROW_HEIGHT]
-                    [GamePanel.COL_WIDTH];
-
-    for (int r = 0; r < GamePanel.ROW_HEIGHT; r++) {
-
-        for (int c = 0; c < GamePanel.COL_WIDTH; c++) {
-
-            GameObject obj = obstacleMap[r][c];
-
-            if (obj == null) {
-                map[r][c] = '0';
-            }
-            else if (obj instanceof BushWall) {
-                map[r][c] = 'B';
-            }
-            else if (obj instanceof Spike) {
-                map[r][c] = 'S';
-            }
-            else if (obj instanceof Hole) {
-                map[r][c] = 'H';
-            }
-            else if (obj instanceof Key) {
-                map[r][c] = 'K';
-            }
-            else if (obj instanceof Ninja) {
-                map[r][c] = 'N';
-            }
-            else if (obj instanceof Fire) {
-                map[r][c] = 'R';
-            }
-            else if (obj instanceof Wizard) {
-                map[r][c] = 'W';
-            }
-            else if (obj instanceof FireMonster) {
-                map[r][c] = 'M';
-            }
-            else if (obj instanceof FlagGreen) {
-                map[r][c] = 'F';
-            }
-            else if (obj instanceof FlagLocked) {
-                map[r][c] = 'L';
-            }
-            else if (obj instanceof FlagRed) {
-                map[r][c] = 'f';
-            }
-            else if (obj instanceof SpeedSpell) {
-                map[r][c] = 's';
-            }
-            else if (obj instanceof PoisonSpell) {
-                map[r][c] = 'p';
-            }
-            else if (obj instanceof HealSpell) {
-                map[r][c] = 'h';
-            }
-            else if (obj instanceof Elf) {
-                map[r][c] = 'E';
-            }
-            else {
-                map[r][c] = '0';
-            }
-        }
-    }
-
-    return map;
-}
 }
