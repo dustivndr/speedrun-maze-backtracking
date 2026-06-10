@@ -8,12 +8,12 @@ For code documentation, look at README.md in each directory.
 
 | ID  | Tile        | Collision | Description                                                                                                                                                                 |
 |-----|-------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `P` | Player      | -         | Win condition: collect all `F` and `L` flags. <br>Optimal path: highest remaining HP. <br>Lose condition: HP reaches 0.                                                     |
 | `0` | Air         | ❌         | Empty space.                                                                                                                                                                |
 | `B` | BushWall    | ✅         | Solid obstacle.                                                                                                                                                             |
 | `S` | Spike       | ❌         | Deals **5 damage** when stepped on.                                                                                                                                         |
 | `H` | Hole        | Dynamic   | Before touched: no collision. <br>On first touch: deals **5 damage** and becomes a solid obstacle.                                                                          |
 | `K` | Key         | ❌         | Increases `keyCount`. <br>Collected key disappears. <br>Used to unlock `L` tiles and is consumed after use.                                                                 |
-| `P` | Player      | -         | Win condition: collect all `F` and `L` flags. <br>Optimal path: highest remaining HP. <br>Lose condition: HP reaches 0.                                                     |
 | `N` | Ninja       | ✅         | Deals **5 damage**. <br>Attack range: **3×3**. <br>Attacks immediately when player enters range, then every **2 tile counts** while player remains inside range.            |
 | `R` | Fire        | ❌         | Deals **5 damage** when stepped on.                                                                                                                                         |
 | `W` | Wizard      | ✅         | Deals **10 damage**. <br>Attack range: **5×5**. <br>Attacks immediately when player enters range, then every **4 tile counts** while player remains inside range.           |
