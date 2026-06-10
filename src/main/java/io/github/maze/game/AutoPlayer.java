@@ -9,15 +9,14 @@ public class AutoPlayer {
 
     private int currentStep = 0;
 
-    // 🔥 tracking target tile
-    private int targetTileX;
-    private int targetTileY;
-    private boolean isMovingToTile = false;
+    private int targetX;
+    private int targetY;
+
+    private boolean waitingMove = false;
 
     public AutoPlayer(Player player, String path) {
         this.player = player;
         this.path = path;
-
         player.setAutoMode(true);
     }
 
@@ -26,26 +25,35 @@ public class AutoPlayer {
         if (path == null || path.isEmpty())
             return;
 
-        // 🔒 kalau masih menuju tile, tunggu selesai dulu
-        if (isMovingToTile) {
+        // =========================
+        // WAIT UNTIL ARRIVE TARGET
+        // =========================
+        if (waitingMove) {
 
-            if (player.getTileX() == targetTileX &&
-                player.getTileY() == targetTileY) {
+            // sudah sampai tile target
+            if (player.getTileX() == targetX &&
+                player.getTileY() == targetY) {
 
-                isMovingToTile = false;
+                waitingMove = false;
                 player.setAutoDirection(0, 0);
+                currentStep++;
             }
 
             return;
         }
 
-        // selesai semua langkah
+        // =========================
+        // FINISH
+        // =========================
         if (currentStep >= path.length()) {
             player.setAutoDirection(0, 0);
             player.setAutoMode(false);
             return;
         }
 
+        // =========================
+        // NEXT STEP
+        // =========================
         char move = path.charAt(currentStep);
 
         int dx = 0, dy = 0;
@@ -57,13 +65,12 @@ public class AutoPlayer {
             case 'R': dx = 1; break;
         }
 
-        // set target tile
-        targetTileX = player.getTileX() + dx;
-        targetTileY = player.getTileY() + dy;
+        // target tile yang harus dicapai
+        targetX = player.getTileX() + dx;
+        targetY = player.getTileY() + dy;
 
         player.setAutoDirection(dx, dy);
 
-        isMovingToTile = true;
-        currentStep++;
+        waitingMove = true;
     }
 }

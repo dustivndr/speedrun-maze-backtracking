@@ -246,4 +246,6 @@ public class Player extends Entity {
     public void setSpeedLength(int speedLength) {
         this.speedLength = speedLength;
     }
+
+    
 }

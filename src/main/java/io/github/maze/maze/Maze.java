@@ -265,40 +265,72 @@ public class Maze {
         return strMap;
     }
 
-    public char[][] toCharMap() {
+   public char[][] toCharMap() {
 
-        char[][] map =
-                new char[GamePanel.ROW_HEIGHT]
-                        [GamePanel.COL_WIDTH];
+    char[][] map =
+            new char[GamePanel.ROW_HEIGHT]
+                    [GamePanel.COL_WIDTH];
 
-        for(int r = 0; r < GamePanel.ROW_HEIGHT; r++) {
+    for (int r = 0; r < GamePanel.ROW_HEIGHT; r++) {
 
-            for(int c = 0; c < GamePanel.COL_WIDTH; c++) {
+        for (int c = 0; c < GamePanel.COL_WIDTH; c++) {
 
-                GameObject obj =
-                        obstacleMap[r][c];
+            GameObject obj = obstacleMap[r][c];
 
-                if(obj == null) {
-                    map[r][c] = '0';
-                }
-                else if(obj instanceof BushWall) {
-                    map[r][c] = 'B';
-                }
-                else if(obj instanceof Spike) {
-                    map[r][c] = 'S';
-                }
-                else if(obj instanceof Hole) {
-                    map[r][c] = 'H';
-                }
-                else if(obj instanceof FlagGreen) {
-                    map[r][c] = 'F';
-                }
-                else {
-                    map[r][c] = '0';
-                }
+            if (obj == null) {
+                map[r][c] = '0';
+            }
+            else if (obj instanceof BushWall) {
+                map[r][c] = 'B';
+            }
+            else if (obj instanceof Spike) {
+                map[r][c] = 'S';
+            }
+            else if (obj instanceof Hole) {
+                map[r][c] = 'H';
+            }
+            else if (obj instanceof Key) {
+                map[r][c] = 'K';
+            }
+            else if (obj instanceof Ninja) {
+                map[r][c] = 'N';
+            }
+            else if (obj instanceof Fire) {
+                map[r][c] = 'R';
+            }
+            else if (obj instanceof Wizard) {
+                map[r][c] = 'W';
+            }
+            else if (obj instanceof FireMonster) {
+                map[r][c] = 'M';
+            }
+            else if (obj instanceof FlagGreen) {
+                map[r][c] = 'F';
+            }
+            else if (obj instanceof FlagLocked) {
+                map[r][c] = 'L';
+            }
+            else if (obj instanceof FlagRed) {
+                map[r][c] = 'f';
+            }
+            else if (obj instanceof SpeedSpell) {
+                map[r][c] = 's';
+            }
+            else if (obj instanceof PoisonSpell) {
+                map[r][c] = 'p';
+            }
+            else if (obj instanceof HealSpell) {
+                map[r][c] = 'h';
+            }
+            else if (obj instanceof Elf) {
+                map[r][c] = 'E';
+            }
+            else {
+                map[r][c] = '0';
             }
         }
-
-        return map;
     }
+
+    return map;
+}
 }

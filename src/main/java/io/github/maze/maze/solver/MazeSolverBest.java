@@ -8,6 +8,7 @@ public class MazeSolverBest {
 
     private static String bestPath;
     private static int bestRemainingHp;
+    private static int totalFlags;
 
     public static String solve(
             char[][] maze,
@@ -18,19 +19,36 @@ public class MazeSolverBest {
 
         bestPath = null;
         bestRemainingHp = -1;
+        totalFlags = 0;
 
-        boolean[][] visited = new boolean[maze.length][maze[0].length];
+        for (int r = 0; r < maze.length; r++) {
+            for (int c = 0; c < maze[0].length; c++) {
+
+                if (maze[r][c] == 'F' ||
+                    maze[r][c] == 'L') {
+
+                    totalFlags++;
+                }
+            }
+        }
+
+        boolean[][] visited =
+                new boolean[maze.length][maze[0].length];
 
         backtrack(
                 maze,
                 startRow,
                 startCol,
                 startHp,
+                0,              // keys
+                0,              // flags collected
                 visited,
                 new StringBuilder()
         );
 
-        return (bestPath == null) ? "Path tidak ditemukan" : bestPath;
+        return bestPath == null
+                ? "Path tidak ditemukan"
+                : bestPath;
     }
 
     private static void backtrack(
@@ -38,6 +56,8 @@ public class MazeSolverBest {
             int row,
             int col,
             int hp,
+            int keys,
+            int flagsCollected,
             boolean[][] visited,
             StringBuilder currentPath
     ) {
@@ -46,62 +66,159 @@ public class MazeSolverBest {
         int cols = maze[0].length;
 
         // out of bounds
-        if (row < 0 || col < 0 || row >= rows || col >= cols) return;
+        if (row < 0 ||
+            col < 0 ||
+            row >= rows ||
+            col >= cols) {
 
-        // tembok
-        if (maze[row][col] == 'B') return;
-
-        // sudah dikunjungi di jalur ini
-        if (visited[row][col]) return;
-
-        // apply damage di tile sekarang
-        char tile = maze[row][col];
-        switch (tile) {
-            case 'S': hp -= 10; break;
-            case 'R': hp -= 15; break;
-            case 'L': hp -= 25; break;
-            case 'H': hp = 0; break;
+            return;
         }
 
-        // mati setelah kena tile
-        if (hp <= 0) return;
+        char tile = maze[row][col];
 
-        // ✅ GOAL CHECK (SETELAH DAMAGE)
+        // obstacle
+        if (tile == 'B') {
+            return;
+        }
+
+        // sudah dikunjungi
+        if (visited[row][col]) {
+            return;
+        }
+
+        // =====================
+        // DAMAGE
+        // =====================
+
+        switch (tile) {
+
+            case 'S':
+                hp -= 5;
+                break;
+
+            case 'N':
+                hp -= 5;
+                break;
+
+            case 'R':
+                hp -= 5;
+                break;
+
+            case 'W':
+                hp -= 10;
+                break;
+
+            case 'M':
+                hp -= 20;
+                break;
+
+            case 'H':
+                hp -= 5;
+                break;
+        }
+
+        if (hp <= 0) {
+            return;
+        }
+
+        // backup tile untuk restore
+        char originalTile = tile;
+
+        // =====================
+        // KEY
+        // =====================
+
+        if (tile == 'K') {
+
+            keys++;
+
+            // supaya tidak diambil lagi
+            maze[row][col] = '0';
+        }
+
+        // =====================
+        // FLAG GREEN
+        // =====================
+
         if (tile == 'F') {
+
+            flagsCollected++;
+
+            maze[row][col] = '0';
+        }
+
+        // =====================
+        // FLAG LOCKED
+        // =====================
+
+        if (tile == 'L') {
+
+            if (keys <= 0) {
+
+                maze[row][col] = originalTile;
+                return;
+            }
+
+            keys--;
+
+            flagsCollected++;
+
+            maze[row][col] = '0';
+        }
+
+        // =====================
+        // GOAL
+        // =====================
+
+        if (flagsCollected == totalFlags) {
+
             if (hp > bestRemainingHp) {
+
                 bestRemainingHp = hp;
                 bestPath = currentPath.toString();
-            } else if (hp == bestRemainingHp &&
-                    bestPath != null &&
-                    currentPath.length() < bestPath.length()) {
+
+            }
+            else if (hp == bestRemainingHp &&
+                    (bestPath == null ||
+                     currentPath.length() < bestPath.length())) {
+
                 bestPath = currentPath.toString();
             }
+
+            maze[row][col] = originalTile;
             return;
         }
 
         visited[row][col] = true;
 
-        for (int i = 0; i < 4; i++) {
+        // =====================
+        // RECURSIVE SEARCH
+        // =====================
 
-            int nextRow = row + DR[i];
-            int nextCol = col + DC[i];
+        for (int i = 0; i < 4; i++) {
 
             currentPath.append(DIR[i]);
 
             backtrack(
                     maze,
-                    nextRow,
-                    nextCol,
+                    row + DR[i],
+                    col + DC[i],
                     hp,
+                    keys,
+                    flagsCollected,
                     visited,
                     currentPath
             );
 
-            // undo langkah
-            currentPath.deleteCharAt(currentPath.length() - 1);
+            currentPath.deleteCharAt(
+                    currentPath.length() - 1
+            );
         }
 
         visited[row][col] = false;
+
+        // restore tile
+        maze[row][col] = originalTile;
     }
 
     public static int getBestRemainingHp() {
