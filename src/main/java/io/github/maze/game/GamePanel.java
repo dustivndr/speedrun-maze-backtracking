@@ -11,6 +11,7 @@ import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.maze.TileManager;
 import io.github.maze.maze.loader.MazeLoader;
+import io.github.maze.maze.solver.MazeSolver;
 import io.github.maze.obstacles.Obstacle;
 import io.github.maze.render.Camera;
 
@@ -22,11 +23,6 @@ import javafx.scene.layout.Pane;
 
 import java.util.Comparator;
 import java.util.Objects;
-import io.github.maze.game.AutoPlayer;
-import io.github.maze.maze.solver.MazeSolverBest;
-
-
-
 
 public class GamePanel extends Pane {
 
@@ -86,12 +82,7 @@ public class GamePanel extends Pane {
         camera = new Camera(this, maze.player);
         mazeLoader.loadNextMapObstacles();
 
-        String bestPath = MazeSolverBest.solve(
-                maze.toCharMap(),
-                maze.player.getTileY(),
-                maze.player.getTileX(),
-                maze.player.getHP()
-        );
+        String bestPath = MazeSolver.solve(maze);
 
         autoPlayer = new AutoPlayer(
                 maze.player,

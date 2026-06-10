@@ -14,6 +14,8 @@ public class Fire extends Obstacle {
     long lastTime;
     int damage = 5;
 
+    boolean playerWasInside = false;
+
     public Fire(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
         p = gp.maze.player;
@@ -31,7 +33,12 @@ public class Fire extends Obstacle {
         // check damage player
         Player p = gp.maze.player;
         if (Util.checkAABB(p, this)) {
-            p.damage(damage);
+            if (!playerWasInside) {
+                p.damage(damage);
+                playerWasInside = true;
+            }
+        } else {
+            playerWasInside = false;
         }
 
         // update texture

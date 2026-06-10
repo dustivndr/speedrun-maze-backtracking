@@ -134,7 +134,7 @@ public class Player extends Entity {
         int dx = 0;
         int dy = 0;
 
-        // 🔥 PRIORITAS AUTO PLAYER
+        // prioritas auto player
         if (autoMode) {
             dx = autoDx;
             dy = autoDy;
@@ -166,7 +166,7 @@ public class Player extends Entity {
 
         if (movedTile) {
 
-            // 🔥 SNAP ke grid (penting untuk AutoPlayer)
+            // snap ke grid (penting untuk AutoPlayer)
             if (autoMode) {
                 snapToTile();
             }
