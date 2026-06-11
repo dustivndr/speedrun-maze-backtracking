@@ -585,7 +585,7 @@ public class MazeSolver {
                 // collect the interacted flag without adding to greenFlagCount
                 collectedFlags.add(currPos);
             }
-            case SpellHeal heal -> {
+            case HealSpell heal -> {
 
                 // collect only uncollected spells
                 if (!collectedSpells.contains(currPos)) {
@@ -595,7 +595,7 @@ public class MazeSolver {
                     hp += 20;
                 }
             }
-            case SpellPoison poison -> {
+            case PoisonSpell poison -> {
 
                 // collect only uncollected spells
                 if (!collectedSpells.contains(currPos)) {
@@ -605,7 +605,7 @@ public class MazeSolver {
                     collectedSpells.add(currPos);
                 }
             }
-            case SpellSpeed speed -> {
+            case SpeedSpell speed -> {
 
                 // collect only uncollected spells
                 if (!collectedSpells.contains(currPos)) {

@@ -9,6 +9,7 @@ import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.github.maze.obstacles.*;
 
 public class Maze {
 
@@ -195,17 +196,17 @@ public class Maze {
                 flagCount++;
             }
             case 's' /* Speed Spell */ -> {
-                SpellSpeed s = new SpellSpeed(gp, x, y);
+                SpeedSpell s = new SpeedSpell(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
             case 'p' /* Poison Spell */ -> {
-                SpellPoison s = new SpellPoison(gp, x, y);
+                PoisonSpell s = new PoisonSpell(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
             case 'h' /* Heal Spell */ -> {
-                SpellHeal s = new SpellHeal(gp, x, y);
+                HealSpell s = new HealSpell(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
