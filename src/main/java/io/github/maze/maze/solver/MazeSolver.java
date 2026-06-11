@@ -45,12 +45,12 @@ public class MazeSolver {
 
     private static Map<State, int[]> memo;
 
-    public static String solve(Maze maze) {
+    public static String solve(GamePanel gp) {
 
-        Point pos = new Point(maze.player.getTileY(), maze.player.getTileX());
+        Point pos = new Point(gp.maze.player.getTileY(), gp.maze.player.getTileX());
         State initialState = initState(pos);
 
-        totalFlag = maze.flagCount;
+        totalFlag = gp.maze.flagCount;
         memo = new HashMap<>();
         bestRemainingHp = -1;
         bestPath = "";
@@ -69,7 +69,7 @@ public class MazeSolver {
             initialState = initState(pos);
 
             backtracking(
-                    maze.obstacleMap,
+                    gp.maze.obstacleMap,
                     initialState,
                     100,
                     path,
@@ -81,8 +81,6 @@ public class MazeSolver {
                 return bestPath;
             }
         }
-
-        System.out.println("no path to goal found");
 
         return bestPath;
     }

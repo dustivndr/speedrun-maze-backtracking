@@ -41,12 +41,12 @@ public class Game extends Pane {
         gamePanel.startGameThread("showBacktracking");
     }
 
-    public void finishGame() {
+    public void finishGame(String text) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         alert.setTitle("Maze");
-        alert.setHeaderText("Maze Completed!");
+        alert.setHeaderText(text);
         alert.setContentText("What would you like to do?");
 
         ButtonType menu = new ButtonType("Menu");

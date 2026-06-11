@@ -82,7 +82,7 @@ public class GamePanel extends Pane {
         camera = new Camera(this, maze.player);
         mazeLoader.loadNextMapObstacles();
 
-        path = MazeSolver.solve(maze);
+        path = MazeSolver.solve(this);
 
         ui = new UI(this);
 
@@ -102,7 +102,7 @@ public class GamePanel extends Pane {
         }
 
         autoPlayer = new AutoPlayer(
-                maze,
+                this,
                 path
         );
 

@@ -4,9 +4,11 @@ import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
 import io.github.maze.obstacles.Portal;
+import javafx.application.Platform;
 
 public class AutoPlayer {
 
+    private final GamePanel gp;
     private final Player player;
     private final GameObject[][] maze;
     private final String path;
@@ -25,7 +27,9 @@ public class AutoPlayer {
 
     private boolean waitingMove = false;
 
-    public AutoPlayer(Maze maze, String path) {
+    public AutoPlayer(GamePanel gp, String path) {
+        this.gp = gp;
+        Maze maze = gp.maze;
         this.player = maze.player;
         this.maze = maze.obstacleMap;
         this.path = path;
@@ -134,6 +138,17 @@ public class AutoPlayer {
         if (currentStep >= path.length()) {
             player.setAutoDirection(0, 0);
             player.setAutoMode(false);
+
+            // 1. Stop the animation timer immediately so the loop pauses
+            if (gp.gameTimer != null) {
+                gp.gameTimer.stop();
+            }
+
+            // 2. Defer the dialog call to run safely outside the animation pulse
+            Platform.runLater(() -> {
+                gp.game.finishGame("Maze Completed!");
+            });
+
             return;
         }
 
