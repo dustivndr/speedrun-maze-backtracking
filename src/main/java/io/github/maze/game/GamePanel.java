@@ -60,6 +60,8 @@ public class GamePanel extends Pane {
     public AnimationTimer gameTimer;
     private AutoPlayer autoPlayer;
 
+    private String path;
+
     public GamePanel(Game game) {
         
         this.game = game;
@@ -81,14 +83,7 @@ public class GamePanel extends Pane {
         camera = new Camera(this, maze.player);
         mazeLoader.loadNextMapObstacles();
 
-        String bestPath = MazeSolver.solve(maze);
-
-        autoPlayer = new AutoPlayer(
-                maze,
-                bestPath
-        );
-
-        System.out.println("PATH = " + bestPath);
+        path = MazeSolver.solve(maze);
 
         ui = new UI(this);
 
@@ -100,9 +95,18 @@ public class GamePanel extends Pane {
 
     }
 
-    public void startGameThread() {
+    public void startGameThread(String state) {
 
         long drawInterval = 1_000_000_000 / FPS;
+        if (state.equals("showBacktracking")) {
+            path = MazeSolver.backtrackingPath.toString();
+            maze.player.currentSpeed = GamePanel.TILE_SIZE;
+        }
+
+        autoPlayer = new AutoPlayer(
+                maze,
+                path
+        );
 
         gameTimer = new AnimationTimer() {
             private long lastTime = 0;

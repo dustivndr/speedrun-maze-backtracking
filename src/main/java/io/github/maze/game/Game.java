@@ -30,7 +30,12 @@ public class Game extends Pane {
 
     public void startGame() {
         getChildren().setAll(gamePanel);
-        gamePanel.startGameThread();
+        gamePanel.startGameThread("bestPath");
+    }
+
+    public void showBacktracking() {
+        getChildren().setAll(gamePanel);
+        gamePanel.startGameThread("showBacktracking");
     }
 
 }
