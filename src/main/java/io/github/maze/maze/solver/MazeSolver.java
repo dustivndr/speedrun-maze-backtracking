@@ -20,6 +20,8 @@ public class MazeSolver {
 
     private static int totalFlag;
     private static String bestPath;
+    public static StringBuilder backtrackingPath = new StringBuilder(3000000);
+    public static int backtrackingLength = 0;
     private static int bestRemainingHp;
 
     private static Map<State, int[]> memo;
@@ -33,6 +35,8 @@ public class MazeSolver {
         memo = new HashMap<>();
         bestRemainingHp = -1;
         bestPath = "";
+        backtrackingLength = 0;
+        backtrackingPath.setLength(0);
 
         StringBuilder path = new StringBuilder();
 
@@ -92,6 +96,10 @@ public class MazeSolver {
     ) {
 
         if (!bestPath.isEmpty() && bestRemainingHp == 100 && path.length() >= bestPath.length()) {
+            return;
+        }
+
+        if (path.length() > maxDepth) {
             return;
         }
 
@@ -197,6 +205,7 @@ public class MazeSolver {
 
             // add position to path taken
             path.append(DIR[i]);
+            backtrackingPath.append(DIR[i]);
 
             // get the next state after player moves (only player position
             // changed, everything else is the same)
@@ -227,6 +236,13 @@ public class MazeSolver {
             );
 
             // backtrack
+            backtrackingPath.append(switch (path.charAt(path.length() - 1)) {
+                case 'U' -> 'D';
+                case 'D' -> 'U';
+                case 'L' -> 'R';
+                case 'R' -> 'L';
+                default -> throw new IllegalStateException("Unexpected value: " + path.charAt(path.length() - 1));
+            });
             path.deleteCharAt(path.length() - 1);
         }
     }
@@ -543,7 +559,7 @@ public class MazeSolver {
         }
 
         switch (obj) {
-            case Spike spike -> hp -= 5;
+            case Spike spike -> hp -= 10;
             case Fire fire -> hp -= 5;
             case Hole hole -> {
                 hp -= 5;

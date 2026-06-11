@@ -40,7 +40,7 @@ public class GamePanel extends Pane {
 
     static {
         SCALE = 2;
-        TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE;
+        TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // 32
 
         WORLD_WIDTH = TILE_SIZE * COL_WIDTH;
         WORLD_HEIGHT = TILE_SIZE * ROW_HEIGHT;
@@ -84,7 +84,7 @@ public class GamePanel extends Pane {
         String bestPath = MazeSolver.solve(maze);
 
         autoPlayer = new AutoPlayer(
-                maze.player,
+                maze,
                 bestPath
         );
 
