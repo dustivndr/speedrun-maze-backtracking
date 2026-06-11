@@ -9,6 +9,10 @@ public class AutoPlayer {
 
     private int currentStep = 0;
 
+    // logical tile position (IMPORTANT FIX)
+    private int logicalX;
+    private int logicalY;
+
     private int targetX;
     private int targetY;
 
@@ -20,13 +24,17 @@ public class AutoPlayer {
     public AutoPlayer(Player player, String path) {
         this.player = player;
         this.path = path;
-        player.setAutoMode(true);
+
+        this.player.setAutoMode(true);
+
+        // FIX: snapshot initial tile position (NOT pixel)
+        this.logicalX = player.getTileX();
+        this.logicalY = player.getTileY();
     }
 
     public void update() {
 
-        if (path == null || path.isEmpty())
-            return;
+        if (path == null || path.isEmpty()) return;
 
         // =========================
         // WAIT UNTIL ARRIVE TARGET
@@ -36,28 +44,37 @@ public class AutoPlayer {
             double targetPixelX = targetX * GamePanel.TILE_SIZE;
             double targetPixelY = targetY * GamePanel.TILE_SIZE;
 
-            boolean reached = false;
-
-            // Deteksi apakah koordinat pixel player sudah menyentuh/melewati target
-            if (currentDx == 1 && player.getX() >= targetPixelX) reached = true;
-            else if (currentDx == -1 && player.getX() <= targetPixelX) reached = true;
-            else if (currentDy == 1 && player.getY() >= targetPixelY) reached = true;
-            else if (currentDy == -1 && player.getY() <= targetPixelY) reached = true;
+            boolean reached =
+                    (currentDx == 1 && player.getX() >= targetPixelX) ||
+                    (currentDx == -1 && player.getX() <= targetPixelX) ||
+                    (currentDy == 1 && player.getY() >= targetPixelY) ||
+                    (currentDy == -1 && player.getY() <= targetPixelY);
 
             if (reached) {
-                // Paskan posisi (snap) secara manual dan akurat
+
+                // snap EXACT
                 player.setX(targetPixelX);
                 player.setY(targetPixelY);
 
+                // FIX: update logical position (IMPORTANT)
+                logicalX = targetX;
+                logicalY = targetY;
+
                 waitingMove = false;
                 player.setAutoDirection(0, 0);
+
                 currentStep++;
-            }
-            // Jika koordinat player tidak berubah sama sekali (nabrak tembok/out of bounds)
-            else if (player.getX() == player.lastX && player.getY() == player.lastY) {
-                player.setAutoDirection(0, 0);
-                player.setAutoMode(false); // Batalkan AutoMode agar player bisa dikontrol manual lagi
                 return;
+            }
+
+            // FIX: safer stuck detection (epsilon instead of exact double compare)
+            boolean stuck =
+                    Math.abs(player.getX() - player.lastX) < 0.0001 &&
+                    Math.abs(player.getY() - player.lastY) < 0.0001;
+
+            if (stuck) {
+                player.setAutoDirection(0, 0);
+                player.setAutoMode(false);
             }
 
             return;
@@ -77,22 +94,22 @@ public class AutoPlayer {
         // =========================
         char move = path.charAt(currentStep);
 
+        // FIX CRITICAL BUG (reset BOTH directions)
         currentDx = 0;
-        currentDx = 0;
+        currentDy = 0;
 
         switch (move) {
-            case 'U': currentDy = -1; break;
-            case 'D': currentDy = 1; break;
-            case 'L': currentDx = -1; break;
-            case 'R': currentDx = 1; break;
+            case 'U' -> currentDy = -1;
+            case 'D' -> currentDy = 1;
+            case 'L' -> currentDx = -1;
+            case 'R' -> currentDx = 1;
         }
 
-        // target tile yang harus dicapai
-        targetX = player.getTileX() + currentDx;
-        targetY = player.getTileY() + currentDy;
+        // FIX: use LOGICAL position, NOT player pixel-derived tile
+        targetX = logicalX + currentDx;
+        targetY = logicalY + currentDy;
 
         player.setAutoDirection(currentDx, currentDy);
-
         waitingMove = true;
     }
 }
