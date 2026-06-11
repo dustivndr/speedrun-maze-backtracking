@@ -4,7 +4,7 @@ import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 
-public class SpeedSpell extends Obstacle {
+public class SpellHeal extends Obstacle {
 
     private static final SpellAssets spellAssets = new SpellAssets();
 
@@ -16,7 +16,7 @@ public class SpeedSpell extends Obstacle {
     private long lastTime;
     private static final int animationSpeedMs = 100;
 
-    public SpeedSpell(GamePanel gp, double x, double y) {
+    public SpellHeal(GamePanel gp, double x, double y) {
         super(gp, x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
     }
 
@@ -53,14 +53,14 @@ public class SpeedSpell extends Obstacle {
         double screenX = gp.camera.getScreenX(this.x);
         double screenY = gp.camera.getScreenY(this.y + dy - 5);
 
-        g.drawImage(spellAssets.getSpell(SpellAssets.SPEED), screenX, screenY);
+        g.drawImage(spellAssets.getSpell(SpellAssets.HEAL), screenX, screenY);
     }
 
     @Override
     public void update() {
 
         if (Util.checkAABB(gp.maze.player, this)) {
-            gp.maze.player.setSpeedLength(20);
+            gp.maze.player.heal(10);
             removeObject = true;
         }
     }

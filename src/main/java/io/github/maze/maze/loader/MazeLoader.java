@@ -74,9 +74,17 @@ public class MazeLoader {
 
             while ((line = br.readLine()) != null) {
 
+                if (row >= GamePanel.ROW_HEIGHT) {
+                    break;
+                }
+
                 String[] str = line.split(" ");
 
                 for (int col = 0; col < str.length; col++) {
+
+                    if (col >= GamePanel.COL_WIDTH) {
+                        break;
+                    }
 
                     if (!str[col].isEmpty()) {
                         char id = str[col].charAt(0);

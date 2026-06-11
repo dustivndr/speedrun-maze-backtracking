@@ -9,7 +9,6 @@ import io.github.maze.particle.Thunder;
 
 import java.util.ArrayList;
 import java.util.List;
-import io.github.maze.obstacles.*;
 
 public class Maze {
 
@@ -122,7 +121,7 @@ public class Maze {
     public void addObject(char id, int col, int row) {
 
         if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
-            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+            return;
         }
 
         double x = col * GamePanel.TILE_SIZE;
@@ -196,17 +195,17 @@ public class Maze {
                 flagCount++;
             }
             case 's' /* Speed Spell */ -> {
-                SpeedSpell s = new SpeedSpell(gp, x, y);
+                SpellSpeed s = new SpellSpeed(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
             case 'p' /* Poison Spell */ -> {
-                PoisonSpell s = new PoisonSpell(gp, x, y);
+                SpellPoison s = new SpellPoison(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
             case 'h' /* Heal Spell */ -> {
-                HealSpell s = new HealSpell(gp, x, y);
+                SpellHeal s = new SpellHeal(gp, x, y);
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
@@ -220,7 +219,9 @@ public class Maze {
 
     public Portal addPortal(int col, int row, int num) {
         if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
-            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+//            return new Portal();
+//            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+            return null;
         }
 
         double x = col * GamePanel.TILE_SIZE;
