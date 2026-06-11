@@ -12,6 +12,9 @@ public class AutoPlayer {
     private int targetX;
     private int targetY;
 
+    private int currentDx = 0;
+    private int currentDy = 0;
+
     private boolean waitingMove = false;
 
     public AutoPlayer(Player player, String path) {
@@ -30,13 +33,31 @@ public class AutoPlayer {
         // =========================
         if (waitingMove) {
 
-            // sudah sampai tile target
-            if (player.getTileX() == targetX &&
-                player.getTileY() == targetY) {
+            double targetPixelX = targetX * GamePanel.TILE_SIZE;
+            double targetPixelY = targetY * GamePanel.TILE_SIZE;
+
+            boolean reached = false;
+
+            // Deteksi apakah koordinat pixel player sudah menyentuh/melewati target
+            if (currentDx == 1 && player.getX() >= targetPixelX) reached = true;
+            else if (currentDx == -1 && player.getX() <= targetPixelX) reached = true;
+            else if (currentDy == 1 && player.getY() >= targetPixelY) reached = true;
+            else if (currentDy == -1 && player.getY() <= targetPixelY) reached = true;
+
+            if (reached) {
+                // Paskan posisi (snap) secara manual dan akurat
+                player.setX(targetPixelX);
+                player.setY(targetPixelY);
 
                 waitingMove = false;
                 player.setAutoDirection(0, 0);
                 currentStep++;
+            }
+            // Jika koordinat player tidak berubah sama sekali (nabrak tembok/out of bounds)
+            else if (player.getX() == player.lastX && player.getY() == player.lastY) {
+                player.setAutoDirection(0, 0);
+                player.setAutoMode(false); // Batalkan AutoMode agar player bisa dikontrol manual lagi
+                return;
             }
 
             return;
@@ -56,20 +77,21 @@ public class AutoPlayer {
         // =========================
         char move = path.charAt(currentStep);
 
-        int dx = 0, dy = 0;
+        currentDx = 0;
+        currentDx = 0;
 
         switch (move) {
-            case 'U': dy = -1; break;
-            case 'D': dy = 1; break;
-            case 'L': dx = -1; break;
-            case 'R': dx = 1; break;
+            case 'U': currentDy = -1; break;
+            case 'D': currentDy = 1; break;
+            case 'L': currentDx = -1; break;
+            case 'R': currentDx = 1; break;
         }
 
         // target tile yang harus dicapai
-        targetX = player.getTileX() + dx;
-        targetY = player.getTileY() + dy;
+        targetX = player.getTileX() + currentDx;
+        targetY = player.getTileY() + currentDy;
 
-        player.setAutoDirection(dx, dy);
+        player.setAutoDirection(currentDx, currentDy);
 
         waitingMove = true;
     }

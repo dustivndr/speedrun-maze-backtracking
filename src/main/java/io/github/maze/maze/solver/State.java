@@ -7,28 +7,23 @@ import java.util.*;
 public final class State {
 
     // POSITION
-
     private final Point position;
 
     // PLAYER
-
     private final int keyCount;
     private final int collectedGreenFlags;
     private final int tilesWalkedWithSpeed;
 
     // TIMERS
-
     private final int walkCount;
     private final int poisonRemaining;
 
     private final int speedRemaining;
 
     // WORLD STATE
-
     private final Set<Point> collectedKeys;
-
     private final Set<Point> collectedFlags;
-
+    private final Set<Point> collectedSpells;
     private final Set<Point> brokenHoles;
 
     // ENEMY STATE
@@ -63,12 +58,12 @@ public final class State {
             int speedRemaining,
             Set<Point> collectedKeys,
             Set<Point> collectedFlags,
+            Set<Point> collectedSpells,
             Set<Point> brokenHoles,
             Map<Point, Integer> ninjaEntryWalkCount,
             Map<Point, Integer> wizardEntryWalkCount,
             Set<Point> fireMonstersAlreadyTriggered
     ) {
-
         this.position = position;
 
         this.keyCount = keyCount;
@@ -87,6 +82,10 @@ public final class State {
         this.collectedFlags =
                 Collections.unmodifiableSet(
                         new HashSet<>(collectedFlags));
+
+        this.collectedSpells =
+                Collections.unmodifiableSet(
+                        new HashSet<>(collectedSpells));
 
         this.brokenHoles =
                 Collections.unmodifiableSet(
@@ -116,6 +115,7 @@ public final class State {
     public int speedRemaining() { return speedRemaining; }
     public Set<Point> collectedKeys() { return collectedKeys; }
     public Set<Point> collectedFlags() { return collectedFlags; }
+    public Set<Point> collectedSpells() { return collectedSpells; }
     public Set<Point> brokenHoles() { return brokenHoles; }
     public Map<Point, Integer> ninjasPlayerInside() { return ninjaEntryWalkCount; }
     public Map<Point, Integer> wizardsPlayerInside() { return wizardEntryWalkCount; }
@@ -134,17 +134,16 @@ public final class State {
 
         return keyCount == other.keyCount
                 && collectedGreenFlags == other.collectedGreenFlags
-                && walkCount == other.walkCount
                 && poisonRemaining == other.poisonRemaining
                 && speedRemaining == other.speedRemaining
                 && Objects.equals(position, other.position)
                 && Objects.equals(collectedKeys, other.collectedKeys)
                 && Objects.equals(collectedFlags, other.collectedFlags)
+                && Objects.equals(collectedSpells, other.collectedSpells)
                 && Objects.equals(brokenHoles, other.brokenHoles)
                 && Objects.equals(ninjaEntryWalkCount, other.ninjaEntryWalkCount)
                 && Objects.equals(wizardEntryWalkCount, other.wizardEntryWalkCount)
-                && Objects.equals(fireMonstersAlreadyTriggered,
-                other.fireMonstersAlreadyTriggered);
+                && Objects.equals(fireMonstersAlreadyTriggered, other.fireMonstersAlreadyTriggered);
     }
 
     @Override
@@ -154,11 +153,11 @@ public final class State {
                 position,
                 keyCount,
                 collectedGreenFlags,
-                walkCount,
                 poisonRemaining,
                 speedRemaining,
                 collectedKeys,
                 collectedFlags,
+                collectedSpells,
                 brokenHoles,
                 ninjaEntryWalkCount,
                 wizardEntryWalkCount,
