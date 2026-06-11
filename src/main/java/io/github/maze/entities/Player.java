@@ -166,11 +166,6 @@ public class Player extends Entity {
 
         if (movedTile) {
 
-            // snap ke grid (penting untuk AutoPlayer)
-//            if (autoMode) {
-//                snapToTile();
-//            }
-
             if (speedLength > 0) {
 
                 tilesWalkedWithSpeed++;
