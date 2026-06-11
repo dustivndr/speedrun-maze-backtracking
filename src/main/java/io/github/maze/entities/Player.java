@@ -35,7 +35,7 @@ public class Player extends Entity {
     private boolean collisionLeft = false;
 
     private final double NORMAL_SPEED = 5;
-    private double currentSpeed = NORMAL_SPEED;
+    public double currentSpeed = NORMAL_SPEED;
 
     private int poisonLength = 0;
 
@@ -44,7 +44,7 @@ public class Player extends Entity {
 
     private static StringBuilder sb = new StringBuilder();
 
-    // 🔥 AUTO PLAYER
+    // AUTO PLAYER
     private int autoDx = 0;
     private int autoDy = 0;
     private boolean autoMode = false;
@@ -209,8 +209,7 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
 
-        SoundManager.FOOTSTEP_SFX.play();
-
+//        SoundManager.FOOTSTEP_SFX.play();
     }
 
     public void checkOutOfBound(int dx, int dy) {

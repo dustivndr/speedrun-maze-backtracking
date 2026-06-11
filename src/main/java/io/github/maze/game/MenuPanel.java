@@ -21,17 +21,22 @@ public class MenuPanel extends VBox {
         Label title = new Label("Alpro MAZE");
         title.getStyleClass().add("title");
 
-        Button startButton = new Button("Start");
+        Button startButton = new Button("Best Path");
         startButton.getStyleClass().add("menu-button");
+
+        Button backtrackingButton = new Button("Show Backtracking");
+        backtrackingButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
         exitButton.getStyleClass().add("menu-button");
 
         startButton.setOnAction(_ -> game.startGame());
 
+        backtrackingButton.setOnAction(_ -> game.showBacktracking());
+
         exitButton.setOnAction(_ -> Platform.exit());
 
-        getChildren().addAll(title, startButton, exitButton);
+        getChildren().addAll(title, startButton, backtrackingButton, exitButton);
 
         // log debug
         Platform.runLater(() -> {
