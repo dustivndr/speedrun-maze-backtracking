@@ -33,7 +33,7 @@ public class Player extends Entity {
     private boolean collisionDown = false;
     private boolean collisionLeft = false;
 
-    private final double NORMAL_SPEED = 3;
+    private final double NORMAL_SPEED = 5;
     private double currentSpeed = NORMAL_SPEED;
 
     private int poisonLength = 0;
@@ -94,7 +94,6 @@ public class Player extends Entity {
         return (int) (y / GamePanel.TILE_SIZE);
     }
 
-    // 🔥 SNAP BIAR PRESISI GRID
     public void snapToTile() {
         x = getTileX() * GamePanel.TILE_SIZE;
         y = getTileY() * GamePanel.TILE_SIZE;
@@ -154,7 +153,7 @@ public class Player extends Entity {
 
         // reset collision
         collisionUp = collisionDown = collisionLeft = collisionRight = false;
-        checkOutOfBound(dx, dy);
+//        checkOutOfBound(dx, dy);
 
         // movement
         if (dy < 0 && !collisionUp)    y -= currentSpeed;
@@ -167,9 +166,9 @@ public class Player extends Entity {
         if (movedTile) {
 
             // snap ke grid (penting untuk AutoPlayer)
-            if (autoMode) {
-                snapToTile();
-            }
+//            if (autoMode) {
+//                snapToTile();
+//            }
 
             if (speedLength > 0) {
 

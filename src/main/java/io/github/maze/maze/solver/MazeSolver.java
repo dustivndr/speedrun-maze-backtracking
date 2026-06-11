@@ -1,6 +1,5 @@
 package io.github.maze.maze.solver;
 
-import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.*;
 import io.github.maze.obstacles.*;
@@ -19,34 +18,50 @@ public class MazeSolver {
     private static final int[] DC = {0, 0, -1, 1};
     private static final char[] DIR = {'U', 'D', 'L', 'R'};
 
+    private static int totalFlag;
     private static String bestPath;
     private static int bestRemainingHp;
 
-    private static int totalFlags;
-
-    private static Map<Point, Portal> portalLookup;
-
-    private static Map<State, Integer> memo;
+    private static Map<State, int[]> memo;
 
     public static String solve(Maze maze) {
 
         Point pos = new Point(maze.player.getTileY(), maze.player.getTileX());
         State initialState = initState(pos);
 
-        totalFlags = maze.flagCount;
-        portalLookup = buildPortals(maze.obstacleMap);
+        totalFlag = maze.flagCount;
         memo = new HashMap<>();
+        bestRemainingHp = -1;
+        bestPath = "";
 
         StringBuilder path = new StringBuilder();
 
-        backtracking(
-                maze.obstacleMap,
-                initialState,
-                100,
-                path
-        );
+        for (int maxDepth = 20; maxDepth <= 2000; maxDepth += 20) {
 
-        return path.toString();
+            path.setLength(0);
+            memo.clear();
+            bestRemainingHp = -1;
+            bestPath = "";
+
+            initialState = initState(pos);
+
+            backtracking(
+                    maze.obstacleMap,
+                    initialState,
+                    100,
+                    path,
+                    maxDepth
+            );
+
+            if (!bestPath.isEmpty()) {
+                System.out.println("PATH = " + bestPath);
+                return bestPath;
+            }
+        }
+
+        System.out.println("no path to goal found");
+
+        return bestPath;
     }
 
     private static State initState(Point point) {
@@ -61,6 +76,7 @@ public class MazeSolver {
                 new HashSet<>(),
                 new HashSet<>(),
                 new HashSet<>(),
+                new HashSet<>(),
                 new HashMap<>(),
                 new HashMap<>(),
                 new HashSet<>()
@@ -71,8 +87,22 @@ public class MazeSolver {
             GameObject[][] maze,
             State state,
             int hp,
-            StringBuilder path
+            StringBuilder path,
+            int maxDepth
     ) {
+
+        if (!bestPath.isEmpty() && bestRemainingHp == 100 && path.length() >= bestPath.length()) {
+            return;
+        }
+
+        if (path.length() % 1000 == 0 && path.length() > 0) {
+            System.out.println("DEPTH = " + path.length());
+        }
+
+        if (path.length() % 1000 == 0) {
+            System.out.println("DEPTH = " + path.length());
+        }
+
         // check out of bound
         if (!inBound(state)) return;
 
@@ -103,9 +133,59 @@ public class MazeSolver {
         // apply enemy damage
         // this updates: ninjaEntryWalkCount, wizardEntryWalkCount, fireMonstersTriggered
         Result enemyDamageResult = applyEnemyDamage(maze, state, hp);
+        state = enemyDamageResult.state;
+        hp = enemyDamageResult.hp;
+
+        // check lose (lose base case)
+        if (hp <= 0) {
+            return;
+        }
+
+
+        if (memo.size() % 1000 == 0) {
+            System.out.println(
+                    "memo=" + memo.size()
+            );
+        }
 
         // remove unnecessary branches
-        shouldPrune(state, hp);
+        if (shouldPrune(state, hp, path.length())) return;
+
+        // check win
+        if (state.collectedGreenFlags() == totalFlag) {
+
+            System.out.println(
+                    state.position()
+                            + " flagsSet=" + state.collectedFlags()
+            );
+
+            // one solution found. check if the
+            // path is the current best path
+            // if a tie, take the previous path
+            if (
+                    hp > bestRemainingHp
+                            || (
+                            hp == bestRemainingHp
+                                    && (
+                                    bestPath.isEmpty()
+                                            || path.length() < bestPath.length()
+                            )
+                    )
+            ) {
+                bestRemainingHp = hp;
+                bestPath = path.toString();
+
+                System.out.println(
+                        "depth=" + path.length()
+                                + " pos=" + state.position()
+                                + " walk=" + state.walkCount()
+                                + " flags=" + state.collectedGreenFlags()
+                );
+            }
+
+            // win base case
+            return;
+        }
 
         for (int i = 0; i < 4; i++) {
 
@@ -113,12 +193,13 @@ public class MazeSolver {
             Point curr = state.position();
 
             // get next position
-            Point nextPos = new Point(curr.row() + DR[i], curr.col() + DR[i]);
+            Point nextPos = new Point(curr.row() + DR[i], curr.col() + DC[i]);
 
             // add position to path taken
             path.append(DIR[i]);
 
-            // backtrack on the next position
+            // get the next state after player moves (only player position
+            // changed, everything else is the same)
             State nextState = new State(
                     nextPos,
                     state.keyCount(),
@@ -129,30 +210,54 @@ public class MazeSolver {
                     state.speedRemaining(),
                     state.collectedKeys(),
                     state.collectedFlags(),
+                    state.collectedSpells(),
                     state.brokenHoles(),
                     state.ninjasPlayerInside(),
                     state.wizardsPlayerInside(),
                     state.fireMonstersPlayerInside()
             );
 
+            // backtrack the next position
+            backtracking(
+                    maze,
+                    nextState,
+                    hp,
+                    path,
+                    maxDepth
+            );
+
             // backtrack
             path.deleteCharAt(path.length() - 1);
-
         }
-
     }
 
     private static boolean shouldPrune(
             State state,
-            int hp
+            int hp,
+            int pathLength
     ) {
         // if hp in memo is more than the current HP, don't prune
-        if (memo.containsKey(state) && memo.get(state) >= hp) {
-            return true;
+        if (memo.containsKey(state)) {
+
+            int[] best = memo.get(state);
+            int bestHp = best[0];
+            int bestPathLength = best[1];
+
+            if (bestHp > hp) {
+                return true;
+            }
+
+            if (bestHp == hp && bestPathLength <= pathLength) {
+                return true;
+            }
+
+            best[0] = hp;
+            best[1] = pathLength;
+            return false;
         }
 
         // else prune
-        memo.put(state, hp);
+        memo.put(state, new int[]{hp, pathLength});
         return false;
     }
 
@@ -163,9 +268,9 @@ public class MazeSolver {
     ) {
         Point position = state.position();
         int startRow = Math.max(position.row() - 2, 0);
-        int startCol = Math.max(position.col() - 2, 0);
-        int endRow = Math.min(startRow + 4, GamePanel.ROW_HEIGHT);
-        int endCol = Math.min(startCol + 5, GamePanel.COL_WIDTH);
+        int startCol = Math.max(position.col() - 3, 0);
+        int endRow = Math.min(startRow + 4, GamePanel.ROW_HEIGHT - 1);
+        int endCol = Math.min(startCol + 6, GamePanel.COL_WIDTH - 1);
 
         Set<Point> fireMonstersPlayerInside = new HashSet<>(state.fireMonstersPlayerInside());
         Set<Point> fmsInside = new HashSet<>(fireMonstersPlayerInside.size());
@@ -182,15 +287,23 @@ public class MazeSolver {
             for (int c = startCol; c <= endCol; c++) {
 
                 GameObject obj = maze[r][c];
+                Point pos = new Point(r, c);
 
                 // check current position for FireMOnster
-                if (obj instanceof FireMonster fm) {
+                if (obj instanceof FireMonster fm &&
 
-                    Point pos = new Point(r, c);
+                        // player in range of FireMonster
+                        position.row() >= r - 2 &&
+                        position.row() <= r + 2 &&
+                        position.col() >= c - 2 &&
+                        position.col() <= c + 3
+                ) {
+
                     fmsInside.add(pos);
 
                     // if player isn't already inside the FireMonster, attack
                     if (!fireMonstersPlayerInside.contains(pos)) {
+                        fireMonstersPlayerInside.add(pos);
                         hp -= 20;
                     }
                 }
@@ -200,17 +313,17 @@ public class MazeSolver {
                         obj instanceof Wizard w &&
 
                         // range of wizard
-                        r >= startRow && r <= endRow &&
-                        c >= startCol && c <= endCol - 1
+                        position.row() >= r - 2 &&
+                        position.row() <= r + 2 &&
+                        position.col() >= c - 2 &&
+                        position.col() <= c + 2
                 ) {
-                    Point pos = new Point(r, c);
-                    int moveCountInRange = 0;
 
                     wsInside.add(pos);
 
                     // player has just entered wizard range
                     if (!wizardsPlayerInside.containsKey(pos)) {
-                        wizardsPlayerInside.put(pos, 0);
+                        wizardsPlayerInside.put(pos, state.walkCount());
                         hp -= 10;
                     }
 
@@ -218,17 +331,13 @@ public class MazeSolver {
                     else {
 
                         // check for tile moves
-                        moveCountInRange = wizardsPlayerInside.get(pos);
+                        int walkCountOnEntry = wizardsPlayerInside.get(pos);
 
                         // move count in wizard range is a multiple of 4
-                        if (moveCountInRange % 4 == 0) {
+                        if ((state.walkCount() - walkCountOnEntry) % 4 == 0) {
                             hp -= 10;
                         }
-
                     }
-
-                    // add 1 to move count in that wizard's range
-                    wizardsPlayerInside.put(pos, moveCountInRange + 1);
                 }
 
                 // check current position for Ninja
@@ -236,38 +345,34 @@ public class MazeSolver {
                         obj instanceof Ninja &&
 
                         // check if player is in Ninja range
-                        r >= position.row() - 1 && r <= position.row() + 1 &&
-                        c >= position.col() - 1 && c <= position.col() + 1
+                        position.row() >= r - 1 &&
+                        position.row() <= r + 1 &&
+                        position.col() >= c - 1 &&
+                        position.col() <= c + 1
                 ) {
-                    Point pos = new Point(r, c);
-                    int moveCountInRange = 0;
-
                     nsInside.add(pos);
 
                     // player has just entered Ninja range
                     if (!ninjasPlayerInside.containsKey(pos)) {
-                        ninjasPlayerInside.put(pos, 0);
+                        ninjasPlayerInside.put(pos, state.walkCount());
                         hp -= 5;
                     }
 
                     // player was already in NInja range
                     else {
 
-                        // check for tile move
-                        moveCountInRange = ninjasPlayerInside.get(pos);
+                        int walkCountOnEntry = ninjasPlayerInside.get(pos);
 
                         // move count is a multiple of 2
-                        if (moveCountInRange % 2 == 0) {
+                        if ((state.walkCount() - walkCountOnEntry) % 2 == 0) {
                             hp -= 5;
                         }
-
                     }
-
-                    // add 1 to that ninja's player move count in range
-                    ninjasPlayerInside.put(pos, moveCountInRange + 1);
                 }
             }
         }
+
+        hp = Math.clamp(hp, 0, 100);
 
         // removes all enemies which doesn't have the player in its range anymore
         ninjasPlayerInside.keySet().retainAll(nsInside);
@@ -284,6 +389,7 @@ public class MazeSolver {
                 state.speedRemaining(),
                 state.collectedKeys(),
                 state.collectedFlags(),
+                state.collectedSpells(),
                 state.brokenHoles(),
                 ninjasPlayerInside,
                 wizardsPlayerInside,
@@ -335,6 +441,7 @@ public class MazeSolver {
                     state.speedRemaining(),
                     state.collectedKeys(),
                     state.collectedFlags(),
+                    state.collectedSpells(),
                     state.brokenHoles(),
                     state.ninjasPlayerInside(),
                     state.wizardsPlayerInside(),
@@ -398,13 +505,16 @@ public class MazeSolver {
                 speedLength,
                 state.collectedKeys(),
                 state.collectedFlags(),
+                state.collectedSpells(),
                 state.brokenHoles(),
                 state.ninjasPlayerInside(),
                 state.wizardsPlayerInside(),
                 state.fireMonstersPlayerInside()
         );
 
-        return new Result(newState, Math.max(hp, 0));
+        hp = Math.clamp(hp, 0, 100);
+
+        return new Result(newState, hp);
     }
 
     private static Result processTile(
@@ -414,55 +524,118 @@ public class MazeSolver {
     ) {
         int r = state.position().row();
         int c = state.position().col();
+        Point currPos = new Point(r, c);
 
         GameObject obj = maze[r][c];
+
         int keyCount = state.keyCount();
         Set<Point> collectedFlags = new HashSet<>(state.collectedFlags());
         Set<Point> collectedKeys = new HashSet<>(state.collectedKeys());
+        Set<Point> collectedSpells = new HashSet<>(state.collectedSpells());
         Set<Point> brokenHoles = new HashSet<>(state.brokenHoles());
-        int flagCount = state.collectedGreenFlags();
+        int greenFlagCount = state.collectedGreenFlags();
         int poisonLen = state.poisonRemaining();
         int speedLen = state.speedRemaining();
+
+
+        if (obj == null) {
+            return new Result(state, hp);
+        }
 
         switch (obj) {
             case Spike spike -> hp -= 5;
             case Fire fire -> hp -= 5;
-            case Hole hole -> hp -= 5;
+            case Hole hole -> {
+                hp -= 5;
+                brokenHoles.add(new Point(r, c));
+            }
             case Key key -> {
-                keyCount++;
-                collectedKeys.add(new Point(r, c));
-            }
-            case FlagGreen flagG -> {
-                collectedFlags.add(new Point(r, c));
-                flagCount++;
-            }
-            case FlagLocked flagL -> {
-                if (keyCount > 0) {
-                    collectedFlags.add(new Point(r, c));
-                    flagCount++;
+
+                // collect only uncollected keys
+                if (!collectedKeys.contains(currPos)) {
+                    keyCount++;
+
+                    // add key to the set of collected keys
+                    collectedKeys.add(currPos);
                 }
             }
-            case HealSpell heal -> hp += 20;
-            case PoisonSpell poison -> poisonLen += 10;
-            case SpeedSpell speed -> speedLen += 20;
+            case FlagGreen flagG -> {
+
+                // collect only uncollected flags
+                if (!collectedFlags.contains(currPos)) {
+                    greenFlagCount++;
+
+                    // add flag to set of collected flags
+                    collectedFlags.add(currPos);
+                }
+            }
+            case FlagLocked flagL -> {
+
+                // collect only uncollected flags
+                if (keyCount > 0 && !collectedFlags.contains(currPos)) {
+
+                    // add flag to set of collected flags
+                    collectedFlags.add(currPos);
+                    greenFlagCount++;
+                    keyCount--; // remove one key
+                }
+            }
+            case FlagRed flagR -> {
+
+                // collect the interacted flag without adding to greenFlagCount
+                collectedFlags.add(currPos);
+            }
+            case HealSpell heal -> {
+
+                // collect only uncollected spells
+                if (!collectedSpells.contains(currPos)) {
+
+                    // add spell to set of collected spells
+                    collectedSpells.add(currPos);
+                    hp += 20;
+                }
+            }
+            case PoisonSpell poison -> {
+
+                // collect only uncollected spells
+                if (!collectedSpells.contains(currPos)) {
+
+                    // add spell to set of collected spells
+                    poisonLen = 10;
+                    collectedSpells.add(currPos);
+                }
+            }
+            case SpeedSpell speed -> {
+
+                // collect only uncollected spells
+                if (!collectedSpells.contains(currPos)) {
+
+                    // add spell to set of collected spells
+                    collectedSpells.add(currPos);
+                    speedLen = 20;
+                }
+            }
             default -> {}
         }
 
         State newState = new State(
-                new Point(state.position()),
+                currPos,
                 keyCount,
-                flagCount,
+                greenFlagCount,
                 state.walkCount(),
                 state.tilesWalkedWithSpeed(),
                 poisonLen,
                 speedLen,
                 collectedKeys,
                 collectedFlags,
+                collectedSpells,
                 brokenHoles,
-                new HashMap<>(state.ninjasPlayerInside()),
-                new HashMap<>(state.wizardsPlayerInside()),
-                new HashSet<>(state.fireMonstersPlayerInside())
+                state.ninjasPlayerInside(),
+                state.wizardsPlayerInside(),
+                state.fireMonstersPlayerInside()
         );
+
+        hp = Math.clamp(hp, 0, 100);
 
         return new Result(newState, hp);
     }
@@ -503,22 +676,5 @@ public class MazeSolver {
         }
 
         return false;
-    }
-
-    private static Map<Point, Portal> buildPortals(GameObject[][] maze) {
-        Map<Point, Portal> map = new HashMap<>();
-
-        for (int i = 0; i < GamePanel.ROW_HEIGHT; i++) {
-            for (int j = 0; j < GamePanel.COL_WIDTH; j++) {
-                if (maze[i][j] instanceof Portal portalObject) {
-                    map.put(
-                            new Point(i, j),
-                            portalObject
-                    );
-                }
-            }
-        }
-
-        return map;
     }
 }
