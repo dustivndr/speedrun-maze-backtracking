@@ -38,7 +38,14 @@ public class Portal extends Obstacle {
         }
 
         // player teleports from this portal to the connection portal
-        if (state == NONE && Util.checkAABB(this, gp.maze.player)) {
+        int col = (int) (x / GamePanel.TILE_SIZE);
+        int row = (int) (y / GamePanel.TILE_SIZE);
+        if (
+                state == NONE &&
+
+                gp.maze.player.getTileX() == col &&
+                gp.maze.player.getTileY() == row
+        ) {
             connection.state = EXITED;
 
             gp.maze.player.setX(connection.x);
