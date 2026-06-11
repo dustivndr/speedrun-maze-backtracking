@@ -105,7 +105,6 @@ public final class State {
     }
 
     // GETTERS
-
     public int tilesWalkedWithSpeed() { return tilesWalkedWithSpeed; }
     public Point position() { return position; }
     public int keyCount() { return keyCount; }

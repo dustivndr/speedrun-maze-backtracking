@@ -32,8 +32,8 @@ public class GamePanel extends Pane {
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 600;
 
-    public static final int COL_WIDTH = 40;
-    public static final int ROW_HEIGHT = 30;
+    public static final int COL_WIDTH = 30;
+    public static final int ROW_HEIGHT = 20;
 
     public static final int WORLD_WIDTH;
     public static final int WORLD_HEIGHT;

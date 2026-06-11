@@ -122,7 +122,7 @@ public class Maze {
     public void addObject(char id, int col, int row) {
 
         if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
-            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+            return;
         }
 
         double x = col * GamePanel.TILE_SIZE;
@@ -220,7 +220,9 @@ public class Maze {
 
     public Portal addPortal(int col, int row, int num) {
         if (col < 0 || col >= GamePanel.COL_WIDTH || row < 0 || row >= GamePanel.COL_WIDTH) {
-            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+//            return new Portal();
+//            throw new IndexOutOfBoundsException("col: " + col + ", row: " + row);
+            return null;
         }
 
         double x = col * GamePanel.TILE_SIZE;
