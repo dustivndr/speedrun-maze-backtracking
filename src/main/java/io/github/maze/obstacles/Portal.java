@@ -29,6 +29,7 @@ public class Portal extends Obstacle {
     @Override
     public void update() {
 
+        // player exits from the portal
         if (state == EXITED) {
 
             if (!Util.checkAABB(gp.maze.player, this)) {
@@ -36,6 +37,7 @@ public class Portal extends Obstacle {
             }
         }
 
+        // player teleports from this portal to the connection portal
         if (state == NONE && Util.checkAABB(this, gp.maze.player)) {
             connection.state = EXITED;
 

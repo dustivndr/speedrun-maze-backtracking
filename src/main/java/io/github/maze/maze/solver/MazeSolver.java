@@ -426,10 +426,10 @@ public class MazeSolver {
         int c = currentPosition.col();
 
         GameObject obj = maze[r][c];
-        if (obj instanceof Portal) {
+        if (obj instanceof Portal origin) {
 
-            int destR = (int) (obj.getY() / GamePanel.TILE_SIZE);
-            int destC = (int) (obj.getX() / GamePanel.TILE_SIZE);
+            int destR = (int) (origin.getConnection().getY() / GamePanel.TILE_SIZE);
+            int destC = (int) (origin.getConnection().getX() / GamePanel.TILE_SIZE);
 
             return new State(
                     new Point(destR, destC),
