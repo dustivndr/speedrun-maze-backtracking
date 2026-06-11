@@ -7,10 +7,10 @@ import javafx.scene.image.ImageView;
 public class UI {
 
     final GamePanel gp;
-    private Label hpLabel;
-    private Label flagCountLabel;
-    private Label keyLabel;
-    private Label walk;
+    private final Label hpLabel;
+    private final Label flagCountLabel;
+    private final Label keyLabel;
+    private final Label walk;
 
     private int lastHP;
     private int lastFlagCount;
