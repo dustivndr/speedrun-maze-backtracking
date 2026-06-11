@@ -1,9 +1,14 @@
 package io.github.maze.entities;
 
-import io.github.maze.audio.SoundManager;
-import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.input.InputHandler;
+import io.github.maze.maze.GameObject;
+import io.github.maze.obstacles.BushWall;
+import io.github.maze.obstacles.Elf;
+import io.github.maze.obstacles.FireMonster;
+import io.github.maze.obstacles.Hole;
+import io.github.maze.obstacles.Ninja;
+import io.github.maze.obstacles.Wizard;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
@@ -28,11 +33,6 @@ public class Player extends Entity {
     private int spriteNum = 1;
     private long lastTime;
     private boolean isMoving = false;
-
-    private boolean collisionUp = false;
-    private boolean collisionRight = false;
-    private boolean collisionDown = false;
-    private boolean collisionLeft = false;
 
     private final double NORMAL_SPEED = 5;
     public double currentSpeed = NORMAL_SPEED;
@@ -152,15 +152,21 @@ public class Player extends Entity {
         else if (dy < 0) direction = "up";
         else if (dy > 0) direction = "down";
 
-        // reset collision
-        collisionUp = collisionDown = collisionLeft = collisionRight = false;
-//        checkOutOfBound(dx, dy);
+        double moveX = dx * currentSpeed;
+        double moveY = dy * currentSpeed;
 
-        // movement
-        if (dy < 0 && !collisionUp)    y -= currentSpeed;
-        if (dy > 0 && !collisionDown)  y += currentSpeed;
-        if (dx < 0 && !collisionLeft)  x -= currentSpeed;
-        if (dx > 0 && !collisionRight) x += currentSpeed;
+        if (canOccupy(x + moveX, y + moveY)) {
+            x += moveX;
+            y += moveY;
+        } else {
+            if (moveY != 0 && canOccupy(x, y + moveY)) {
+                y += moveY;
+            }
+
+            if (moveX != 0 && canOccupy(x + moveX, y)) {
+                x += moveX;
+            }
+        }
 
         boolean movedTile = getTileX() != prevCol || getTileY() != prevRow;
 
@@ -212,21 +218,43 @@ public class Player extends Entity {
 //        SoundManager.FOOTSTEP_SFX.play();
     }
 
-    public void checkOutOfBound(int dx, int dy) {
+    private boolean canOccupy(double nextX, double nextY) {
 
-        double newX = x;
-        double newY = y;
+        if (nextX < 0 || nextX + width > GamePanel.WORLD_WIDTH) {
+            return false;
+        }
 
-        if (dx == 1) newX += currentSpeed;
-        else if (dx == -1) newX -= currentSpeed;
+        if (nextY < 0 || nextY + height > GamePanel.WORLD_HEIGHT) {
+            return false;
+        }
 
-        if (dy == 1) newY += currentSpeed;
-        else if (dy == -1) newY -= currentSpeed;
+        int nextCol = (int) (nextX / GamePanel.TILE_SIZE);
+        int nextRow = (int) (nextY / GamePanel.TILE_SIZE);
 
-        if (newX < 0) collisionLeft = true;
-        if (newX + width >= GamePanel.WORLD_WIDTH) collisionRight = true;
-        if (newY < 0) collisionUp = true;
-        if (newY + height >= GamePanel.WORLD_HEIGHT) collisionDown = true;
+        if (nextRow < 0 || nextRow >= GamePanel.ROW_HEIGHT || nextCol < 0 || nextCol >= GamePanel.COL_WIDTH) {
+            return false;
+        }
+
+        GameObject obj = gp.maze.obstacleMap[nextRow][nextCol];
+
+        if (obj instanceof BushWall ||
+                obj instanceof Ninja ||
+                obj instanceof Wizard ||
+                obj instanceof FireMonster ||
+                obj instanceof Elf) {
+            return false;
+        }
+
+        if (obj instanceof Hole) {
+            return false;
+        }
+
+        int leftCol = nextCol - 1;
+        if (leftCol >= 0 && gp.maze.obstacleMap[nextRow][leftCol] instanceof FireMonster) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

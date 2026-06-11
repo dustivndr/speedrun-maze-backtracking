@@ -1,11 +1,30 @@
 package io.github.maze.maze.solver;
 
-import io.github.maze.game.GamePanel;
-import io.github.maze.maze.*;
-import io.github.maze.obstacles.*;
-import io.github.maze.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import io.github.maze.game.GamePanel;
+import io.github.maze.maze.GameObject;
+import io.github.maze.maze.Maze;
+import io.github.maze.obstacles.BushWall;
+import io.github.maze.obstacles.Elf;
+import io.github.maze.obstacles.Fire;
+import io.github.maze.obstacles.FireMonster;
+import io.github.maze.obstacles.FlagGreen;
+import io.github.maze.obstacles.FlagLocked;
+import io.github.maze.obstacles.FlagRed;
+import io.github.maze.obstacles.HealSpell;
+import io.github.maze.obstacles.Hole;
+import io.github.maze.obstacles.Key;
+import io.github.maze.obstacles.Ninja;
+import io.github.maze.obstacles.PoisonSpell;
+import io.github.maze.obstacles.Portal;
+import io.github.maze.obstacles.SpeedSpell;
+import io.github.maze.obstacles.Spike;
+import io.github.maze.obstacles.Wizard;
+import io.github.maze.util.Point;
 
 public class MazeSolver {
 
@@ -182,6 +201,8 @@ public class MazeSolver {
             ) {
                 bestRemainingHp = hp;
                 bestPath = path.toString();
+                backtrackingPath.setLength(0);
+                backtrackingPath.append(bestPath);
 
                 System.out.println(
                         "depth=" + path.length()
@@ -203,28 +224,30 @@ public class MazeSolver {
             // get next position
             Point nextPos = new Point(curr.row() + DR[i], curr.col() + DC[i]);
 
+            State nextState = new State(
+                nextPos,
+                state.keyCount(),
+                state.collectedGreenFlags(),
+                state.walkCount(),
+                state.tilesWalkedWithSpeed(),
+                state.poisonRemaining(),
+                state.speedRemaining(),
+                state.collectedKeys(),
+                state.collectedFlags(),
+                state.collectedSpells(),
+                state.brokenHoles(),
+                state.ninjasPlayerInside(),
+                state.wizardsPlayerInside(),
+                state.fireMonstersPlayerInside()
+            );
+
+            if (!inBound(nextState) || isBlocked(maze, nextState)) {
+            continue;
+            }
+
             // add position to path taken
             path.append(DIR[i]);
             backtrackingPath.append(DIR[i]);
-
-            // get the next state after player moves (only player position
-            // changed, everything else is the same)
-            State nextState = new State(
-                    nextPos,
-                    state.keyCount(),
-                    state.collectedGreenFlags(),
-                    state.walkCount(),
-                    state.tilesWalkedWithSpeed(),
-                    state.poisonRemaining(),
-                    state.speedRemaining(),
-                    state.collectedKeys(),
-                    state.collectedFlags(),
-                    state.collectedSpells(),
-                    state.brokenHoles(),
-                    state.ninjasPlayerInside(),
-                    state.wizardsPlayerInside(),
-                    state.fireMonstersPlayerInside()
-            );
 
             // backtrack the next position
             backtracking(
@@ -234,15 +257,6 @@ public class MazeSolver {
                     path,
                     maxDepth
             );
-
-            // backtrack
-            backtrackingPath.append(switch (path.charAt(path.length() - 1)) {
-                case 'U' -> 'D';
-                case 'D' -> 'U';
-                case 'L' -> 'R';
-                case 'R' -> 'L';
-                default -> throw new IllegalStateException("Unexpected value: " + path.charAt(path.length() - 1));
-            });
             path.deleteCharAt(path.length() - 1);
         }
     }

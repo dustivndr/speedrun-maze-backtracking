@@ -5,6 +5,9 @@ package io.github.maze.game;
 *
 */
 
+import java.util.Comparator;
+import java.util.Objects;
+
 import io.github.maze.input.InputHandler;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
@@ -13,15 +16,11 @@ import io.github.maze.maze.loader.MazeLoader;
 import io.github.maze.maze.solver.MazeSolver;
 import io.github.maze.obstacles.Obstacle;
 import io.github.maze.render.Camera;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-
-import java.util.Comparator;
-import java.util.Objects;
 
 public class GamePanel extends Pane {
 
@@ -48,7 +47,7 @@ public class GamePanel extends Pane {
 
     public int FPS = 30;
 
-    final Game game;
+    public final Game game;
     public final Maze maze;
     public final Canvas canvas;
     public final GraphicsContext gc;
@@ -100,7 +99,6 @@ public class GamePanel extends Pane {
         long drawInterval = 1_000_000_000 / FPS;
         if (state.equals("showBacktracking")) {
             path = MazeSolver.backtrackingPath.toString();
-            maze.player.currentSpeed = GamePanel.TILE_SIZE;
         }
 
         autoPlayer = new AutoPlayer(
@@ -193,7 +191,5 @@ public class GamePanel extends Pane {
         ui.render();
 
     }
-
-    
 
 }
