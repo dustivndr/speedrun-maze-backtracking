@@ -209,7 +209,7 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
 
-        SoundManager.FOOTSTEP_SFX.play();
+        //SoundManager.FOOTSTEP_SFX.play();
 
     }
 

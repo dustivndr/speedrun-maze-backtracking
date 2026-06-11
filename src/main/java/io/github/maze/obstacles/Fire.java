@@ -53,7 +53,7 @@ public class Fire extends Obstacle {
             animationCounter = ++animationCounter % fireAssets.size();
         }
 
-        SoundManager.FIRE_SFX.play();
+        //SoundManager.FIRE_SFX.play();
 
     }
 
