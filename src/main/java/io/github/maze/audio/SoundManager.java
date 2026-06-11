@@ -22,7 +22,7 @@ public final class SoundManager {
     public static final AudioClip KUNAI_SFX;
     public static final AudioClip METEOR_SFX;
     public static final AudioClip PLAYER_FALL_SFX;
-    public static final AudioClip POISON_SPELL;
+    public static final AudioClip POISON_SPELL_SFX;
     public static final AudioClip PORTAL_SFX;
     public static final AudioClip SPEED_SPELL_SFX;
     public static final AudioClip SPIKE_HIT_SFX;
@@ -43,7 +43,7 @@ public final class SoundManager {
         KUNAI_SFX = load("/audio/sfx/kunai-sfx.mp3");
         METEOR_SFX = load("/audio/sfx/meteor-sfx.mp3");
         PLAYER_FALL_SFX = load("/audio/sfx/player-fall-voice.mp3");
-        POISON_SPELL = load("/audio/sfx/poison-spell.mp3");
+        POISON_SPELL_SFX = load("/audio/sfx/poison-spell.mp3");
         PORTAL_SFX = load("/audio/sfx/portal-sfx.mp3");
         SPEED_SPELL_SFX = load("/audio/sfx/speed-spell-sfx.mp3");
         SPIKE_HIT_SFX = load("/audio/sfx/spike-hit-sfx.mp3");

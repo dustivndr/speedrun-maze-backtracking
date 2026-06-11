@@ -1,5 +1,6 @@
 package io.github.maze.entities.projectile;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Projectile;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
@@ -7,8 +8,6 @@ import io.github.maze.render.Camera;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
-import java.awt.image.BufferedImage;
 
 public class Kunai extends Projectile {
 
@@ -33,6 +32,8 @@ public class Kunai extends Projectile {
 
     @Override
     public void onUpdate() {
+        SoundManager.KUNAI_SFX.play();
+
         travelledDistance += speed;
         x += angle.cos() * speed;
         y += angle.sin() * speed;

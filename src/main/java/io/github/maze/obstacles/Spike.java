@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
@@ -23,13 +24,18 @@ public class Spike extends Obstacle implements GameObject {
     @Override
     public void update() {
         if (player.getTileX() == x / GamePanel.TILE_SIZE &&
-                player.getTileY() == y / GamePanel.TILE_SIZE) {
+                player.getTileY() == y / GamePanel.TILE_SIZE)
+        {
 
             if (triggered) {
                 return;
             }
 
+            SoundManager.SPIKE_SFX.play();
+
             player.damage(10);
+
+            SoundManager.SPIKE_HIT_SFX.play();
 
             triggered = true;
             active = true;

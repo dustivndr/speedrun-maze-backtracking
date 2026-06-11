@@ -5,7 +5,6 @@ package io.github.maze.game;
 *
 */
 
-import io.github.maze.entities.Player;
 import io.github.maze.input.InputHandler;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;

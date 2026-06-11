@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;
@@ -48,6 +49,9 @@ public class Fire extends Obstacle {
             lastTime = currTime;
             animationCounter = ++animationCounter % fireAssets.size();
         }
+
+        SoundManager.FIRE_SFX.play();
+
     }
 
     @Override public double getDepth() { return y + height; }

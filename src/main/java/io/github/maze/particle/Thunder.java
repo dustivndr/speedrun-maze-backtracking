@@ -1,5 +1,6 @@
 package io.github.maze.particle;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,6 +33,7 @@ public class Thunder extends Particle {
     @Override
     public void onUpdate() {
         frameCounter++;
+        SoundManager.THUNDER_SFX.play();
     }
 
     @Override public double getDepth() { return getY() + getHeight(); }

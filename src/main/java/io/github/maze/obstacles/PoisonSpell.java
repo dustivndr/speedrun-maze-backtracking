@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
@@ -58,8 +59,9 @@ public class PoisonSpell extends Obstacle {
 
     @Override
     public void update() {
-
         if (Util.checkAABB(gp.maze.player, this)) {
+            SoundManager.POISON_SPELL_SFX.play();
+
             gp.maze.player.setPoisonLength(10);
             removeObject = true;
         }
