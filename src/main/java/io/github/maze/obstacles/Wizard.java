@@ -1,12 +1,16 @@
 package io.github.maze.obstacles;
 
+import java.util.Random;
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
-import io.github.maze.maze.GameObject;
 import io.github.maze.util.Angle;
 import javafx.scene.canvas.GraphicsContext;
 
+
 public class Wizard extends Obstacle {
+
+    public static Random random = new Random();
 
     private static final WizardAssets wizardAssets = new WizardAssets();
 
@@ -96,6 +100,13 @@ public class Wizard extends Obstacle {
                 double playerBottomY = p.getY() + p.getHeight();
 
                 gp.maze.addThunder(playerCenterX, playerBottomY);
+
+                boolean wizVoice = random.nextBoolean();
+                if (wizVoice) {
+                    SoundManager.WIZARD_VOICE_1.play();
+                } else {
+                    SoundManager.WIZARD_VOICE_2.play();
+                }
 
                 p.damage(10);
 
