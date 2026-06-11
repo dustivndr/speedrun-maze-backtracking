@@ -2,7 +2,6 @@ package io.github.maze.obstacles;
 
 import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
-
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -28,6 +27,9 @@ public class FlagGreen extends Obstacle {
             SoundManager.GREEN_FLAG_SFX.play();
 
             gp.maze.player.flagCount++;
+//            if (gp.maze.player.flagCount == gp.maze.flagCount) {
+//                gp.game.finishGame();
+//            }
             removeObject = true;
         }
     }
