@@ -99,6 +99,7 @@ public class Wizard extends Obstacle {
                 double playerCenterX = p.getX() + (p.getWidth() / 2.0);
                 double playerBottomY = p.getY() + p.getHeight();
 
+                SoundManager.THUNDER_SFX.play();
                 gp.maze.addThunder(playerCenterX, playerBottomY);
 
                 boolean wizVoice = random.nextBoolean();
