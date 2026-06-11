@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -66,6 +67,10 @@ public class FireMonster extends Obstacle {
             if (calculatedFrame < fireMonsterAssets.attackSize()) {
                 attackAnimationCounter = calculatedFrame;
             }
+
+            // note: check first if sound when it's generated
+            // move it up/down if incorrect
+            SoundManager.FIRE_MONSTER_VOICE.play();
 
             if (currAnimationLength >= animationLength) {
 
