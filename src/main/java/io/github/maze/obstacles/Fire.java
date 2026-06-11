@@ -25,7 +25,10 @@ public class Fire extends Obstacle {
 
     @Override
     public void render(GraphicsContext g) {
-        g.drawImage(fireAssets.getFrame(animationCounter), x, y);
+        double screenX = gp.camera.getScreenX(x);
+        double screenY = gp.camera.getScreenY(y);
+
+        g.drawImage(fireAssets.getFrame(animationCounter), screenX, screenY);
     }
 
     @Override
