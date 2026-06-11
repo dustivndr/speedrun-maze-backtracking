@@ -67,4 +67,6 @@ public class Portal extends Obstacle {
 
     public int getNum() { return portalNumber; }
     public void setConnection(Portal portal) { connection = portal; }
+
+    public Portal getConnection() { return connection; }
 }

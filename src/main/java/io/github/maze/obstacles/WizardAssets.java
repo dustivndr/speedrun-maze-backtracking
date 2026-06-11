@@ -19,10 +19,10 @@ public class WizardAssets {
     public WizardAssets() {
         sheet = Util.getScaledImage("/image/wizard/wizard.png");
 
-        frames[0] = sliceImage(2, 0);
-        frames[1] = sliceImage(2, 2);
-        frames[2] = sliceImage(3, 2);
-        frames[3] = sliceImage(0, 4);
+        frames[0] = sliceImage(2, 0); // menghadap ke bawah
+        frames[1] = sliceImage(2, 2); // menghadap ke kiri
+        frames[2] = sliceImage(3, 2); // menghadap ke kanan
+        frames[3] = sliceImage(0, 4); // menghadap ke atas
 
         frames[4] = sliceImage(3, 0);
         frames[5] = sliceImage(0, 1);
