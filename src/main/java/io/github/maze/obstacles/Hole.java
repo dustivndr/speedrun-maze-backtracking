@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.render.Camera;
@@ -53,6 +54,8 @@ public class Hole extends Obstacle {
             if (!hasOpened) {
                 p.damage(5);
             }
+
+            SoundManager.PLAYER_FALL_SFX.play();
 
             hasOpened = true;
             collision = true;
