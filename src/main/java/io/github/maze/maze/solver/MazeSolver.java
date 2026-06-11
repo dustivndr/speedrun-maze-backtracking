@@ -52,10 +52,6 @@ public class MazeSolver {
 
         totalFlag = gp.maze.flagCount;
         memo = new HashMap<>();
-        bestRemainingHp = -1;
-        bestPath = "";
-        backtrackingLength = 0;
-        backtrackingPath.setLength(0);
 
         StringBuilder path = new StringBuilder();
 
@@ -65,6 +61,8 @@ public class MazeSolver {
             memo.clear();
             bestRemainingHp = -1;
             bestPath = "";
+            backtrackingLength = 0;
+            backtrackingPath.setLength(0);
 
             initialState = initState(pos);
 
@@ -73,7 +71,8 @@ public class MazeSolver {
                     initialState,
                     100,
                     path,
-                    maxDepth
+                    maxDepth,
+                    ' '
             );
 
             if (!bestPath.isEmpty()) {
@@ -109,7 +108,8 @@ public class MazeSolver {
             State state,
             int hp,
             StringBuilder path,
-            int maxDepth
+            int maxDepth,
+            char dir
     ) {
 
         if (!bestPath.isEmpty() && bestRemainingHp == 100 && path.length() >= bestPath.length()) {
@@ -162,19 +162,17 @@ public class MazeSolver {
         hp = enemyDamageResult.hp;
 
         // check lose (lose base case)
-        if (hp <= 0) {
-            return;
-        }
-
-
-        if (memo.size() % 1000 == 0) {
-            System.out.println(
-                    "memo=" + memo.size()
-            );
-        }
+        if (hp <= 0) return;
 
         // remove unnecessary branches
         if (shouldPrune(state, hp, path.length())) return;
+
+        // add position to path taken
+        boolean isRoot = (dir == ' ');
+        if (!isRoot) {
+            path.append(dir);
+            backtrackingPath.append(dir);
+        }
 
         // check win
         if (state.collectedGreenFlags() == totalFlag) {
@@ -199,8 +197,6 @@ public class MazeSolver {
             ) {
                 bestRemainingHp = hp;
                 bestPath = path.toString();
-                backtrackingPath.setLength(0);
-                backtrackingPath.append(bestPath);
 
                 System.out.println(
                         "depth=" + path.length()
@@ -240,12 +236,8 @@ public class MazeSolver {
             );
 
             if (!inBound(nextState) || isBlocked(maze, nextState)) {
-            continue;
+                continue;
             }
-
-            // add position to path taken
-            path.append(DIR[i]);
-            backtrackingPath.append(DIR[i]);
 
             // backtrack the next position
             backtracking(
@@ -253,10 +245,25 @@ public class MazeSolver {
                     nextState,
                     hp,
                     path,
-                    maxDepth
+                    maxDepth,
+                    DIR[i]
             );
-            path.deleteCharAt(path.length() - 1);
         }
+
+        if (!isRoot) {
+            path.deleteCharAt(path.length() - 1);
+            backtrackingPath.append(getReverseDir(dir));
+        }
+    }
+
+    private static char getReverseDir(char c) {
+        return switch (c) {
+            case 'U' -> 'D';
+            case 'D' -> 'U';
+            case 'L' -> 'R';
+            case 'R' -> 'L';
+            default -> throw new IllegalStateException("Unexpected direction: " + c);
+        };
     }
 
     private static boolean shouldPrune(

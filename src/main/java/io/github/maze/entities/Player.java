@@ -155,18 +155,21 @@ public class Player extends Entity {
         double moveX = dx * currentSpeed;
         double moveY = dy * currentSpeed;
 
-        if (canOccupy(x + moveX, y + moveY)) {
-            x += moveX;
-            y += moveY;
-        } else {
-            if (moveY != 0 && canOccupy(x, y + moveY)) {
-                y += moveY;
-            }
+//        if (canOccupy(x + moveX, y + moveY)) {
+//            x += moveX;
+//            y += moveY;
+//        } else {
+//            if (moveY != 0 && canOccupy(x, y + moveY)) {
+//                y += moveY;
+//            }
+//
+//            if (moveX != 0 && canOccupy(x + moveX, y)) {
+//                x += moveX;
+//            }
+//        }
 
-            if (moveX != 0 && canOccupy(x + moveX, y)) {
-                x += moveX;
-            }
-        }
+        y += moveY;
+        x += moveX;
 
         boolean movedTile = getTileX() != prevCol || getTileY() != prevRow;
 
