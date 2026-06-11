@@ -35,14 +35,11 @@ public class Fire extends Obstacle {
     public void update() {
 
         // check damage player
-        Player p = gp.maze.player;
-        if (Util.checkAABB(p, this)) {
-            if (!playerWasInside) {
-                p.damage(damage);
-                playerWasInside = true;
-            }
-        } else {
-            playerWasInside = false;
+        if (Util.checkAABB(gp.maze.player, this)) {
+            SoundManager.FIRE_SFX.play();
+
+            gp.maze.player.setPoisonLength(10);
+            removeObject = true;
         }
 
         // update texture

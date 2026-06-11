@@ -3,6 +3,7 @@ package io.github.maze.game;
 import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
+import io.github.maze.maze.solver.MazeSolver;
 import io.github.maze.obstacles.Portal;
 import javafx.application.Platform;
 
@@ -107,12 +108,16 @@ public class AutoPlayer {
                         player.setX(destCol * GamePanel.TILE_SIZE);
                         player.setY(destRow * GamePanel.TILE_SIZE);
 
-                        // Sync the AutoPlayer's logical trackers to the destination
+                        // Sync tracker
                         logicalX = destCol;
                         logicalY = destRow;
 
                         System.out.println("AutoPlayer successfully synced through portal to: " + logicalX + "," + logicalY);
                         System.out.println("player col=" + player.getTileX() + ", row=" + player.getTileY());
+
+                        currentDx = 0;
+                        currentDy = 0;
+                        player.setAutoDirection(0, 0);
                     }
                 }
 
@@ -146,6 +151,7 @@ public class AutoPlayer {
 
             // 2. Defer the dialog call to run safely outside the animation pulse
             Platform.runLater(() -> {
+                System.out.println(MazeSolver.backtrackingPath.substring(0, 180));
                 gp.game.finishGame("Maze Completed!");
             });
 
