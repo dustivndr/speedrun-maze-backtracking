@@ -1,5 +1,6 @@
 package io.github.maze.entities.projectile;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Projectile;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Angle;
@@ -55,6 +56,8 @@ public class Meteor extends Projectile {
 
     @Override
     public void onUpdate() {
+        SoundManager.METEOR_SFX.play();
+
         x += SPEED_X;
         y += SPEED_Y;
 
