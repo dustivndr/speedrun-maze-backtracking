@@ -1,5 +1,6 @@
 package io.github.maze.entities;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.Game;
 import io.github.maze.game.GamePanel;
 import io.github.maze.input.InputHandler;
@@ -212,6 +213,9 @@ public class Player extends Entity {
             spriteNum = (spriteNum % 4) + 1;
             spriteCounter = 0;
         }
+
+        SoundManager.FOOTSTEP_SFX.play();
+
     }
 
     public void checkOutOfBound(int dx, int dy) {

@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,7 +31,6 @@ public class Portal extends Obstacle {
     public void update() {
 
         if (state == EXITED) {
-
             if (!Util.checkAABB(gp.maze.player, this)) {
                 state = NONE;
             }
@@ -41,6 +41,8 @@ public class Portal extends Obstacle {
 
             gp.maze.player.setX(connection.x);
             gp.maze.player.setY(connection.y);
+
+            SoundManager.PORTAL_SFX.play();
         }
 
         final int gap = 3;
@@ -49,6 +51,7 @@ public class Portal extends Obstacle {
             frameNum = (frameNum + 1) % portalAssets.size();
             animationTimer -= gap;
         }
+
     }
 
     @Override

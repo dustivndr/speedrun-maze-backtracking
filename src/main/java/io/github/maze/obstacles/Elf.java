@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.entities.Player;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
@@ -25,8 +26,8 @@ public class Elf extends Obstacle {
 
     @Override
     public void update() {
-
         if (isPlayerInCoordinateRange()) {
+            SoundManager.ELF_VOICE.play();
             gp.maze.player.heal(gp.maze.player.MAX_HP);
         }
     }

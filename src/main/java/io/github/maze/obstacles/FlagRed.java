@@ -1,5 +1,6 @@
 package io.github.maze.obstacles;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.util.Util;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,8 +26,8 @@ public class FlagRed extends Obstacle {
 
     @Override
     public void update() {
-
         if (Util.checkAABB(gp.maze.player, this)) {
+            SoundManager.FAKE_FLAG_SFX.play();
             removeObject = true;
         }
     }
