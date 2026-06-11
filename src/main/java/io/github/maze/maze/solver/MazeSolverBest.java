@@ -1,275 +1,385 @@
-package io.github.maze.maze.solver;
+// package io.github.maze.maze.solver;
 
-import java.util.*;
+// import java.util.*;
 
-public class MazeSolverBest {
+// public class MazeSolverBest {
 
-    private static final int[] DR = {-1, 1, 0, 0};
-    private static final int[] DC = {0, 0, -1, 1};
-    private static final char[] DIR = {'U', 'D', 'L', 'R'};
+//     private static final int[] DR = {-1, 1, 0, 0};
+//     private static final int[] DC = {0, 0, -1, 1};
+//     private static final char[] DIR = {'U', 'D', 'L', 'R'};
 
-    private static String bestPath;
-    private static int bestRemainingHp;
-    private static int totalFlags;
+//     private static String bestPath = "";
+//     private static int bestRemainingHp = -1;
 
-    private static Map<Character, List<int[]>> portalMap;
+//     private static char[][] maze;
+//     private static int rows;
+//     private static int cols;
 
-    // ===================== MEMOIZATION (DP CACHE) =====================
-    private static Map<String, Integer> memo;
+//     private static Map<String, Integer> memo;
 
-    public static String solve(char[][] maze, int sr, int sc, int startHp) {
+//     private static List<Point> flags;
+//     private static List<Point> lockedFlags;
+//     private static List<Point> keys;
+//     private static List<Point> holes;
 
-        bestPath = null;
-        bestRemainingHp = -1;
-        totalFlags = countFlags(maze);
-        portalMap = buildPortals(maze);
+//     private static int allFlagsMask;
 
-        memo = new HashMap<>();
+//     public static String solve(char[][] map) {
 
-        boolean[][] visited = new boolean[maze.length][maze[0].length];
+//         maze = map;
+//         rows = map.length;
+//         cols = map[0].length;
 
-        backtrack(
-                maze,
-                sr,
-                sc,
-                startHp,
-                0,
-                0,
-                0,
-                0,
-                0,
-                new HashSet<>(),
-                new StringBuilder(),
-                visited
-        );
+//         memo = new HashMap<>();
 
-        return bestPath == null ? "Path tidak ditemukan" : bestPath;
-    }
+//         flags = new ArrayList<>();
+//         lockedFlags = new ArrayList<>();
+//         keys = new ArrayList<>();
+//         holes = new ArrayList<>();
 
-    // ========================= BACKTRACK + DP =========================
+//         int startRow = -1;
+//         int startCol = -1;
 
-    private static void backtrack(
-            char[][] maze,
-            int r,
-            int c,
-            int hp,
-            int keys,
-            int flags,
-            int tileCount,
-            int poisonTimer,
-            int speedTimer,
-            Set<String> holeBroken,
-            StringBuilder path,
-            boolean[][] visited
-    ) {
+//         scanMap();
 
-        if (!inBounds(maze, r, c)) return;
-        if (visited[r][c]) return;
+//         for (int r = 0; r < rows; r++) {
+//             for (int c = 0; c < cols; c++) {
 
-        char tile = maze[r][c];
+//                 if (maze[r][c] == 'P') {
+//                     startRow = r;
+//                     startCol = c;
+//                 }
+//             }
+//         }
 
-        if (isSolid(tile, r, c, holeBroken)) return;
+//         allFlagsMask =
+//                 (1 << (flags.size() + lockedFlags.size())) - 1;
 
-        // ================= SPEED =================
-        boolean speedActive = speedTimer > 0;
-        tileCount += speedActive ? 2 : 1;
+//         bestPath = "";
+//         bestRemainingHp = -1;
 
-        // ================= POISON =================
-        if (poisonTimer > 0) {
-            hp -= 1;
-            poisonTimer--;
-        }
+//         State start = new State();
 
-        if (hp <= 0) return;
+//         start.row = startRow;
+//         start.col = startCol;
 
-        char original = tile;
+//         start.hp = 100;
 
-        // ================= TILE EFFECTS =================
-        if (tile == 'H') {
-            hp -= 5;
-            maze[r][c] = 'B';
-            holeBroken.add(r + "," + c);
-        }
+//         start.keys = 0;
 
-        if (tile == 'K') {
-            keys++;
-            maze[r][c] = '0';
-        }
+//         start.flagMask = 0;
+//         start.keyMask = 0;
+//         start.holeMask = 0;
 
-        if (tile == 'F' || tile == 'f') {
-            flags++;
-            maze[r][c] = '0';
-        }
+//         start.path = "";
 
-        if (tile == 'L') {
-            if (keys <= 0) return;
-            keys--;
-            flags++;
-            maze[r][c] = '0';
-        }
+//         dfs(start);
 
-        if (tile == 'h') {
-            hp += 20;
-            maze[r][c] = '0';
-        }
+//         return bestPath;
+//     }
 
-        if (tile == 's') {
-            speedTimer = 20;
-            maze[r][c] = '0';
-        }
+//     private static void dfs(State s) {
 
-        if (tile == 'p') {
-            poisonTimer = 10;
-            maze[r][c] = '0';
-        }
+//         if (s.hp <= 0)
+//             return;
 
-        if (tile == 'E') {
-            hp = 1000;
-        }
+//         if (s.flagMask == allFlagsMask) {
 
-        if (tile == 'O') {
-            int[] dest = teleport(r, c, maze);
-            r = dest[0];
-            c = dest[1];
-        }
+//             if (s.hp > bestRemainingHp) {
+//                 bestRemainingHp = s.hp;
+//                 bestPath = s.path;
+//             }
 
-        // ================= WIN =================
-        if (flags == totalFlags) {
-            if (hp > bestRemainingHp) {
-                bestRemainingHp = hp;
-                bestPath = path.toString();
-            }
-            maze[r][c] = original;
-            return;
-        }
+//             return;
+//         }
 
-        visited[r][c] = true;
+//         String stateKey =
+//                 s.row + "," +
+//                 s.col + "," +
+//                 s.hp + "," +
+//                 s.keys + "," +
+//                 s.flagMask + "," +
+//                 s.keyMask + "," +
+//                 s.holeMask;
 
-        // ================= DP KEY =================
-        String stateKey = r + "," + c + "," + keys + "," + flags + "," + poisonTimer + "," + speedTimer;
+//         Integer prev = memo.get(stateKey);
 
-        if (memo.containsKey(stateKey)) {
-            if (memo.get(stateKey) >= hp) {
-                visited[r][c] = false;
-                maze[r][c] = original;
-                return;
-            }
-        }
-        memo.put(stateKey, hp);
+//         if (prev != null && prev >= s.hp)
+//             return;
 
-        // ================= ENEMY =================
-        hp = applyEnemyDamage(maze, r, c, hp, tileCount);
+//         memo.put(stateKey, s.hp);
 
-        if (hp <= 0) {
-            visited[r][c] = false;
-            maze[r][c] = original;
-            return;
-        }
+//         for (int d = 0; d < 4; d++) {
 
-        // ================= MOVE =================
-        for (int i = 0; i < 4; i++) {
+//             State next = move(s, d);
 
-            path.append(DIR[i]);
+//             if (next != null)
+//                 dfs(next);
+//         }
+//     }
 
-            backtrack(
-                    maze,
-                    r + DR[i],
-                    c + DC[i],
-                    hp,
-                    keys,
-                    flags,
-                    tileCount,
-                    poisonTimer,
-                    speedTimer > 0 ? speedTimer - 1 : 0,
-                    holeBroken,
-                    path,
-                    visited
-            );
+//     private static State move(State s, int dir) {
 
-            path.deleteCharAt(path.length() - 1);
-        }
+//         int nr = s.row + DR[dir];
+//         int nc = s.col + DC[dir];
 
-        visited[r][c] = false;
-        maze[r][c] = original;
-    }
+//         if (!inside(nr, nc))
+//             return null;
 
-    // ================= SAME FUNCTIONS (unchanged) =================
+//         char tile = maze[nr][nc];
 
-    private static int applyEnemyDamage(char[][] maze, int r, int c, int hp, int step) {
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[0].length; j++) {
+//         if (tile == 'B')
+//             return null;
 
-                char t = maze[i][j];
+//         State n = s.copy();
 
-                if (t == 'N' && inRange(i, j, r, c, 3)) {
-                    if (step % 2 == 0) hp -= 5;
-                }
+//         n.row = nr;
+//         n.col = nc;
 
-                if (t == 'W' && inRange(i, j, r, c, 5)) {
-                    if (step % 4 == 0) hp -= 10;
-                }
+//         n.path += DIR[dir];
 
-                if (t == 'M' && inRange(i, j, r, c, 6, 5)) {
-                    hp -= 20;
-                }
-            }
-        }
-        return hp;
-    }
+//         switch (tile) {
 
-    private static boolean isSolid(char t, int r, int c, Set<String> holeBroken) {
-        if (t == 'B') return true;
-        if (t == 'N' || t == 'W' || t == 'M') return true;
-        if (t == 'H') return holeBroken.contains(r + "," + c);
-        return false;
-    }
+//             case 'S':
+//                 n.hp -= 5;
+//                 break;
 
-    private static boolean inRange(int r1, int c1, int r2, int c2, int range) {
-        return Math.abs(r1 - r2) <= range && Math.abs(c1 - c2) <= range;
-    }
+//             case 'R':
+//                 n.hp -= 5;
+//                 break;
 
-    private static boolean inRange(int r1, int c1, int r2, int c2, int rx, int ry) {
-        return Math.abs(r1 - r2) <= rx && Math.abs(c1 - c2) <= ry;
-    }
+//             case 'h':
+//                 n.hp = Math.min(100, n.hp + 20);
+//                 break;
 
-    private static int[] teleport(int r, int c, char[][] maze) {
-        char id = maze[r][c];
-        List<int[]> list = portalMap.get(id);
+//             case 'K':
 
-        if (list.size() < 2) return new int[]{r, c};
+//                 int keyId = getKeyId(nr, nc);
 
-        return (list.get(0)[0] == r && list.get(0)[1] == c)
-                ? list.get(1)
-                : list.get(0);
-    }
+//                 if (keyId >= 0 &&
+//                         (n.keyMask & (1 << keyId)) == 0) {
 
-    private static Map<Character, List<int[]>> buildPortals(char[][] maze) {
-        Map<Character, List<int[]>> map = new HashMap<>();
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[0].length; j++) {
-                if (maze[i][j] == 'O') {
-                    map.computeIfAbsent('O', k -> new ArrayList<>())
-                            .add(new int[]{i, j});
-                }
-            }
-        }
-        return map;
-    }
+//                     n.keyMask |= (1 << keyId);
+//                     n.keys++;
+//                 }
 
-    private static boolean inBounds(char[][] m, int r, int c) {
-        return r >= 0 && c >= 0 && r < m.length && c < m[0].length;
-    }
+//                 break;
 
-    private static int countFlags(char[][] maze) {
-        int count = 0;
-        for (char[] row : maze)
-            for (char c : row)
-                if (c == 'F' || c == 'L' || c == 'f')
-                    count++;
-        return count;
-    }
+//             case 'H':
 
-    public static int getBestRemainingHp() {
-        return bestRemainingHp;
-    }
-}
+//                 int holeId = getHoleId(nr, nc);
+
+//                 if ((n.holeMask & (1 << holeId)) != 0)
+//                     return null;
+
+//                 n.holeMask |= (1 << holeId);
+
+//                 n.hp -= 5;
+
+//                 break;
+
+//             case 'F':
+
+//                 int flagId = getFlagId(nr, nc);
+
+//                 if (flagId >= 0)
+//                     n.flagMask |= (1 << flagId);
+
+//                 break;
+
+//             case 'f':
+
+//                 break;
+
+//             case 'L':
+
+//                 int lockedId = getLockedFlagId(nr, nc);
+
+//                 if (lockedId >= 0) {
+
+//                     int bit =
+//                             1 << (flags.size() + lockedId);
+
+//                     if ((n.flagMask & bit) == 0) {
+
+//                         if (n.keys <= 0)
+//                             return null;
+
+//                         n.keys--;
+
+//                         n.flagMask |= bit;
+//                     }
+//                 }
+
+//                 break;
+
+//             case 'O':
+
+//                 Point p = findConnectedPortal(nr, nc);
+
+//                 if (p != null) {
+
+//                     n.row = p.row;
+//                     n.col = p.col;
+//                 }
+
+//                 break;
+//         }
+
+//         if (n.hp <= 0)
+//             return null;
+
+//         return n;
+//     }
+
+//     private static void scanMap() {
+
+//         for (int r = 0; r < rows; r++) {
+
+//             for (int c = 0; c < cols; c++) {
+
+//                 switch (maze[r][c]) {
+
+//                     case 'F':
+//                         flags.add(new Point(r, c));
+//                         break;
+
+//                     case 'L':
+//                         lockedFlags.add(new Point(r, c));
+//                         break;
+
+//                     case 'K':
+//                         keys.add(new Point(r, c));
+//                         break;
+
+//                     case 'H':
+//                         holes.add(new Point(r, c));
+//                         break;
+//                 }
+//             }
+//         }
+//     }
+
+//     private static int getFlagId(int r, int c) {
+
+//         for (int i = 0; i < flags.size(); i++) {
+
+//             Point p = flags.get(i);
+
+//             if (p.row == r && p.col == c)
+//                 return i;
+//         }
+
+//         return -1;
+//     }
+
+//     private static int getLockedFlagId(int r, int c) {
+
+//         for (int i = 0; i < lockedFlags.size(); i++) {
+
+//             Point p = lockedFlags.get(i);
+
+//             if (p.row == r && p.col == c)
+//                 return i;
+//         }
+
+//         return -1;
+//     }
+
+//     private static int getKeyId(int r, int c) {
+
+//         for (int i = 0; i < keys.size(); i++) {
+
+//             Point p = keys.get(i);
+
+//             if (p.row == r && p.col == c)
+//                 return i;
+//         }
+
+//         return -1;
+//     }
+
+//     private static int getHoleId(int r, int c) {
+
+//         for (int i = 0; i < holes.size(); i++) {
+
+//             Point p = holes.get(i);
+
+//             if (p.row == r && p.col == c)
+//                 return i;
+//         }
+
+//         return -1;
+//     }
+
+//     private static Point findConnectedPortal(int r, int c) {
+
+//         for (int rr = 0; rr < rows; rr++) {
+
+//             for (int cc = 0; cc < cols; cc++) {
+
+//                 if (maze[rr][cc] == 'O'
+//                         && (rr != r || cc != c))
+//                     return new Point(rr, cc);
+//             }
+//         }
+
+//         return null;
+//     }
+
+//     private static boolean inside(int r, int c) {
+
+//         return r >= 0 &&
+//                 r < rows &&
+//                 c >= 0 &&
+//                 c < cols;
+//     }
+
+//     private static class State {
+
+//         int row;
+//         int col;
+
+//         int hp;
+
+//         int keys;
+
+//         int flagMask;
+//         int keyMask;
+//         int holeMask;
+
+//         String path;
+
+//         State copy() {
+
+//             State s = new State();
+
+//             s.row = row;
+//             s.col = col;
+
+//             s.hp = hp;
+
+//             s.keys = keys;
+
+//             s.flagMask = flagMask;
+//             s.keyMask = keyMask;
+//             s.holeMask = holeMask;
+
+//             s.path = path;
+
+//             return s;
+//         }
+//     }
+
+//     private static class Point {
+
+//         int row;
+//         int col;
+
+//         Point(int row, int col) {
+
+//             this.row = row;
+//             this.col = col;
+//         }
+//     }
+// }
