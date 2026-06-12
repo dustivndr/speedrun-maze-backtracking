@@ -18,6 +18,8 @@ public class MenuPanel extends VBox {
         setAlignment(Pos.CENTER);
         setSpacing(20);
 
+        this.getStyleClass().add("menu-panel");
+
         Label title = new Label("Alpro MAZE");
         title.getStyleClass().add("title");
 
@@ -37,6 +39,8 @@ public class MenuPanel extends VBox {
         exitButton.setOnAction(_ -> Platform.exit());
 
         getChildren().addAll(title, startButton, backtrackingButton, exitButton);
+
+        setSpacing(25);
 
         // log debug
         Platform.runLater(() -> {

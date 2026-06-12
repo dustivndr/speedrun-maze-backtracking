@@ -89,20 +89,20 @@ public class MazeLoader {
                     if (!str[col].isEmpty()) {
                         char id = str[col].charAt(0);
 
-                        if (id == 'O') {
-
-                            if (str[col].length() <= 1) {
-                                throw new IndexOutOfBoundsException(
-                                        "Portal 'O' at col: " + col + ", row: " + row +
-                                        " is not followed by an id");
-                            }
-
-                            int num = Integer.parseInt(str[col].substring(1));
-                            Portal portal = maze.addPortal(col, row, num);
-
-                            portalGroups.computeIfAbsent(num,
-                                    k -> new ArrayList<>()).add(portal);
-                        }
+//                        if (id == 'O') {
+//
+//                            if (str[col].length() <= 1) {
+//                                throw new IndexOutOfBoundsException(
+//                                        "Portal 'O' at col: " + col + ", row: " + row +
+//                                        " is not followed by an id");
+//                            }
+//
+//                            int num = Integer.parseInt(str[col].substring(1));
+//                            Portal portal = maze.addPortal(col, row, num);
+//
+//                            portalGroups.computeIfAbsent(num,
+//                                    k -> new ArrayList<>()).add(portal);
+//                        }
 
                         // ignore player
                         if (id != 'P' && id != 'O') {

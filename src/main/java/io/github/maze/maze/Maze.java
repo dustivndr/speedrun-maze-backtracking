@@ -200,11 +200,11 @@ public class Maze {
                 objectList.add(s);
                 obstacleMap[row][col] = s;
             }
-            case 'p' /* Poison Spell */ -> {
-                PoisonSpell s = new PoisonSpell(gp, x, y);
-                objectList.add(s);
-                obstacleMap[row][col] = s;
-            }
+//            case 'p' /* Poison Spell */ -> {
+//                PoisonSpell s = new PoisonSpell(gp, x, y);
+//                objectList.add(s);
+//                obstacleMap[row][col] = s;
+//            }
             case 'h' /* Heal Spell */ -> {
                 HealSpell s = new HealSpell(gp, x, y);
                 objectList.add(s);

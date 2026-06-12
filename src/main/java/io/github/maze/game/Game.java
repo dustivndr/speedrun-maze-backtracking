@@ -6,6 +6,7 @@ package io.github.maze.game;
 *
 */
 
+import io.github.maze.maze.solver.MazeSolver;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -41,13 +42,13 @@ public class Game extends Pane {
         gamePanel.startGameThread("showBacktracking");
     }
 
-    public void finishGame() {
+    public void finishGame(String text) {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         alert.setTitle("Maze");
-        alert.setHeaderText("Maze Completed!");
-        alert.setContentText("What would you like to do?");
+        alert.setHeaderText(text);
+        alert.setContentText("remaining HP: " + MazeSolver.bestRemainingHp + "\nWhat would you like to do?");
 
         ButtonType menu = new ButtonType("Menu");
         ButtonType exit = new ButtonType("Exit");

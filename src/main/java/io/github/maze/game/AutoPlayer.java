@@ -3,10 +3,13 @@ package io.github.maze.game;
 import io.github.maze.entities.Player;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
+import io.github.maze.maze.solver.MazeSolver;
 import io.github.maze.obstacles.Portal;
+import javafx.application.Platform;
 
 public class AutoPlayer {
 
+    private final GamePanel gp;
     private final Player player;
     private final GameObject[][] maze;
     private final String path;
@@ -25,7 +28,9 @@ public class AutoPlayer {
 
     private boolean waitingMove = false;
 
-    public AutoPlayer(Maze maze, String path) {
+    public AutoPlayer(GamePanel gp, String path) {
+        this.gp = gp;
+        Maze maze = gp.maze;
         this.player = maze.player;
         this.maze = maze.obstacleMap;
         this.path = path;
@@ -103,12 +108,16 @@ public class AutoPlayer {
                         player.setX(destCol * GamePanel.TILE_SIZE);
                         player.setY(destRow * GamePanel.TILE_SIZE);
 
-                        // Sync the AutoPlayer's logical trackers to the destination
+                        // Sync tracker
                         logicalX = destCol;
                         logicalY = destRow;
 
                         System.out.println("AutoPlayer successfully synced through portal to: " + logicalX + "," + logicalY);
                         System.out.println("player col=" + player.getTileX() + ", row=" + player.getTileY());
+
+                        currentDx = 0;
+                        currentDy = 0;
+                        player.setAutoDirection(0, 0);
                     }
                 }
 
@@ -130,10 +139,59 @@ public class AutoPlayer {
             return;
         }
 
+//        if (waitingMove) {
+//
+//            double playerX = player.getX();
+//            double playerY = player.getY();
+//            double targetPixelX = targetX * GamePanel.TILE_SIZE;
+//            double targetPixelY = targetY * GamePanel.TILE_SIZE;
+//
+//            boolean reached = false;
+//
+//            // Accurate vector threshold checking
+//            if (currentDx > 0 && playerX >= targetPixelX) reached = true;
+//            else if (currentDx < 0 && playerX <= targetPixelX) reached = true;
+//            else if (currentDy > 0 && playerY >= targetPixelY) reached = true;
+//            else if (currentDy < 0 && playerY <= targetPixelY) reached = true;
+//
+//            if (reached) {
+//                // Snap perfectly to the grid edge to prevent drift
+//                player.setX(targetPixelX);
+//                player.setY(targetPixelY);
+//
+//                logicalX = targetX;
+//                logicalY = targetY;
+//
+//                System.out.println(
+//                        "[ARRIVED] " +
+//                                "step=" + currentStep +
+//                                " target=(" + targetX + "," + targetY + ")" +
+//                                " actual=(" + player.getTileX() + "," + player.getTileY() + ")"
+//                );
+//
+//                waitingMove = false;
+//                player.setAutoDirection(0, 0);
+//                currentStep++;
+//            }
+//            return;
+//        }
+
         // finish
         if (currentStep >= path.length()) {
             player.setAutoDirection(0, 0);
             player.setAutoMode(false);
+
+            // stop the animation timer immediately so the loop pauses
+            if (gp.gameTimer != null) {
+                gp.gameTimer.stop();
+            }
+
+            // defer the dialog call to run safely outside the animation pulse
+            Platform.runLater(() -> {
+                System.out.println(MazeSolver.backtrackingPath.substring(0, 180));
+                gp.game.finishGame("Maze Completed!");
+            });
+
             return;
         }
 
@@ -142,12 +200,12 @@ public class AutoPlayer {
 
         if (logicalX != realTileX || logicalY != realTileY) {
 
-            System.out.println(
-                    "[AUTOPLAYER DESYNC] " +
-                            "step=" + currentStep +
-                            " logical=(" + logicalX + "," + logicalY + ")" +
-                            " real=(" + realTileX + "," + realTileY + ")"
-            );
+//            System.out.println(
+//                    "[AUTOPLAYER DESYNC] " +
+//                            "step=" + currentStep +
+//                            " logical=(" + logicalX + "," + logicalY + ")" +
+//                            " real=(" + realTileX + "," + realTileY + ")"
+//            );
 
             // resync
             logicalX = realTileX;
@@ -155,13 +213,13 @@ public class AutoPlayer {
         }
 
         // print every move for debugging
-        System.out.println(
-                "[AUTOPLAYER] " +
-                        "step=" + currentStep +
-                        " logical=(" + logicalX + "," + logicalY + ")" +
-                        " real=(" + realTileX + "," + realTileY + ")" +
-                        " move=" + path.charAt(currentStep)
-        );
+//        System.out.println(
+//                "[AUTOPLAYER] " +
+//                        "step=" + currentStep +
+//                        " logical=(" + logicalX + "," + logicalY + ")" +
+//                        " real=(" + realTileX + "," + realTileY + ")" +
+//                        " move=" + path.charAt(currentStep)
+//        );
 
         char move = path.charAt(currentStep);
 

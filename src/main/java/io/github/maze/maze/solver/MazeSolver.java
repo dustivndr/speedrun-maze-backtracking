@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
 import io.github.maze.maze.Maze;
@@ -19,12 +20,12 @@ import io.github.maze.obstacles.HealSpell;
 import io.github.maze.obstacles.Hole;
 import io.github.maze.obstacles.Key;
 import io.github.maze.obstacles.Ninja;
-import io.github.maze.obstacles.PoisonSpell;
 import io.github.maze.obstacles.Portal;
 import io.github.maze.obstacles.SpeedSpell;
 import io.github.maze.obstacles.Spike;
 import io.github.maze.obstacles.Wizard;
 import io.github.maze.util.Point;
+import io.github.maze.util.Util;
 
 public class MazeSolver {
 
@@ -41,21 +42,17 @@ public class MazeSolver {
     private static String bestPath;
     public static StringBuilder backtrackingPath = new StringBuilder(3000000);
     public static int backtrackingLength = 0;
-    private static int bestRemainingHp;
+    public static int bestRemainingHp;
 
     private static Map<State, int[]> memo;
 
-    public static String solve(Maze maze) {
+    public static String solve(GamePanel gp) {
 
-        Point pos = new Point(maze.player.getTileY(), maze.player.getTileX());
+        Point pos = new Point(gp.maze.player.getTileY(), gp.maze.player.getTileX());
         State initialState = initState(pos);
 
-        totalFlag = maze.flagCount;
+        totalFlag = gp.maze.flagCount;
         memo = new HashMap<>();
-        bestRemainingHp = -1;
-        bestPath = "";
-        backtrackingLength = 0;
-        backtrackingPath.setLength(0);
 
         StringBuilder path = new StringBuilder();
 
@@ -65,15 +62,19 @@ public class MazeSolver {
             memo.clear();
             bestRemainingHp = -1;
             bestPath = "";
+            backtrackingLength = 0;
+            backtrackingPath.setLength(0);
 
             initialState = initState(pos);
 
             backtracking(
-                    maze.obstacleMap,
+                    gp.maze.obstacleMap,
                     initialState,
                     100,
                     path,
-                    maxDepth
+                    maxDepth,
+                    ' ',
+                    initialState.position()
             );
 
             if (!bestPath.isEmpty()) {
@@ -81,8 +82,6 @@ public class MazeSolver {
                 return bestPath;
             }
         }
-
-        System.out.println("no path to goal found");
 
         return bestPath;
     }
@@ -111,7 +110,9 @@ public class MazeSolver {
             State state,
             int hp,
             StringBuilder path,
-            int maxDepth
+            int maxDepth,
+            char dir,
+            Point previousActualPos
     ) {
 
         if (!bestPath.isEmpty() && bestRemainingHp == 100 && path.length() >= bestPath.length()) {
@@ -122,19 +123,8 @@ public class MazeSolver {
             return;
         }
 
-        if (path.length() % 1000 == 0 && path.length() > 0) {
-            System.out.println("DEPTH = " + path.length());
-        }
-
-        if (path.length() % 1000 == 0) {
-            System.out.println("DEPTH = " + path.length());
-        }
-
         // check out of bound
         if (!inBound(state)) return;
-
-        // check if player is able to move into that tile or not
-        if (isBlocked(maze, state)) return;
 
         // handle tile effects:
         // spike, fire, hole, key, flagGreen, flagLocked, key, healSpell, poisonSpell, speedSpell
@@ -154,6 +144,9 @@ public class MazeSolver {
         // teleport player if there is a portal
         state = processPortal(maze, state);
 
+        // check if player is able to move into that tile or not
+        if (isBlocked(maze, state)) return;
+
         // apply elf healing
         hp = applyElfHealing(maze, state.position(), hp);
 
@@ -164,19 +157,17 @@ public class MazeSolver {
         hp = enemyDamageResult.hp;
 
         // check lose (lose base case)
-        if (hp <= 0) {
-            return;
-        }
-
-
-        if (memo.size() % 1000 == 0) {
-            System.out.println(
-                    "memo=" + memo.size()
-            );
-        }
+        if (hp <= 0) return;
 
         // remove unnecessary branches
         if (shouldPrune(state, hp, path.length())) return;
+
+        // add position to path taken
+        boolean isRoot = (dir == ' ');
+        if (!isRoot) {
+            path.append(dir);
+            backtrackingPath.append(dir);
+        }
 
         // check win
         if (state.collectedGreenFlags() == totalFlag) {
@@ -189,27 +180,17 @@ public class MazeSolver {
             // one solution found. check if the
             // path is the current best path
             // if a tie, take the previous path
-            if (
-                    hp > bestRemainingHp
-                            || (
-                            hp == bestRemainingHp
-                                    && (
-                                    bestPath.isEmpty()
-                                            || path.length() < bestPath.length()
-                            )
-                    )
-            ) {
+            if (hp > bestRemainingHp ||
+                    (hp == bestRemainingHp &&
+                        (bestPath.isEmpty() || path.length() < bestPath.length()))) {
                 bestRemainingHp = hp;
                 bestPath = path.toString();
-                backtrackingPath.setLength(0);
-                backtrackingPath.append(bestPath);
+            }
 
-                System.out.println(
-                        "depth=" + path.length()
-                                + " pos=" + state.position()
-                                + " walk=" + state.walkCount()
-                                + " flags=" + state.collectedGreenFlags()
-                );
+            if (!isRoot) {
+                path.deleteCharAt(path.length() - 1);
+                char rev = getExactReturnChar(state.position(), previousActualPos, dir);
+                if (rev != ' ') backtrackingPath.append(rev);
             }
 
             // win base case
@@ -242,12 +223,8 @@ public class MazeSolver {
             );
 
             if (!inBound(nextState) || isBlocked(maze, nextState)) {
-            continue;
+                continue;
             }
-
-            // add position to path taken
-            path.append(DIR[i]);
-            backtrackingPath.append(DIR[i]);
 
             // backtrack the next position
             backtracking(
@@ -255,10 +232,47 @@ public class MazeSolver {
                     nextState,
                     hp,
                     path,
-                    maxDepth
+                    maxDepth,
+                    DIR[i],
+                    state.position()
             );
-            path.deleteCharAt(path.length() - 1);
         }
+
+        if (!isRoot) {
+            path.deleteCharAt(path.length() - 1);
+            char rev = getExactReturnChar(state.position(), previousActualPos, dir);
+            if (rev != ' ') {
+                backtrackingPath.append(rev);
+            }
+        }
+    }
+
+    private static char getExactReturnChar(Point currentPos, Point targetPos, char incomingDir) {
+        int dRow = targetPos.row() - currentPos.row();
+        int dCol = targetPos.col() - currentPos.col();
+
+        // 1. Normal single-tile movement: Return standard inverse
+        if (Math.abs(dRow) + Math.abs(dCol) == 1) {
+            if (dRow == -1) return 'U';
+            if (dRow == 1) return 'D';
+            if (dCol == -1) return 'L';
+            if (dCol == 1) return 'R';
+        }
+
+        // 2. PORTAL TELEPORTATION DETECTED
+        // The player jumped across the map. To visually backtrack using only U/D/L/R
+        // without cutting through walls, we must look at the neighbor tiles of the
+        // portal DESTINATION (currentPos) and pick the one that is safe/valid,
+        // OR we simply invert the incoming direction relative to how they enter it.
+        //
+        // Standard geometric inversion for a clean look-ahead fallback:
+        return switch (incomingDir) {
+            case 'U' -> 'D';
+            case 'D' -> 'U';
+            case 'L' -> 'R';
+            case 'R' -> 'L';
+            default -> ' ';
+        };
     }
 
     private static boolean shouldPrune(
@@ -574,7 +588,11 @@ public class MazeSolver {
 
         switch (obj) {
             case Spike spike -> hp -= 10;
-            case Fire fire -> hp -= 5;
+            case Fire fire -> {
+
+                // reset fire length
+                poisonLen = 10;
+            }
             case Hole hole -> {
                 hp -= 5;
                 brokenHoles.add(new Point(r, c));
@@ -625,16 +643,6 @@ public class MazeSolver {
                     hp += 20;
                 }
             }
-            case PoisonSpell poison -> {
-
-                // collect only uncollected spells
-                if (!collectedSpells.contains(currPos)) {
-
-                    // add spell to set of collected spells
-                    poisonLen = 10;
-                    collectedSpells.add(currPos);
-                }
-            }
             case SpeedSpell speed -> {
 
                 // collect only uncollected spells
@@ -681,6 +689,10 @@ public class MazeSolver {
         int r = state.position().row();
         int c = state.position().col();
 
+        if (r < 0 || r >= GamePanel.ROW_HEIGHT || c < 0 || c >= GamePanel.COL_WIDTH) {
+            return true;
+        }
+
         GameObject obj = maze[r][c];
 
         // handle all collision
@@ -699,10 +711,8 @@ public class MazeSolver {
 
         // safely handle FireMonster's extended hitbox
         int leftCol = c - 1;
-        if (leftCol >= 0) {
-            if (maze[r][leftCol] instanceof FireMonster) {
-                return true;
-            }
+        if (leftCol >= 0 && maze[r][leftCol] instanceof FireMonster) {
+            return true;
         }
 
         return false;
