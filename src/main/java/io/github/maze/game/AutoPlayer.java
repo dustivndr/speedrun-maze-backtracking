@@ -139,17 +139,54 @@ public class AutoPlayer {
             return;
         }
 
+//        if (waitingMove) {
+//
+//            double playerX = player.getX();
+//            double playerY = player.getY();
+//            double targetPixelX = targetX * GamePanel.TILE_SIZE;
+//            double targetPixelY = targetY * GamePanel.TILE_SIZE;
+//
+//            boolean reached = false;
+//
+//            // Accurate vector threshold checking
+//            if (currentDx > 0 && playerX >= targetPixelX) reached = true;
+//            else if (currentDx < 0 && playerX <= targetPixelX) reached = true;
+//            else if (currentDy > 0 && playerY >= targetPixelY) reached = true;
+//            else if (currentDy < 0 && playerY <= targetPixelY) reached = true;
+//
+//            if (reached) {
+//                // Snap perfectly to the grid edge to prevent drift
+//                player.setX(targetPixelX);
+//                player.setY(targetPixelY);
+//
+//                logicalX = targetX;
+//                logicalY = targetY;
+//
+//                System.out.println(
+//                        "[ARRIVED] " +
+//                                "step=" + currentStep +
+//                                " target=(" + targetX + "," + targetY + ")" +
+//                                " actual=(" + player.getTileX() + "," + player.getTileY() + ")"
+//                );
+//
+//                waitingMove = false;
+//                player.setAutoDirection(0, 0);
+//                currentStep++;
+//            }
+//            return;
+//        }
+
         // finish
         if (currentStep >= path.length()) {
             player.setAutoDirection(0, 0);
             player.setAutoMode(false);
 
-            // 1. Stop the animation timer immediately so the loop pauses
+            // stop the animation timer immediately so the loop pauses
             if (gp.gameTimer != null) {
                 gp.gameTimer.stop();
             }
 
-            // 2. Defer the dialog call to run safely outside the animation pulse
+            // defer the dialog call to run safely outside the animation pulse
             Platform.runLater(() -> {
                 System.out.println(MazeSolver.backtrackingPath.substring(0, 180));
                 gp.game.finishGame("Maze Completed!");
@@ -163,12 +200,12 @@ public class AutoPlayer {
 
         if (logicalX != realTileX || logicalY != realTileY) {
 
-            System.out.println(
-                    "[AUTOPLAYER DESYNC] " +
-                            "step=" + currentStep +
-                            " logical=(" + logicalX + "," + logicalY + ")" +
-                            " real=(" + realTileX + "," + realTileY + ")"
-            );
+//            System.out.println(
+//                    "[AUTOPLAYER DESYNC] " +
+//                            "step=" + currentStep +
+//                            " logical=(" + logicalX + "," + logicalY + ")" +
+//                            " real=(" + realTileX + "," + realTileY + ")"
+//            );
 
             // resync
             logicalX = realTileX;
@@ -176,13 +213,13 @@ public class AutoPlayer {
         }
 
         // print every move for debugging
-        System.out.println(
-                "[AUTOPLAYER] " +
-                        "step=" + currentStep +
-                        " logical=(" + logicalX + "," + logicalY + ")" +
-                        " real=(" + realTileX + "," + realTileY + ")" +
-                        " move=" + path.charAt(currentStep)
-        );
+//        System.out.println(
+//                "[AUTOPLAYER] " +
+//                        "step=" + currentStep +
+//                        " logical=(" + logicalX + "," + logicalY + ")" +
+//                        " real=(" + realTileX + "," + realTileY + ")" +
+//                        " move=" + path.charAt(currentStep)
+//        );
 
         char move = path.charAt(currentStep);
 
