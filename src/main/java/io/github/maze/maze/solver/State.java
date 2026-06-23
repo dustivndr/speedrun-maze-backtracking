@@ -4,6 +4,7 @@ import io.github.maze.util.Point;
 
 import java.util.*;
 
+// menyimpan seluruh data game yang berubah2 dalam suatu waktu
 public final class State {
 
     // POSITION
@@ -16,7 +17,7 @@ public final class State {
 
     // TIMERS
     private final int walkCount;
-    private final int poisonRemaining;
+    private final int fireRemaining;
 
     private final int speedRemaining;
 
@@ -49,12 +50,12 @@ public final class State {
     private final Set<Point> fireMonstersAlreadyTriggered;
 
     public State(
-            Point position,
-            int keyCount,
-            int collectedGreenFlags,
-            int walkCount,
-            int tilesWalkedWithSpeed,
-            int poisonRemaining,
+            Point position, // posisi player
+            int keyCount, // jumlah key yang dimiliki player
+            int collectedGreenFlags, // jumlah flag ijo yang diambil player
+            int walkCount, // jumlah langkah player
+            int tilesWalkedWithSpeed, // jumlah player bergerak dengan speed
+            int fireRemaining, // jumlah
             int speedRemaining,
             Set<Point> collectedKeys,
             Set<Point> collectedFlags,
@@ -72,7 +73,7 @@ public final class State {
         this.walkCount = walkCount;
         this.tilesWalkedWithSpeed = tilesWalkedWithSpeed;
 
-        this.poisonRemaining = poisonRemaining;
+        this.fireRemaining = fireRemaining;
         this.speedRemaining = speedRemaining;
 
         this.collectedKeys =
@@ -110,7 +111,7 @@ public final class State {
     public int keyCount() { return keyCount; }
     public int collectedGreenFlags() { return collectedGreenFlags; }
     public int walkCount() { return walkCount; }
-    public int poisonRemaining() { return poisonRemaining; }
+    public int fireRemaining() { return fireRemaining; }
     public int speedRemaining() { return speedRemaining; }
     public Set<Point> collectedKeys() { return collectedKeys; }
     public Set<Point> collectedFlags() { return collectedFlags; }
@@ -133,7 +134,7 @@ public final class State {
 
         return keyCount == other.keyCount
                 && collectedGreenFlags == other.collectedGreenFlags
-                && poisonRemaining == other.poisonRemaining
+                && fireRemaining == other.fireRemaining
                 && speedRemaining == other.speedRemaining
                 && Objects.equals(position, other.position)
                 && Objects.equals(collectedKeys, other.collectedKeys)
@@ -152,7 +153,7 @@ public final class State {
                 position,
                 keyCount,
                 collectedGreenFlags,
-                poisonRemaining,
+                fireRemaining,
                 speedRemaining,
                 collectedKeys,
                 collectedFlags,

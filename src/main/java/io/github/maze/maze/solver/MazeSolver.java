@@ -1,68 +1,64 @@
 package io.github.maze.maze.solver;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import io.github.maze.audio.SoundManager;
 import io.github.maze.game.GamePanel;
 import io.github.maze.maze.GameObject;
-import io.github.maze.maze.Maze;
-import io.github.maze.obstacles.BushWall;
-import io.github.maze.obstacles.Elf;
-import io.github.maze.obstacles.Fire;
-import io.github.maze.obstacles.FireMonster;
-import io.github.maze.obstacles.FlagGreen;
-import io.github.maze.obstacles.FlagLocked;
-import io.github.maze.obstacles.FlagRed;
-import io.github.maze.obstacles.HealSpell;
-import io.github.maze.obstacles.Hole;
-import io.github.maze.obstacles.Key;
-import io.github.maze.obstacles.Ninja;
-import io.github.maze.obstacles.Portal;
-import io.github.maze.obstacles.SpeedSpell;
-import io.github.maze.obstacles.Spike;
-import io.github.maze.obstacles.Wizard;
+import io.github.maze.obstacles.*;
 import io.github.maze.util.Point;
-import io.github.maze.util.Util;
 
 public class MazeSolver {
 
-    private record Result(
-            State state,
-            int hp
-    ) {}
+    private static class Result {
+        State state;
+        int hp;
 
-    private static final int[] DR = {-1, 1, 0, 0};
-    private static final int[] DC = {0, 0, -1, 1};
-    private static final char[] DIR = {'U', 'D', 'L', 'R'};
+        public Result(State state, int hp) {
+            this.state= state;
+            this.hp = hp;
+        }
+    }
 
-    private static int totalFlag;
-    private static String bestPath;
+    private static final int[] DR = {-1, 1, 0, 0}; // DELTA ROW: perubahan row (kiri = -1, kanan = 1, tetap = 0)
+    private static final int[] DC = {0, 0, -1, 1}; // DELTA COL: perubahan col (naik = -1, turun = 1, tetap = 0)
+    private static final char[] DIR = {'U', 'D', 'L', 'R'}; // char pilihan pergerakan player
+
+    private static int totalFlag; // jumlah flag yang perlu di ambil spy menang
+    private static String bestPath; // jalan terbaik dengan panjang maksimal tertentu
+    public static int bestRemainingHp; //
     public static StringBuilder backtrackingPath = new StringBuilder(3000000);
-    public static int backtrackingLength = 0;
-    public static int bestRemainingHp;
 
     private static Map<State, int[]> memo;
 
+    /*
+     * goal: dapatkan semua flag dengan sebanyak mungkin hp
+     *
+     * @param gp
+     * @return
+     */
     public static String solve(GamePanel gp) {
 
+        // titik starting player
         Point pos = new Point(gp.maze.player.getTileY(), gp.maze.player.getTileX());
-        State initialState = initState(pos);
+        State initialState;
 
-        totalFlag = gp.maze.flagCount;
-        memo = new HashMap<>();
+        totalFlag = gp.maze.flagCount; // menyimpan total flag untuk win case
+        memo = new HashMap<>(); // memo untuk backtracking
+        StringBuilder path = new StringBuilder(); // membuat string dengan efisien
 
-        StringBuilder path = new StringBuilder();
-
+        // nge loop dengan maksimal panjang path.
+        // ini dilakukan karena semisal map tidak memiliki obstacle
+        // dan flag tepat di sebelahnya kita membatasi panjang path ke maxDepth
+        // agar tidak mbulet jalan e karena algorithma bisa memutari
+        // map 100 kali atau langsung lurus ke goal jika urutan pencobaan
+        // backtracking tidak sesuai
         for (int maxDepth = 20; maxDepth <= 2000; maxDepth += 20) {
 
-            path.setLength(0);
-            memo.clear();
-            bestRemainingHp = -1;
-            bestPath = "";
-            backtrackingLength = 0;
+            // reset data tiap kali mencoba depth baru
+            path.setLength(0); // perjalanan algoritma jadikan ""
+            memo.clear(); // bersihkan memo
+            bestRemainingHp = -1; // reset hp
+            bestPath = ""; // reset hasil jalan terbaik pass backtracking ini
             backtrackingPath.setLength(0);
 
             initialState = initState(pos);
@@ -115,10 +111,17 @@ public class MazeSolver {
             Point previousActualPos
     ) {
 
-        if (!bestPath.isEmpty() && bestRemainingHp == 100 && path.length() >= bestPath.length()) {
+        // base case
+        if (
+                !bestPath.isEmpty() && //  udah ketemu best path
+                bestRemainingHp == 100 && // udh ketemu full hp lngsng stop
+                path.length() >= bestPath.length() // batasi panjang path algoritma spy gk kepanjangen
+        ) {
             return;
         }
 
+        // membatasi scope pencobaan backtracking agar tidak mencoba terlalu banyak
+        // dan nge StackOverflowError dimana memory program tidak cukup
         if (path.length() > maxDepth) {
             return;
         }
@@ -127,22 +130,18 @@ public class MazeSolver {
         if (!inBound(state)) return;
 
         // handle tile effects:
-        // spike, fire, hole, key, flagGreen, flagLocked, key, healSpell, poisonSpell, speedSpell
+        // spike, fire, hole, key, flagGreen, flagLocked, healSpell, poisonSpell, speedSpell
         Result tileResult = processTile(maze, state, hp);
 
         // update player:
         //
         // speedRemaining
-        // speedParity
         // walkCount
         // poisonRemaining
         // poison damage
         Result playerUpdateResult = updateWalkCountAndStatusEffects(tileResult);
         state = playerUpdateResult.state;
         hp = playerUpdateResult.hp;
-
-        // teleport player if there is a portal
-        state = processPortal(maze, state);
 
         // check if player is able to move into that tile or not
         if (isBlocked(maze, state)) return;
@@ -172,14 +171,14 @@ public class MazeSolver {
         // check win
         if (state.collectedGreenFlags() == totalFlag) {
 
-            System.out.println(
-                    state.position()
-                            + " flagsSet=" + state.collectedFlags()
-            );
+//            System.out.println(
+//                    state.position()
+//                            + " flagsSet=" + state.collectedFlags()
+//            );
 
-            // one solution found. check if the
-            // path is the current best path
-            // if a tie, take the previous path
+            // berhasil ngambil semua flag.
+            // cek apakah path yang terbaik? dan ambil yang terbaik
+            // jika sama kebaikannya, ambil path yg sebelumnya
             if (hp > bestRemainingHp ||
                     (hp == bestRemainingHp &&
                         (bestPath.isEmpty() || path.length() < bestPath.length()))) {
@@ -187,6 +186,7 @@ public class MazeSolver {
                 bestPath = path.toString();
             }
 
+            // backtrack path
             if (!isRoot) {
                 path.deleteCharAt(path.length() - 1);
                 char rev = getExactReturnChar(state.position(), previousActualPos, dir);
@@ -197,6 +197,11 @@ public class MazeSolver {
             return;
         }
 
+        // mencoba ke 4 arah player gerak
+        // i == 0: ke atas
+        // i == 1: ke bawah
+        // i == 2: ke kiri
+        // i == 3: ke kanan
         for (int i = 0; i < 4; i++) {
 
             // get current position
@@ -211,7 +216,7 @@ public class MazeSolver {
                 state.collectedGreenFlags(),
                 state.walkCount(),
                 state.tilesWalkedWithSpeed(),
-                state.poisonRemaining(),
+                state.fireRemaining(),
                 state.speedRemaining(),
                 state.collectedKeys(),
                 state.collectedFlags(),
@@ -251,28 +256,14 @@ public class MazeSolver {
         int dRow = targetPos.row() - currentPos.row();
         int dCol = targetPos.col() - currentPos.col();
 
-        // 1. Normal single-tile movement: Return standard inverse
+        // inverse movement
         if (Math.abs(dRow) + Math.abs(dCol) == 1) {
             if (dRow == -1) return 'U';
             if (dRow == 1) return 'D';
             if (dCol == -1) return 'L';
             if (dCol == 1) return 'R';
         }
-
-        // 2. PORTAL TELEPORTATION DETECTED
-        // The player jumped across the map. To visually backtrack using only U/D/L/R
-        // without cutting through walls, we must look at the neighbor tiles of the
-        // portal DESTINATION (currentPos) and pick the one that is safe/valid,
-        // OR we simply invert the incoming direction relative to how they enter it.
-        //
-        // Standard geometric inversion for a clean look-ahead fallback:
-        return switch (incomingDir) {
-            case 'U' -> 'D';
-            case 'D' -> 'U';
-            case 'L' -> 'R';
-            case 'R' -> 'L';
-            default -> ' ';
-        };
+        return ' ';
     }
 
     private static boolean shouldPrune(
@@ -280,7 +271,8 @@ public class MazeSolver {
             int hp,
             int pathLength
     ) {
-        // if hp in memo is more than the current HP, don't prune
+        // if hp in memo is more than the current HP,
+        // don't prune
         if (memo.containsKey(state)) {
 
             int[] best = memo.get(state);
@@ -310,8 +302,8 @@ public class MazeSolver {
             State state,
             int hp
     ) {
-        Point position = state.position();
-        int startRow = Math.max(position.row() - 2, 0);
+        Point position = state.position(); // posisi playernya sekarang ini
+        int startRow = Math.max(position.row() - 2, 0); //
         int startCol = Math.max(position.col() - 3, 0);
         int endRow = Math.min(startRow + 4, GamePanel.ROW_HEIGHT - 1);
         int endCol = Math.min(startCol + 6, GamePanel.COL_WIDTH - 1);
@@ -429,7 +421,7 @@ public class MazeSolver {
                 state.collectedGreenFlags(),
                 state.walkCount(),
                 state.tilesWalkedWithSpeed(),
-                state.poisonRemaining(),
+                state.fireRemaining(),
                 state.speedRemaining(),
                 state.collectedKeys(),
                 state.collectedFlags(),
@@ -443,6 +435,7 @@ public class MazeSolver {
         return new Result(newState, hp);
     }
 
+    // klo ada elf di ukuran 3x3 heal ke full hp (100)
     private static int applyElfHealing(
             GameObject[][] maze,
             Point position,
@@ -459,43 +452,6 @@ public class MazeSolver {
         return hp;
     }
 
-    private static State processPortal(
-            GameObject[][] maze,
-            State state
-    ) {
-
-        Point currentPosition = state.position();
-
-        int r = currentPosition.row();
-        int c = currentPosition.col();
-
-        GameObject obj = maze[r][c];
-        if (obj instanceof Portal origin) {
-
-            int destR = (int) (origin.getConnection().getY() / GamePanel.TILE_SIZE);
-            int destC = (int) (origin.getConnection().getX() / GamePanel.TILE_SIZE);
-
-            return new State(
-                    new Point(destR, destC),
-                    state.keyCount(),
-                    state.collectedGreenFlags(),
-                    state.walkCount(),
-                    state.tilesWalkedWithSpeed(),
-                    state.poisonRemaining(),
-                    state.speedRemaining(),
-                    state.collectedKeys(),
-                    state.collectedFlags(),
-                    state.collectedSpells(),
-                    state.brokenHoles(),
-                    state.ninjasPlayerInside(),
-                    state.wizardsPlayerInside(),
-                    state.fireMonstersPlayerInside()
-            );
-        }
-
-        return state;
-    }
-
     // exactly teh same as update method in Player class
     private static Result updateWalkCountAndStatusEffects(
             Result result
@@ -504,16 +460,20 @@ public class MazeSolver {
         int hp = result.hp;
 
         int speedLength = state.speedRemaining();
-        int poisonLength = state.poisonRemaining();
+        int poisonLength = state.fireRemaining();
         int walkCount = state.walkCount();
         int tilesWalkedWithSpeed = state.tilesWalkedWithSpeed();
 
+        //
         if (speedLength > 0) {
 
             tilesWalkedWithSpeed++;
 
+            // karena speed player di 2x, anggep player
+            // gerak 1 tile tiap gerak 2 tile.
             if (tilesWalkedWithSpeed % 2 == 0) {
 
+                // damage juga tiap 2 tile hanya jika player punya efek speed
                 if (poisonLength > 0) {
                     hp--;
                     poisonLength--;
@@ -524,17 +484,20 @@ public class MazeSolver {
 
             speedLength--;
 
+            // reset jumlah player gerak jika speed habis
             if (speedLength <= 0) {
                 tilesWalkedWithSpeed = 0;
             }
 
         } else {
 
+            // damage klo ada poison
             if (poisonLength > 0) {
                 hp--;
                 poisonLength--;
             }
 
+            // naikin walk count
             tilesWalkedWithSpeed = 0;
             walkCount++;
         }
@@ -568,17 +531,18 @@ public class MazeSolver {
     ) {
         int r = state.position().row();
         int c = state.position().col();
-        Point currPos = new Point(r, c);
+        Point currPos = new Point(r, c); // koordinat player sekarang ini
 
+        // obstacle yang ada di koordinat ini
         GameObject obj = maze[r][c];
 
-        int keyCount = state.keyCount();
-        Set<Point> collectedFlags = new HashSet<>(state.collectedFlags());
-        Set<Point> collectedKeys = new HashSet<>(state.collectedKeys());
-        Set<Point> collectedSpells = new HashSet<>(state.collectedSpells());
-        Set<Point> brokenHoles = new HashSet<>(state.brokenHoles());
-        int greenFlagCount = state.collectedGreenFlags();
-        int poisonLen = state.poisonRemaining();
+        int keyCount = state.keyCount(); // ngambil jumlah key yang dimiliki player
+        Set<Point> collectedFlags = new HashSet<>(state.collectedFlags()); // flags mana saja yang sudah di ambil player
+        Set<Point> collectedKeys = new HashSet<>(state.collectedKeys()); // key mana saja yang sudah di ambil player
+        Set<Point> collectedSpells = new HashSet<>(state.collectedSpells()); // spell mana saja yang sudah di ambil player
+        Set<Point> brokenHoles = new HashSet<>(state.brokenHoles()); // hole mana saja yang sudah di pijak player
+        int greenFlagCount = state.collectedGreenFlags(); // jumlah flag ijo
+        int fireLen = state.fireRemaining(); //
         int speedLen = state.speedRemaining();
 
 
@@ -586,14 +550,17 @@ public class MazeSolver {
             return new Result(state, hp);
         }
 
+        // jika obstacle yg dipijak adalah:
         switch (obj) {
             case Spike spike -> hp -= 10;
             case Fire fire -> {
 
                 // reset fire length
-                poisonLen = 10;
+                // bakar player buat 10 step
+                fireLen = 10;
             }
             case Hole hole -> {
+                // damage player 5 hp lalu hole collision = true
                 hp -= 5;
                 brokenHoles.add(new Point(r, c));
             }
@@ -617,9 +584,9 @@ public class MazeSolver {
                     collectedFlags.add(currPos);
                 }
             }
-            case FlagLocked flagL -> {
+            case FlagLocked flagLocked -> {
 
-                // collect only uncollected flags
+                // collect only uncollected flags dan jika punya key
                 if (keyCount > 0 && !collectedFlags.contains(currPos)) {
 
                     // add flag to set of collected flags
@@ -657,23 +624,27 @@ public class MazeSolver {
         }
 
         State newState = new State(
-                currPos,
-                keyCount,
-                greenFlagCount,
-                state.walkCount(),
-                state.tilesWalkedWithSpeed(),
-                poisonLen,
-                speedLen,
-                collectedKeys,
-                collectedFlags,
-                collectedSpells,
-                brokenHoles,
+                currPos, // posisi
+                keyCount, // jumlah key
+                greenFlagCount, // jumlah flag ijo
+                state.walkCount(), // jumlah player jalan
+                state.tilesWalkedWithSpeed(), // jumlah player jalan dengan speed
+                fireLen, // lama sisa api aktif
+                speedLen, // lama sisa speed aktif
+                collectedKeys, // list key yg udh di ambil
+                collectedFlags, // list flag yg udh di ambil
+                collectedSpells, // list spell yg udh di ambil
+                brokenHoles, // list hole yg udh di pijak
                 state.ninjasPlayerInside(),
                 state.wizardsPlayerInside(),
                 state.fireMonstersPlayerInside()
         );
 
-        hp = Math.clamp(hp, 0, 100);
+        if (hp < 0) {
+            hp = 0;
+        } else if (hp > 100) {
+            hp = 100;
+        }
 
         return new Result(newState, hp);
     }
@@ -705,11 +676,14 @@ public class MazeSolver {
         }
 
         // handle Hole's dynamic collision
+        // klo hole belom di pijak gk ada collision
+        // klo UDAH di pijak ADA collision
         if (obj instanceof Hole) {
             return state.brokenHoles().contains(new Point(r, c));
         }
 
         // safely handle FireMonster's extended hitbox
+        // jika di kiri player ada fire monster, maka ada collision
         int leftCol = c - 1;
         if (leftCol >= 0 && maze[r][leftCol] instanceof FireMonster) {
             return true;
