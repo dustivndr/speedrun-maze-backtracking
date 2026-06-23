@@ -37,7 +37,7 @@ public class Player extends Entity {
     private final double NORMAL_SPEED = 5;
     public double currentSpeed = NORMAL_SPEED;
 
-    private int poisonLength = 0;
+    private int fireLength = 0;
 
     private int speedLength = 0;
     private int tilesWalkedWithSpeed = 0;
@@ -181,9 +181,9 @@ public class Player extends Entity {
 
                 if (tilesWalkedWithSpeed % 2 == 0) {
 
-                    if (poisonLength > 0) {
+                    if (fireLength > 0) {
                         damage(1);
-                        poisonLength--;
+                        fireLength--;
                     }
 
                     walkCount++;
@@ -198,9 +198,9 @@ public class Player extends Entity {
 
             } else {
 
-                if (poisonLength > 0) {
+                if (fireLength > 0) {
                     damage(1);
-                    poisonLength--;
+                    fireLength--;
                 }
 
                 tilesWalkedWithSpeed = 0;
@@ -267,8 +267,8 @@ public class Player extends Entity {
 
     public int getWalkCount() { return walkCount; }
 
-    public void setPoisonLength(int poisonLength) {
-        this.poisonLength = poisonLength;
+    public void setFireLength(int fireLength) {
+        this.fireLength = fireLength;
     }
 
     public void setSpeedLength(int speedLength) {

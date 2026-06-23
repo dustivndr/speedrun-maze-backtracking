@@ -62,7 +62,7 @@ public class PoisonSpell extends Obstacle {
         if (Util.checkAABB(gp.maze.player, this)) {
             SoundManager.POISON_SPELL_SFX.play();
 
-            gp.maze.player.setPoisonLength(10);
+            gp.maze.player.setFireLength(10);
             removeObject = true;
         }
     }
